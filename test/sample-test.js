@@ -33310,7 +33310,7 @@ describe("E5's", function () {
   });
 
   /* can perform subscription actions via consensus */
-  it("55. can run e/f178/f200/f201/f202", async () => {
+  xit("55. can run e/f178/f200/f201/f202", async () => {
     const [booter, addr1, addr2] = await ethers.getSigners();
     var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
     /* 126000: 35hrs 3024000: 35dys */
@@ -33348,7 +33348,7 @@ describe("E5's", function () {
       [ /* create cancellable subscription */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 33, 0],
         [0], [23],
-        [3, 1, 1, 100, 0, 0, 2], [35, 23, 23, 23, 23, 23, 23],
+        [3, 1, 1, 100, 0, 0, 3], [35, 23, 23, 23, 23, 23, 35],
         [3], [23],
         [100], [23],
         [0], [23]
@@ -33442,7 +33442,7 @@ describe("E5's", function () {
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 9_900_000, value: bgN(35_000_000, 9) });
     var gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
     console.log("l2: "/* GasEst */ + nWC(gas/* gas_cons */));
-    console.log("contract(end):"/* Data */ + await h52./* balance_of */f140([3], [1004], [0], 1));
+    console.log("contract(end):"/* Data */ + await h52./* balance_of */f140([3], [1005], [0], 1));
     console.log("-----------e-----------");
     console.log("l3: "/* ProposalData */ + await g5./* read_id */f77(1006, false));
     console.log("-----------e-----------");
@@ -33462,6 +33462,17 @@ describe("E5's", function () {
 
 
 
+    // var v1e/* target_nums */ = [
+    //   [[0], [9, 0, 0, 0, 0, 1005/* 5 */, 0, 0, 0, 0], [0], [0],  [1003], [5]/* 5 */, [], [], []]
+    // ];
+    // var v3e/* consensus_type_data */ = [0,0,0,0,0,0,0,0, 0,1,0, 0,0,0,0,0,0,0,0,0,0];
+    // var v4e/* payer_accounts */ = [];
+    // await f5.f263t(v1e/* target_nums */, v3e/* consensus_type_data */, v4e/* payer_accounts */);
+    // console.log("l5: "/* get_subscription_time_value */ + await f5.f229([1003], [[1005]]));
+    // console.log(await f5.f2632t());
+
+
+
     //submit pay_subscription proposal
     var vv = [
       [/* submit consensus */
@@ -33473,8 +33484,57 @@ describe("E5's", function () {
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
     gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
     console.log("l4: "/* GasEst */ + nWC(gas/* gas_cons */));
-    console.log("l5: "/* get_subscription_time_value */ + await f5.f229([1003], [[1005]]));
+    console.log("l5: "/* get_subscription_time_value */ + await f5.f229([1003, 1004], [[1005], [1005]]));
+    console.log("-----------e-----------");
 
+    //submit cancel_subscription proposal
+    var vv = [
+      [/* submit consensus */
+        [30000, 5, 0, 0, 0, 0],
+        [1007], [23]/* targets */
+      ]
+    ];
+
+    console.log("l6: "/* get_subscription_time_value */ + await f5.f229([1004], [[1005]]));
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l7: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("l8: "/* get_subscription_time_value */ + await f5.f229([1004], [[1005]]));
+    console.log("-----------e-----------");
+
+
+
+    var v6/* time_inc */ = 1_000_000;
+    var tt = await e5./*get_time*/f147(2/* get_time */);
+    console.log("t: " + tt);
+    await network.provider.send("evm_increaseTime", [v6/* time_inc */]);
+    await network.provider.send("evm_mine");
+
+    tt = await e5./*get_time*/f147(2/* get_time */);
+    console.log("t: " + tt);
+    console.log("-----------e-----------");
+
+
+    //submit collect_subscription proposal
+    var vv = [
+      [/* submit consensus */
+        [30000, 5, 3, 3, 0, 0],
+        [1008], [23],/* targets */
+        [1005]
+      ]
+    ];
+    console.log("contract(end):"/* Data */ + await h52./* balance_of */f140([3], [1005], [0], 1));
+    console.log("cancellable_subscription(end):"/* Data */ + await h52./* balance_of */f140([3], [1004], [0], 1));
+    console.log("l9: "/* get_subscription_time_value */ + await f5.f229([1004], [[1005]]));
+    console.log("l10: "/* get_subscription_collectible_time_value */ + await f5.f235([1004], [[1005]]));
+    console.log("-----------e-----------");
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l11: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("contract(end):"/* Data */ + await h52./* balance_of */f140([3], [1005], [0], 1));
+    console.log("cancellable_subscription(end):"/* Data */ + await h52./* balance_of */f140([3], [1004], [0], 1));
+    console.log("l12: "/* get_subscription_time_value */ + await f5.f229([1004], [[1005]]));
+    console.log("l13: "/* get_subscription_collectible_time_value */ + await f5.f235([1004], [[1005]]));
   });
 
 

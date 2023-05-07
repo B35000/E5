@@ -6,8 +6,8 @@ library F33 {
 
     /* get_consensus_subscription_data */
     function f251(
-        uint256[][][] calldata p1/* target_nums */,
-        uint256[21] calldata p2/* consensus_type_data */
+        uint256[21] calldata p2/* consensus_type_data */,
+        uint256[][][] calldata p1/* target_nums */
     ) external pure returns (uint256[][3][3] memory v1/* data */) {
         /* calculates sets and returns a three dimentional array whose data is used in consensus subscription actions */
         /* 
@@ -53,6 +53,7 @@ library F33 {
                 }
             }
         }
+
     }//-----RETEST_OK-----
 
     /* get_consensus_subscription_targets_count */

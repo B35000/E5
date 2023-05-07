@@ -331,9 +331,9 @@ contract F5 {
         uint256[][][] memory v1/* target_nums */,
         uint256[21] calldata p2/* consensus_type_data */,
         uint256[][] memory p3/* payer_accounts */
-    ) public f152(msg.sender){
+    ) public f152(msg.sender) {
 
-        uint256[][3][3] memory p1/* data */ = F33.f251/* get_collect_subscription_data */(v1/* target_nums */, p2/* consensus_type_data */);
+        uint256[][3][3] memory p1/* data */ = F33.f251/* get_collect_subscription_data */(p2/* consensus_type_data */, v1/* target_nums */);
         /* initialize a variable that contains the subscription action data */
 
         if( p2/* consensus_type_data */[ 8 /* collect_subscriptions */ ] != 0){
@@ -458,6 +458,21 @@ contract F5 {
     //             v1/* data */[t] = 0;
     //         }
     //     }
+    // }
+
+
+    // uint256[][3][3] p1e/* data */;
+    // function f263t(
+    //     uint256[][][] memory v1/* target_nums */,
+    //     uint256[21] calldata p2/* consensus_type_data */,
+    //     uint256[][] memory p3/* payer_accounts */
+    // ) public {
+    //     f263(v1/* target_nums */, p2/* consensus_type_data */, p3/* payer_accounts */);
+    //     // p1e/* data */ = F33.f251/* get_collect_subscription_data */(v1/* target_nums */, p2/* consensus_type_data */, v1/* target_nums */);
+    // }
+
+    // function f2632t() public view returns(uint256[][3][3] memory){
+    //     return p1e/* data */;
     // }
 
 }
