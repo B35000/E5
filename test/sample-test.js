@@ -33537,7 +33537,268 @@ describe("E5's", function () {
     console.log("l13: "/* get_subscription_collectible_time_value */ + await f5.f235([1004], [[1005]]));
   });
 
+  /* can perform contract actions via consensus */
+  it("55. can run e/f178/f200/f201/f202", async () => {
+    const [booter, addr1, addr2] = await ethers.getSigners();
+    var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
+    /* 126000: 35hrs 3024000: 35dys */
+    var v2/* boot_data */ = [
+      [ /* spend */
+        [0, 0, 0, 5], [bgN(35, 6), bgN(35, 6), 3, 0, 126000/* 4 */, bgN(53, 16), bgN(90, 16), bgN(5, 16)/* 7 */, 3, 0, 0, 0, 2/* 12 */, 1, bgN(3, 16), 1, bgN(53, 9), 2, 1], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]
+      ],
+      [ /* end */
+        [0, 0, 0, 3],
+        [bgN(35, 12), 0, 0, 0, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 2, 0, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0], [bgN(1, 72), bgN(1, 72), bgN(1, 70)/* 2 */, 0, 0, 0, 0], [0], [bgN(1, 9)]
+      ],
+      [ /* main contract */
+        [0], [0, bgN(1, 16), 0, bgN(5, 6)/* 3 */, bgN(5, 6), 3024000, 0, 0/* 7 */, 0, bgN(5, 6), bgN(5, 6), bgN(53, 5), 0/* 12 */, 0, 1, 0/* 15 */, 72, 0, 0, 3/* 19 */, 0, 0, 0, bgN(53, 8)/* 23 */, bgN(90, 16), bgN(72, 8), 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      ]
+      //<12>contract_block_invocation_limit - 1
+      //<13>contract_time_invocation_limit - 650
+    ];
+    var v3/* boot_id_data_type_data */ = [[5, 31], [3, 31], [2, 30]];
+    var v4/* boot_object_metadata */ = [["e", "e"], ["e2", "e2"], ["e3", "e3"]];
+    await e5.connect(booter)./*boot*/f157(v1, v2, v3, v4, v2[2][1]);
+    var v5/* t_limits */ = [bgN(10, 17), bgN(10, 17)];
+    var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
+    
+    // set up proposals
+    var ss = [[["e", "e", "e"]], [["e", "e", "e"]]];
+    var vv = [
+      [ /* mint end, spend then the token */
+        [30000, 8, 0],
+        [3], [23],/* exchanges */
+        [0], [53],/* receivers */
+        [35_000_000]/* amounts */, [0],/* action */
+        []/* lower_bounds */, []/* upper_bounds */
+      ],
+      [ /* create contract */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
+        [30], [23],
+        [0, bgN(1, 16), 3600/* 2 */, 0, 900_000, 30_000, bgN(1, 70)/* 6 */, 0, 1, 0, 300_000, 0, 0, 0, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,0,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [3], [23],
+        [3_000_000], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23]
+      ],//1003
 
+      [ /* create subject contract */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
+        [30], [23],
+        [0, bgN(1, 16), bgN(1,35)/* 2 */, 0, 900_000, 30_000, bgN(1, 70)/* 6 */, 0, 1, 0, 300_000, 0, 0, 0, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,1,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [3], [23],
+        [3_000_000], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23]
+      ],//1004
+      
+      [/* enter contract */
+        [30000, 3, 0],
+        [1, 2], [35, 35],/* contract ids */
+        [bgN(1, 23), bgN(1, 23)]/* expiry time (seconds) */
+      ],
+
+      [/* make enter_contract proposal */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
+        [0], [23],
+        [11, (tt+100_000), 0/* 2 */, bgN(2, 16), 0, 1, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 35, 23, 23, 23, 23],
+        [3], [23],
+        [1_000_000], [23],
+
+        [2], [35],/* targets */
+        [bgN(1, 23)], [23],/* amounts */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23]/* bounty_depths */
+      ],//1005
+
+      [/* make extend_enter_contract proposal */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
+        [0], [23],
+        [12, (tt+100_000), 0/* 2 */, bgN(2, 16), 0, 1, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 35, 23, 23, 23, 23],
+        [3], [23],
+        [1_000_000], [23],
+
+        [2], [35],/* targets */
+        [bgN(3, 23)], [23],/* amounts */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23]/* bounty_depths */
+      ],//1006
+
+      [/* make spend proposal */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
+        [0], [23],
+        [0, (tt+10_000_000), 0/* 2 */, bgN(2, 16), 0, 2, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 35, 23, 23, 23, 23],
+        [3], [23],
+        [1_000_000], [23],
+
+        [3], [23],/* target_exchange */
+        [100], [23],/* amounts */
+        [1003], [23],/* receivers */
+        [0], [23],/* depths */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23]/* bounty_depths */
+      ],//1007
+
+      [/* make vote_contract_proposal proposal */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
+        [0], [23],
+        [13, (tt+100_000), 0/* 2 */, bgN(2, 16), 0, 1, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 35, 23, 23, 23, 23],
+        [3], [23],
+        [1_000_000], [23],
+
+        [6], [35],/* targets */
+        [1], [23],/* vote */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23]/* bounty_depths */
+      ],//1008
+
+      [/* make exit_contract proposal */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
+        [0], [23],
+        [14, (tt+100_000), 0/* 2 */, bgN(2, 16), 0, 1, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 35, 23, 23, 23, 23],
+        [3], [23],
+        [1_000_000], [23],
+
+        [2], [35],/* targets */
+        [0], [23],/* vote */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23]/* bounty_depths */
+      ],//1009
+
+      [/* make force_exit_contract proposal */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
+        [0], [23],
+        [15, (tt+100_000), 0/* 2 */, bgN(2, 16), 0, 1, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 35, 23, 23, 23, 23],
+        [3], [23],
+        [1_000_000], [23],
+
+        [2], [35],/* targets */
+        [0], [53],/* accounts */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23],/* (unused) */
+        [0], [23]/* bounty_depths */
+      ],//1010
+
+      [/* make contract moderator */
+        [20000, 4, 0],
+        [2], [35],/* target objects */
+        [1], [35]/* target moderator account ids*/
+      ],
+
+      [/* vote proposal */
+        [30000, 4, 0],
+        [4, 5, 7, 8, 9], [35, 35, 35, 35, 35],/* proposal ids */
+        [1, 1, 1, 1, 1],/* votes */
+        [3], [23], [0],/* target bounty exchanges */
+        [3], [23], [0],/* target bounty exchanges */
+        [3], [23], [0],/* target bounty exchanges */
+        [3], [23], [0],/* target bounty exchanges */
+        [3], [23], [0],/* target bounty exchanges */
+      ],
+
+      [/* send 6 million end to contract */
+        [30000, 1, 0],
+        [3], [23],/* exchanges */
+        [1], [35],/* receivers */
+        [6_000_000],/* amounts */
+        [0]/* depths */
+      ]
+    ];
+    console.log("-----------e-----------");
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 9_900_000, value: bgN(35_000_000, 9) });
+    console.log("-----------e-----------");
+    var gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l1: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("contract(end):"/* Data */ + await h52./* balance_of */f140([3], [1003], [0], 1));
+    console.log("subject_contract(end):"/* Data */ + await h52./* balance_of */f140([3], [1004], [0], 1));
+    console.log("l2: "/* account_entry_expiry_time */ + await g52.f266([1003, 1004], [[1002],[1003]], 3));
+    console.log("-----e-----");
+    console.log("l3: "/* senders vote */ + await g52./* get_account votes_data */f237([1005, 1006, 1007, 1008, 1009, 1010], [[1002, 1003], [1002, 1003], [1002, 1003], [1002, 1003], [1002, 1003], [1002, 1003]]));
+    console.log("-----e-----");
+    console.log("l4: "/* proposal consensus(y,w,n,auto_w) */ + await g52./* get_total_consensus_data */f266([1005, 1006, 1007, 1008, 1009, 1010], [], 0));
+    console.log("-----------e-----------");
+
+
+
+    var v6/* time_inc */ = 1_000_001;
+    var tt = await e5./*get_time*/f147(2/* get_time */);
+    console.log("t: " + tt);
+    await network.provider.send("evm_increaseTime", [v6/* time_inc */]);
+    await network.provider.send("evm_mine");
+
+    tt = await e5./*get_time*/f147(2/* get_time */);
+    console.log("t: " + tt);
+    console.log("-----------e-----------");
+
+
+    //submit enter_contract proposal
+    var vv = [
+      [/* submit consensus */
+        [30000, 5, 0, 0, 0, 0],
+        [1005], [23]/* targets */
+      ]
+    ];
+
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l5: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("l6: "/* account_entry_expiry_time */ + await g52.f266([1003, 1004], [[1002],[1003]], 3));
+    console.log("-----------e-----------");
+
+
+
+    //submit extend_enter_contract proposal
+    var vv = [
+      [/* submit consensus */
+        [30000, 5, 0, 0, 0, 0],
+        [1006], [23]/* targets */
+      ]
+    ];
+
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l7: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("l8: "/* account_entry_expiry_time */ + await g52.f266([1003, 1004], [[1002],[1003]], 3));
+    console.log("-----------e-----------");
+
+
+    //submit vote_contract_proposal proposal
+    var vv = [
+      [/* submit consensus */
+        [30000, 5, 0, 0, 0, 0],
+        [1008], [23]/* targets */
+      ]
+    ];
+    console.log("l9: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l9: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
+  });
 
 
 
