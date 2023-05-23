@@ -285,6 +285,7 @@ contract G52 {
 
         uint256[] memory v6/* voter_weight_balances */ = gv8/* tokensData2 */.f140/* balance_of */(v2[1/* voter_weight_exchanges */], v2[3/* sender_accounts */], v2[2/* voter_weight_exchange_depths */], 1/* unfrozen balances */);
 
+
         (bool[] memory v3/* include_transfers */, bool v4/* transfer_work */) = G32.f116/* execute_vote_proposal_checkers */( [p1/* targets */, p3/* votes */, p6/* sender_accounts */, v2[1/* voter_weight_exchanges */], v6/* voter_weight_balances */], p2/* sender_account */, p4/* can_sender_vote_in_main_contract */, v1/* target_nums_data */, gv4/* num_data */, p5/* target_bounty_exchanges */[0/* target_bounty_exchanges */]);
         /* execute the vote proposal checkers which updates the senders votes in the specified proposal targets and returns a boolean array specifying if bounty transfers are to take place for each target voted on. */
 
@@ -435,7 +436,7 @@ contract G52 {
 
         if(p1/* consensus_type_data */[ 13 /* vote_proposal */ ] != 0){
             /* if one of the actions involves a vote in proposal */
-            
+
             f195/* execute_vote_proposals */(
                 v4/* data */[2/* vote_contract_proposal_data */][0/* target_proposals */],
                 0/* sender_account */,
@@ -594,4 +595,11 @@ contract G52 {
     //         gv4/* num_data */.int_int_int[ p1/* _ids */[t][0] ][ p1/* _ids */[t][1] /* value */ ][ p1/* _ids */[t][2] /* account */ ] = 0;
     //     }
     // }
+
+
+    // uint256[][3] v4e/* data */;
+    // function f2671t() public view returns(uint256[][3] memory){
+    //     return v4e/* data */;
+    // }
+
 }

@@ -31564,7 +31564,10 @@ describe("E5's", function () {
     var depths = [];
     var amounts = [];
 
-    var depth_amounts = 14; /* 100,000,000e1000 */
+    var exchanges = [];
+    var accounts = [];
+
+    var depth_amounts = 10; /* 100,000,000e1000 */
     var primary_power = 153;
     var depth_gap = 280;
     for (let j = 0; j < depth_amounts; j++) {
@@ -31582,6 +31585,9 @@ describe("E5's", function () {
         actions.push(2);
         depths.push(j);
         amounts.push(bgN(1, 72));
+
+        exchanges.push(1004);
+        accounts.push(1002);
       }
       
     }
@@ -31643,7 +31649,7 @@ describe("E5's", function () {
     console.log("My new End balance: "/* End balance */ + nWC(await h52./* balance_of */f140([3], [1002], [0], 1)));
     console.log("estimated gas consumed: "/* GasEst */+nWC(v6/* gas_cons */));
     // console.log(depth_amounts+ " token depths in total");
-    console.log("" + await h52./* balance_of */f140([1004, 1004, 1004, 1004, 1004, 1004, 1004, 1004, 1004, 1004, 1004, 1004, 1004, 1004], [1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002], [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0], 1));
+    console.log("" + await h52./* balance_of */f140(exchanges, accounts, depths.reverse(), 1));
 
   }).timeout(10000000000);;
 
@@ -32036,6 +32042,19 @@ describe("E5's", function () {
     console.log("add1(end, tokenX):"/* Data */ + await h52./* balance_of */f140([3, 1003], [1002, 1002], [0, 0], 1));
     console.log("tokenX(end): "/* Data */ + await h52./* balance_of */f140([3], [1003], [0, 0], 1));
     
+    /* 
+
+      -----------e-----------
+      l2: 3,498,900
+      add1(end, tokenX):31000000,100
+      tokenX(end): 10000
+      t: 1684769097
+      t: 1685769100
+      -----------e-----------
+      add1(end, tokenX):31000010,100
+      tokenX(end): 9990
+
+    */
   });
 
   /* can run buy/sell tokens via consensus */
@@ -32182,7 +32201,7 @@ describe("E5's", function () {
       ]
     ];
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 });
-    console.log("l3: "/* interactible_enabled */ + await e52.f207([[1003, 0, 1]]));
+    console.log("l3: "/* interactible_enabled */ + await e52.f254([1003], 0));
 
 
 
@@ -32221,7 +32240,21 @@ describe("E5's", function () {
     ];
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
     console.log("contract(end, tokenX):"/* Data */ + await h52./* balance_of */f140([3, 1003], [1004, 1004], [0, 0], 1));
-    
+
+    /* 
+
+      -----------e-----------
+      l2: 4,303,592
+      contract(end, tokenX):3000000,0
+      t: 1684768793
+      t: 1685768795
+      -----------e-----------
+      contract(end, tokenX):2999000,10
+      l3: true
+      -----------e------------
+      contract(end, tokenX):2998000,20
+
+    */
   });
 
   /* can run depth authmint via consensus */
@@ -32912,7 +32945,7 @@ describe("E5's", function () {
 
     console.log("-----------e-----------");
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 });
-    console.log("available time: "/* time */ + await f5.f229([1003], [1002]));
+    console.log("available time: "/* time */ + await f5.f229([1003], [[1002]]));
 
 
 
@@ -32973,11 +33006,33 @@ describe("E5's", function () {
         [5]/* subscription buy amounts */
       ]
     ];
-    console.log("available time: "/* time */ + await f5.f229([1003], [1002]));
+    console.log("available time: "/* time */ + await f5.f229([1003], [[1002]]));
     console.log("-----------e-----------");
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 });
-    console.log("available time: "/* time */ + await f5.f229([1003], [1002]));
+    console.log("available time: "/* time */ + await f5.f229([1003], [[1002]]));
 
+
+    /* 
+
+      l1: ,1001,1,0,100,0,0,0,3,1000,0
+      l2: 22
+      l3: false
+      l4: 1004
+      -----------e------------
+      l4: true
+      -----------e------------
+      l5: true
+      -----------e-----------
+      available time: 15900
+      l6: 0
+      l7: 34998
+      t: 1684768354
+      t: 1685268354
+      available time: 0
+      -----------e-----------
+      available time: 15900
+
+    */
   });
 
 
@@ -33535,10 +33590,45 @@ describe("E5's", function () {
     console.log("cancellable_subscription(end):"/* Data */ + await h52./* balance_of */f140([3], [1004], [0], 1));
     console.log("l12: "/* get_subscription_time_value */ + await f5.f229([1004], [[1005]]));
     console.log("l13: "/* get_subscription_collectible_time_value */ + await f5.f235([1004], [[1005]]));
+
+    /* 
+
+      -----------e-----------
+      l2: 4,800,998
+      contract(end):3000000
+      -----------e-----------
+      l3: 32,9,1684868083,0,20000000000000000,0,1005,0,0,0,0,0,0,0,0,0,0,,,1003,1004,100,100,0,0,0,0,0,0,0,0
+      -----------e-----------
+      t: 1684768084
+      t: 1685768087
+      -----------e-----------
+      l3: 0
+      l4: 708,568
+      l5: 318000,318000
+      -----------e-----------
+      l6: 318000
+      l7: 478,919
+      l8: 286199
+      -----------e-----------
+      t: 1685768089
+      t: 1686768089
+      -----------e-----------
+      contract(end):2981000
+      cancellable_subscription(end):9000
+      l9: 0
+      l10: 286200
+      -----------e-----------
+      l11: 485,633
+      contract(end):2990000
+      cancellable_subscription(end):0
+      l12: 0
+      l13: 0
+
+    */
   });
 
   /* can perform contract actions via consensus */
-  it("55. can run e/f178/f200/f201/f202", async () => {
+  xit("56. can run e/f178/f200/f201/f202", async () => {
     const [booter, addr1, addr2] = await ethers.getSigners();
     var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
     /* 126000: 35hrs 3024000: 35dys */
@@ -33590,7 +33680,7 @@ describe("E5's", function () {
       [ /* create subject contract */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
         [30], [23],
-        [0, bgN(1, 16), bgN(1,35)/* 2 */, 0, 900_000, 30_000, bgN(1, 70)/* 6 */, 0, 1, 0, 300_000, 0, 0, 0, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,1,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
+        [0, bgN(1, 16), bgN(1,35)/* 2 */, 0, 900_000, 30_000, bgN(1, 70)/* 6 */, 0, 1, 0, 300_000, 0, 0, 0, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,1,0,0,0,0,0/* 34 */,0,0,0,1,0,0], 
         [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
         [3], [23],
         [3_000_000], [23],
@@ -33788,51 +33878,289 @@ describe("E5's", function () {
 
 
     //submit vote_contract_proposal proposal
+    // var vv = [
+    //   [/* submit consensus */
+    //     [30000, 5, 0, 0, 3, 4],
+    //     [1008], [23],/* targets */
+    //     [3], [0]
+    //   ]
+    // ];
+    // console.log("l9: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
+    // await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
+    // gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    // console.log("l10: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
+    // console.log("l11: "+await g52.f2671t());
+
+
+    //submit force_exit_contract proposal
     var vv = [
       [/* submit consensus */
         [30000, 5, 0, 0, 0, 0],
-        [1008], [23]/* targets */
+        [1010], [23]/* targets */
       ]
     ];
-    console.log("l9: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
+    console.log("l11: "/* account_entry_expiry_time */ + await g52.f266([1004], [[1002]], 3));
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
     gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
-    console.log("l9: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
+    console.log("l12: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("l13: "/* account_entry_expiry_time */ + await g52.f266([1004], [[1002]], 3));
+    console.log("-----------e-----------");
+
+
+    //submit force_exit_contract proposal
+    var vv = [
+      [/* submit consensus */
+        [30000, 5, 0, 0, 0, 0],
+        [1009], [23]/* targets */
+      ]
+    ];
+    console.log("l14: "/* account_entry_expiry_time */ + await g52.f266([1004], [[1003]], 3));
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l15: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("l16: "/* account_entry_expiry_time */ + await g52.f266([1004], [[1003]], 3));
+    console.log("-----------e-----------");
+
+    /* 
+
+    -----------e-----------
+    -----------e-----------
+    l1: 7,333,472
+    contract(end):9000000
+    subject_contract(end):3000000
+    l2: 100000000000000000000000,0
+    -----e-----
+    l3: 1,0,1,0,0,0,1,0,1,0,1,0
+    -----e-----
+    l4: 0,1,0,0,1,0,1,0,0,0,1,0,0,1,0,0,1,0
+    -----------e-----------
+    t: 1684768004
+    t: 1685768010
+    -----------e-----------
+    l5: 725,049
+    l6: 100000000000000000000000,100000000000000000000000
+    -----------e-----------
+    l7: 622,655
+    l8: 100000000000000000000000,300000000000000000000000
+    -----------e-----------
+    l11: 100000000000000000000000
+    l12: 632,261
+    l13: 0
+    -----------e-----------
+    l14: 300000000000000000000000
+    l15: 611,344
+    l16: 0
+    -----------e-----------
+
+    */
   });
 
 
 
-  /* gas! */
-  xit("gassssssssssssss", async () => {
-    const [booter, addr1, addr2, addr3, addr4, addr5] = await ethers.getSigners();
+
+
+
+
+  /* can force exit accounts from contract */
+  xit("57. can run e/f178/f200/f189/f267", async () => {
+    const [booter, addr1, addr2] = await ethers.getSigners();
     var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
     /* 126000: 35hrs 3024000: 35dys */
     var v2/* boot_data */ = [
       [ /* spend */
-        [0, 0, 0, 5], [bgN(35, 6), bgN(35, 6), 0, 0, 0/* 4 */, bgN(53, 16), bgN(90, 16), bgN(5, 16)/* 7 */, 3, 2, 2, 0, 2/* 12 */, 0, bgN(3, 16), 1, bgN(53, 9), 0, 0], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]
+        [0, 0, 0, 5], [bgN(35, 6), bgN(35, 6), 3, 0, 126000/* 4 */, bgN(53, 16), bgN(90, 16), bgN(5, 16)/* 7 */, 3, 0, 0, 0, 2/* 12 */, 1, bgN(3, 16), 1, bgN(53, 9), 2, 1], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]
       ],
       [ /* end */
         [0, 0, 0, 3],
-        [bgN(35, 6), 0, 0, 0, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 2, 0, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0], [bgN(1, 72), bgN(1, 72), bgN(1, 70)/* 2 */, 0, 0, 0, 0], [0], [bgN(1, 9)]
+        [bgN(35, 12), 0, 0, 0, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 2, 0, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0], [bgN(1, 72), bgN(1, 72), bgN(1, 70)/* 2 */, 0, 0, 0, 0], [0], [bgN(1, 9)]
       ],
       [ /* main contract */
-        [0], [0, bgN(1, 16), 0, bgN(5, 6)/* 3 */, bgN(5, 6), 3024000, 0, 0/* 7 */, 0, bgN(5, 6), bgN(5, 6), bgN(53, 5), 0/* 12 */, 0, 1, 0/* 15 */, 72, 0, 0, 3/* 19 */, 0, 0, 0, bgN(53, 8)/* 23 */, bgN(90, 16), bgN(72, 8), 65000]
+        [0], [0, bgN(1, 16), 0, bgN(5, 6)/* 3 */, bgN(5, 6), 3024000, 0, 0/* 7 */, 0, bgN(5, 6), bgN(5, 6), bgN(53, 5), 0/* 12 */, 0, 1, 0/* 15 */, 72, 0, 0, 3/* 19 */, 0, 0, 0, bgN(53, 8)/* 23 */, bgN(90, 16), bgN(72, 8), 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
       ]
       //<12>contract_block_invocation_limit - 1
       //<13>contract_time_invocation_limit - 650
     ];
     var v3/* boot_id_data_type_data */ = [[5, 31], [3, 31], [2, 30]];
     var v4/* boot_object_metadata */ = [["e", "e"], ["e2", "e2"], ["e3", "e3"]];
-
     await e5.connect(booter)./*boot*/f157(v1, v2, v3, v4, v2[2][1]);
     var v5/* t_limits */ = [bgN(10, 17), bgN(10, 17)];
+    var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
+    
+    // set up proposals
+    var ss = [[["e", "e", "e"]], [["e", "e", "e"]]];
+    var vv = [
+      [ /* mint end, spend then the token */
+        [30000, 8, 0],
+        [3], [23],/* exchanges */
+        [0], [53],/* receivers */
+        [35_000_000]/* amounts */, [0],/* action */
+        []/* lower_bounds */, []/* upper_bounds */
+      ],
 
-    var aa = [[addr2.address], [addr3.address], [addr4.address], [addr5.address], [addr5.address], [addr5.address], [addr5.address], [addr5.address]];
+      [ /* create contract */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
+        [30], [23],
+        [0, bgN(1, 16), 3600/* 2 */, 0, 900_000, 30_000, bgN(1, 70)/* 6 */, 0, 1, 0, 300_000, 0, 0, 0, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,0,0,0,0,0,0/* 34 */,0,0,0,1,0,0], 
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [3], [23],
+        [3_000_000], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23]
+      ],//1003
+
+      [ /* create contract */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
+        [30], [23],
+        [0, bgN(1, 16), 3600/* 2 */, 0, 900_000, 30_000, bgN(1, 70)/* 6 */, 0, 1, 0, 300_000, 0, 0, 0, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,0,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [3], [23],
+        [3_000_000], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23]
+      ],//1004
+
+      [/* enter contract */
+        [30000, 3, 0],
+        [1, 2], [35, 35],/* contract ids */
+        [bgN(1, 23), bgN(1, 23)]/* expiry time (seconds) */
+      ],
+    ];
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 9_900_000, value: bgN(35_000_000, 9) });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l1: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("l2: "/* account_entry_expiry_time */ + await g52.f266([1003, 1004], [[1002], [1002]], 3));
+    console.log("-----------e-----------");
+
+
+    var vv = [
+      [ /* mint end, spend then the token */
+        [30000, 8, 0],
+        [3], [23],/* exchanges */
+        [0], [53],/* receivers */
+        [35_000_000]/* amounts */, [0],/* action */
+        []/* lower_bounds */, []/* upper_bounds */
+      ],
+      [/* enter contract */
+        [30000, 3, 0],
+        [1003, 1004], [23, 23],/* contract ids */
+        [bgN(1, 23), bgN(1, 23)]/* expiry time (seconds) */
+      ]
+    ];
+    await e5.connect(addr2).e(v5/* t_limits */, [], vv, [], { gasLimit: 9_900_000, value: bgN(35_000_000, 9) });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l3: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("l4: "/* account_entry_expiry_time */ + await g52.f266([1003, 1004], [[1006], [1006]], 3));
+    console.log("-----------e-----------");
+
+
+    //attempt to force exit account not as moderator
+    var vv = [
+      [/* force exit account */
+        [30000, 18, 0],
+        [1003], [23],/* contract ids */
+        [1002]
+      ]
+    ];
+    
+    await expect(e5.connect(addr2).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
+    // console.log("-----------e-----------");
+
+
+    //attempt to force exit account with force exit disabled
+    var vv = [
+      [/* force exit account */
+        [30000, 18, 0],
+        [1004], [23],/* contract ids */
+        [1006]
+      ]
+    ];
+    
+    await expect(e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
+    // console.log("-----------e-----------");
+
+
+
+    var vv = [
+      [/* force exit account */
+        [30000, 18, 0],
+        [1003], [23],/* contract ids */
+        [1006]
+      ]
+    ];
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 9_900_000, value: 35 });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l5: "/* GasEst */ + nWC(gas/* gas_cons */));
+    console.log("l6: "/* account_entry_expiry_time */ + await g52.f266([1003], [[1006]], 3));
+    console.log("-----------e-----------");
+
+
+    //attempt to force exit account not part of contract
+    var vv = [
+      [/* force exit account */
+        [30000, 18, 0],
+        [1003], [23],/* contract ids */
+        [1006]
+      ]
+    ];
+    await expect(e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
+    // console.log("-----------e-----------");
+    
+
+    /* 
+
+    l1: 2,602,654
+    l2: 100000000000000000000000,100000000000000000000000
+    -----------e-----------
+    l3: 1,233,070
+    l4: 100000000000000000000000,100000000000000000000000
+    -----------e-----------
+    l5: 322,365
+    l6: 0
+    -----------e-----------
+    
+    */
+  });
+
+  /* gas! */
+  it("gassssssssssssss", async () => {
+    const [booter, addr1, addr2, addr3, addr4, addr5, addr6] = await ethers.getSigners();
+    var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
+    /* 126000: 35hrs 3024000: 35dys */
+    var v2/* boot_data */ = [
+      [ /* spend */
+        [0, 0, 0, 5], [bgN(35, 6), bgN(35, 6), 3, 0, 126000/* 4 */, bgN(53, 16), bgN(90, 16), bgN(5, 16)/* 7 */, 3, 0, 0, 0, 2/* 12 */, 1, bgN(3, 16), 1, bgN(53, 9), 0, 0], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]
+      ],
+      [ /* end */
+        [0, 0, 0, 3],
+        [bgN(35, 12), 0, 0, 0, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 2, 0, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0], [bgN(1, 72), bgN(1, 72), bgN(1, 70)/* 2 */, 0, 0, 0, 0], [0], [bgN(1, 9)]
+      ],
+      [ /* main contract */
+        [0], [0, bgN(1, 16), 0, bgN(5, 6)/* 3 */, bgN(5, 6), 3024000, 0, 0/* 7 */, 0, bgN(5, 6), bgN(5, 6), bgN(53, 5), 0/* 12 */, 0, 1, 0/* 15 */, 72, 0, 0, 3/* 19 */, 0, 0, 0, bgN(53, 8)/* 23 */, bgN(90, 16), bgN(72, 8), 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      ]
+      //<12>contract_block_invocation_limit - 1
+      //<13>contract_time_invocation_limit - 650
+    ];
+    var v3/* boot_id_data_type_data */ = [[5, 31], [3, 31], [2, 30]];
+    var v4/* boot_object_metadata */ = [["e", "e"], ["e2", "e2"], ["e3", "e3"]];
+    await e5.connect(booter)./*boot*/f157(v1, v2, v3, v4, v2[2][1]);
+    var v5/* t_limits */ = [bgN(10, 17), bgN(10, 17)];
+    var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
+
+    var aa = [[addr6.address], [addr3.address], [addr4.address], [addr5.address], [addr5.address], [addr5.address], [addr5.address], [addr5.address]];
     var ss = [
       [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]],
       [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]],
       [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]], [["e", "e", "e"], ["e", "e", "e"], ["e", "e", "e"]]
     ];
+    var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
 
     var create_templates = [
       [/* custom object */
@@ -33841,12 +34169,13 @@ describe("E5's", function () {
       [/* create account object */
         [10000, 0, 0, 25/* context */, 0/* 4 */, 0, 0, 0, 0, 29, 0]
       ],
-      [/* create un-cancellable subscription */
+      [/* create subscription */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 33, 0],
         [0], [23],
-        [1002, 1, 0, 100], [23, 23, 23, 23],
-        [3, 5], [23, 23],
-        [1000, 1000], [23, 23]
+        [1001, 1, 0, 100, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23],
+        [3], [23],
+        [100], [23],
+        [0, 0], [23, 23]
       ],
       [/* create token */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 31, 0],
@@ -33859,60 +34188,37 @@ describe("E5's", function () {
         [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)],
         [23, 23, 23, 23, 23, 23, 23],
 
-        [3, 5], [23, 23],
-        [1000, 1000], [23, 23]
+        [3], [23, 23],
+        [1000], [23, 23],
+        [0], [23]
       ],
       [/* create contract */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
+        [30], [23],
+        [0, bgN(1, 16), 3600/* 2 */, 0, 900_000, 30_000, 90_000/* 6 */, 0, 0, 0, 300_000, 0, 0, 0/* 13 */, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,0,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [3], [23],
+        [3_000_000], [23],
         [0], [23],
-        [0, bgN(1, 16), 3600/* 2 */, 0, 900_000, 30_000, 90_000/* 6 */, 0, 0, 0, 300_000, 0, 0, 0, 0, bgN(1, 63)/* 15 */, 0, 0, 0, 0, 0/* 20 */, 0, 0, 0, 0, 0/* 25 */, 0, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
-        [3, 5], [23, 23],
-        [3_000_000, 3_000_000], [23, 23],
+        [0], [23],
+        [0], [23],
         [0], [23],
         [0], [23],
         [0], [23]
       ],
-      [/* create spend proposal */
+      [/* create proposal */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
         [0], [23],
-        [0, bgN(1, 16), 360/* 2 */, bgN(2, 16), 0, 1003, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [0, bgN(1, 16), 0/* 2 */, bgN(2, 16), 0, 1003, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
         [3, 5], [23, 23],
-        [3_000_000, 3_000_000], [23, 23],
-        [3], [23],/* 4 - exchange */
+        [3_000_000, 5_000_001], [23, 23],
+        [3], [23],/* 4 <exchanges> */
         [9000], [23],
         [2], [23],
         [0], [23],
         [0], [23],
         [0], [23],
-        [0, 0], [23, 23],
-      ],
-      [/* create reconfig proposal */
-        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
-        [0], [23],
-        [1, 1768544874, 0/* 2 */, bgN(2, 16), 0, 1003, 0/* 6 */, 0, 0, 1003], [23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
-        [3, 5], [23, 23],
-        [3_000_000, 3_000_000], [23, 23],
-        [1], [23],/* 4 - reconfig_array_pos */
-        [2], [23],/* reconfig_array_item_pos */
-        [3601], [23],/* reconfig_array_new_item */
-        [0], [23],
-        [0], [23],
-        [0], [23],
-        [0, 0], [23, 23],
-      ],
-      [/* create buy proposal */
-        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
-        [0], [23],
-        [2, 2108546813, 0/* 2 */, bgN(2, 16), 0, 1003, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23, 23, 23, 35],
-        [3, 5], [23, 23],
-        [3_000_000, 3_000_000], [23, 23],
-        [3], [23],/* <4>buy_exchanges */
-        [100_000], [23],
-        [0], [23],
-        [0], [23],
-        [0], [23],
-        [0], [23],
-        [0, 0], [23, 23],
+        [0, 0], [23, 23]
       ]
     ];
 
@@ -33926,9 +34232,10 @@ describe("E5's", function () {
       ],
       [/* send tokens to another account */
         [30000, 1, 0],
-        [5, 5, 5], [23, 23, 23],/* exchanges */
-        [1003, 1004, 1005], [23, 23, 23],/* receivers */
-        [1_000_000, 2_000_000, 3_000_000]/* amounts */
+        [5], [23],/* exchanges */
+        [0], [23],/* receivers */
+        [100_000],/* amounts */
+        [0]/* depths */
       ],
       [/* enter a contract */
         [30000, 3, 0],
@@ -33939,7 +34246,7 @@ describe("E5's", function () {
         [30000, 4, 0],
         [1004], [23],/* proposal ids */
         [1],/* votes */
-        [3, 5]/* target bounty exchanges */
+        [3], [23], [0]/* target bounty exchanges */
       ],
       [/* auth modify subscription */
         [20000, 11, 0],
@@ -33952,18 +34259,33 @@ describe("E5's", function () {
         [20000, 3, 0],
         [1003], [23],/* targets */
         [1],/* target_array */
-        [0],/* target_array_items */
-        [bgN(36, 12)], [23]/* new_items */
+        [17],/* target_array_items */
+        [2], [23]/* new_items */
       ],
-      [/* auth freeze tokens */
+      [/* auth modify contract */
+        [20000, 15, 0],
+        [1003], [23],/* targets */
+        [1],/* target_array_pos */
+        [2],/* target_array_items */
+        [3602], [23]/* new_items */
+      ],
+      [/* auth modify proposal */
+        [20000, 14, 0],
+        [1005], [23],/* targets */
+        [7],/* target_array_pos */
+        [0],/* target_array_items */
+        [136], [23]/* new_items */
+      ],
+      [/* auth freeze tokens [1-freeze_tokens , 0-unfreeze_tokens] */
         [30000, 6, 0],
         [1003], [23],/* target_exchanges */
         [1002], [23],/* target_account_ids */
         [530],/* freeze_amounts */
-        [1]/* action */
+        [1],/* action */
+        [0]/* depths */
       ],
       [/* submit consensus request */
-        [30000, 5, 0],
+        [30000, 5, 0, 0, 0, 0, 0],
         [1004], [23]/* targets */
       ],
       [/* extend enter contract */
@@ -33979,7 +34301,7 @@ describe("E5's", function () {
         [30000, 15, 0],
         [1004], [23],/* proposal/contract ids */
         [1002],/* voters/participants */
-        [3, 5]/* exchanges to loot */
+        [3, 5],[0, 0]/* exchanges to loot */
       ],
       [/* pay subscription */
         [30000, 2, 0],
@@ -33995,8 +34317,9 @@ describe("E5's", function () {
         [30000, 7, 0],
         [10035], [23],/* target receivers */
         [35],/* awward contexts */
-        [3, 5], [23, 23],/* exchange ids for first target receiver */
-        [200035, 200035]/* amounts for first target receiver */
+        [3], [23],/* exchange ids for first target receiver */
+        [1000],/* amounts for first target receiver */
+        [0, 0]/* depths */
       ],
       [/* auth mint token */
         [30000, 9, 0],
@@ -34005,11 +34328,6 @@ describe("E5's", function () {
         [17_000_000]/* amounts */, [0],/* action */
         []/* lower_bounds */, []/* upper_bounds */
       ],
-      [/* link exchanges */
-        [20000, 7, 0],
-        [1004], [23],/* target exchange ids */
-        [1003], [23]/* target parent ids */
-      ],
       [/* exchange transfer */
         [30000, 17, 0],
         [1003], [23],/* exchange ids */
@@ -34017,12 +34335,18 @@ describe("E5's", function () {
         [100_000], [0],/* amounts/depths */
         [3], [23],/* token targets */
       ],
-      [/* modify proposal */
-        [20000, 14, 0],
-        [1005], [23],/* targets */
-        [7],/* target_array_pos */
-        [0],/* target_array_items */
-        [136], [23]/* new_items */
+      [/* depth_mint\swap up\swap down tokens [2(depth_auth_mint), 1(swap_up), 0(swap_down)] */
+        [30000,16,0],
+        [1004], [23],/* target exchange ids */
+        [0], [53],/* receivers */
+        [2],/* action */ 
+        [1],/* depth */
+        [bgN(1,72)]/* amount */
+      ],
+      [/* force exit account */
+        [30000, 18, 0],
+        [1003], [23],/* contract ids */
+        [1002]/* target account */
       ]
     ];
 
@@ -34041,6 +34365,16 @@ describe("E5's", function () {
         [1003], [23],/* target objects */
         [1007], [23],/* target moderator account ids*/
         [1649941427]/* interacible expiry time limit */
+      ],
+      [/* revoke author's moderator privelages */
+        [20000, 16, 0],
+        [1003], [23],/* target objects */
+      ],
+      [/* block account */
+        [20000, 17, 0],
+        [1003], [23],/* target objects */
+        [1002], [23],/* target moderator account ids */
+        [tt+35_000]
       ],
       [ /* set metadata */
         [20000, 1, 0],
@@ -34075,21 +34409,119 @@ describe("E5's", function () {
         [35_000_000, 35_000_000]/* amounts */, [0, 0],/* action */
         []/* lower_bounds */, []/* upper_bounds */
       ],
+
       [/* create contract */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
+        [30], [23],
+        [0, bgN(1, 16), bgN(1, 43)/* 2 */, 0, 900_000, 30_000, 90_000/* 6 */, 0, 0, 0, 300_000, 0, 0, 0/* 13 */, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,bgN(2,23)/* 27 */,1,1,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [3], [23],/* exchanges */
+        [3_000_000], [23],/* amounts */
+        [0], [23],/* depths */
         [0], [23],
-        [0, bgN(1, 16), 3600/* 2 */, 0, 900_000, 30_000, 90_000/* 6 */, 0, 0, 0, 300_000, 0, 0, 0, 0, bgN(1, 63)], [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
-        [3, 5], [23, 23],
-        [3_000_000, 3_000_000], [23, 23],
+        [0], [23],
         [0], [23],
         [0], [23],
         [0], [23]
-      ],
+      ],//1003
+
       [ /* enter contract */
         [30000, 3, 0],
         [1003], [23],/* contract ids */
-        [1683081300]/* expiry time (seconds) */
-      ]
+        [tt+100_000_000]/* expiry time (seconds) */
+      ],
+
+      [/* create buy spend token */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 31, 0],
+        [0, 0, 0, 5],
+        [23, 23, 23, 23],
+
+        [bgN(35, 12), 0, 0, 0/* 3 */, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 1002, 1002, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0],
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 53, 53, 23, 23, 23, 23, 23, 23, 23, 23],
+
+        [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)],
+        [23, 23, 23, 23, 23, 23, 23],
+
+        [3], [23, 23],
+        [1000], [23, 23],
+        [0], [23]
+      ],//1004
+
+      [/* create buy end token */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 31, 0],
+        [0, 0, 0, 3],
+        [23, 23, 23, 23],
+
+        [bgN(35, 12), 0, 0, 0/* 3 */, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 1003, 1002, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0],
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 53, 23, 23, 23, 23, 23, 23, 23, 23],
+
+        [bgN(1, 30), bgN(1, 30), bgN(1, 30)/* 2 */, 0, 0, 0, 0],
+        [23, 23, 23, 23, 23, 23, 23],
+
+        [3], [23, 23],
+        [1000], [23, 23],
+        [0], [23]
+      ],//1005
+
+      [/* buy token */
+        [30000, 8, 0],
+        [1004], [23],/* exchanges */
+        [0], [53],/* receivers */
+        [350]/* amounts */, [0, 0],/* action */
+        []/* lower_bounds */, []/* upper_bounds */
+      ],
+
+      [/* create subscription */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 33, 0],
+        [0], [23],
+        [1002, 1, 1, 100, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23],
+        [3], [23],
+        [100], [23],
+        [0, 0], [23, 23]
+      ],//1006
+
+      [/* create contract */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
+        [30], [23],
+        [0, bgN(1, 16), bgN(1, 43)/* 2 */, 0, 900_000, 30_000, 90_000/* 6 */, 0, 0, 0, 300_000, 0, 0, 0/* 13 */, 0, tt+1000, 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,1,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
+        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [3], [23],/* exchanges */
+        [3_000_000], [23],/* amounts */
+        [0], [23],/* depths */
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23]
+      ],//1007
+
+      [ /* enter contract */
+        [30000, 3, 0],
+        [1007], [23],/* contract ids */
+        [tt+100_000_000]/* expiry time (seconds) */
+      ],
+
+      [/* create proposal */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
+        [0], [23],
+        [0, bgN(3, 23), 0/* 2 */, bgN(4, 23), 0, 1003, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
+        [3], [23],
+        [3_000_000], [23],
+        [3], [23],/* 4 <exchanges> */
+        [9000], [23],
+        [2], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23],
+        [0], [23]
+      ],//1008
+
+      [/* vote proposal */
+        [30000, 4, 0],
+        [1008], [23],/* proposal ids */
+        [1],/* votes */
+        [3], [23], [0]/* target bounty exchanges */
+      ],
     ];
 
     var vv3 = [
@@ -34099,39 +34531,38 @@ describe("E5's", function () {
         [0, 0], [53, 53],/* receivers */
         [35_000_000, 35_000_000]/* amounts */, [0, 0],/* action */
         []/* lower_bounds */, []/* upper_bounds */
-      ]
+      ],
     ];
 
-    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 5_300_000, value: bgN(35_000_000, 9) });
+    console.log("-----------e-----------");
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 19_300_000, value: bgN(35_000_000, 9) });
+    console.log("-----------e-----------");
     await e5.connect(addr2).e(v5/* t_limits */, [], vv3, ss, { gasLimit: 5_300_000, value: bgN(35_000_000, 9) });
-
-    await network.provider.send("evm_increaseTime", [9000000000]);
+    
+    console.log("-----------e-----------");
+    await network.provider.send("evm_increaseTime", [10_000_000]);
     await network.provider.send("evm_mine");
 
-    console.log("sender 2 account: " + await e5.f167([[]], [addr2.address], 2));//1006
-
+    console.log("sender 2 account: " + await e5.f167([], [addr2.address], 2));//1006
+    var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
 
     var vals = [
-      [/* send awwards */
-        [30000, 7, 0],
-        [10035], [23],/* target receivers */
-        [35],/* awward contexts */
-        [3], [23],/* exchange ids for first target receiver */
-        [1000],/* amounts for first target receiver */
-      ]
+      [/* auth modify contract */
+        [20000, 15, 0],
+        [1003], [23],/* targets */
+        [1],/* target_array_pos */
+        [0],/* target_array_items */
+        [3602], [23]/* new_items */
+      ],
     ];
 
     //tesssssssssssst
+    // await e5.connect(addr1).f2232();
     await e5.connect(addr1).e(v5/* t_limits */, aa, vals, ss, { gasLimit: 5_100_000, value: 35 });
     var gas_cons = await e5./* get_gas_consumed */f5300g();
-    console.log("target: send 1 award");
+    console.log("target: create object");
     console.log("nested transaction count " + vals.length);
-    console.log("consumed: "/* GasEst */ + nWC(gas_cons));
-
-    /* 
-
-    */
-
+    console.log("consumed: "/* GasEst */ + nWC(gas_cons)+"g");
 
   });
   
@@ -34148,93 +34579,31 @@ describe("E5's", function () {
   n: nested transaction count
   g: gas
 
-  SKELETON
-  target: all actions skipped, new user
-  nested transaction count: 1
-  consumed: 163,239g
-
-  target: all actions skipped, new user
-  nested transaction count: 2
-  consumed: 172,014
-
-  target: all actions skipped, new user
-  nested transaction count: 3
-  consumed: 180,792
-
-  target: all actions skipped, new user
-  nested transaction count: 4
-  consumed: 189,571
-
-  target: all actions skipped, new user
-  nested transaction count: 5
-  consumed: 198,352
-
-
-
-  ——-—e———
-
-
-
-  target: all actions skipped, existing user
-  nested transaction count: 1
-  consumed: 91,189
-
-  target: all actions skipped, existing user
-  nested transaction count: 2
-  consumed: 99,964
-
-  target: all actions skipped, existing user
-  nested transaction count: 3
-  consumed: 108,742
-
-  target: all actions skipped, existing user
-  nested transaction count: 4
-  consumed: 117,521
-
-  target: all actions skipped, existing user
-  nested transaction count: 5
-  consumed: 126,302
-
-  first: 163,239g
-  not first: 91,189g
-  +9000g per loop.
-
-
-
-
-
-
-  ——————————————e————————————————
-
-
-
-
-
 
 
   MAKE CUSTOM OBJECT
   target: create custom object
   nested transaction count: 1
-  consumed: 184,601
+  consumed: 61,315
 
 
   target: create custom object
   nested transaction count: 2
-  consumed: 303,663
+  consumed: 113,628
 
 
   target: create custom object
   nested transaction count: 3
-  consumed: 422,741
+  consumed: 165,940
 
 
   target: create custom object
   nested transaction count: 4
-  consumed: 541,827
+  consumed: 218,253
 
 
-  184,601g
-  +119,100g per loop.
+  61,315g
+  +52,313g per loop.
 
 
 
@@ -34251,28 +34620,28 @@ describe("E5's", function () {
   CREATE ACCOUNT FOR SOMEONE
   target: create account object
   nested transaction count: 1
-  consumed: 47,162
+  consumed: 42,460
 
 
   target: create account object
   nested transaction count: 2
-  consumed: 89,299
+  consumed: 75,918
 
 
 
   target: create account object
   nested transaction count: 3
-  consumed: 131,435
+  consumed: 109,375
 
 
 
   target: create account object
   nested transaction count: 4
-  consumed: 173,572
+  consumed: 142,833
 
 
-  47,162g
-  +42,136g per loop.
+  42,460g
+  +33,458g per loop.
 
 
 
@@ -34289,55 +34658,27 @@ describe("E5's", function () {
   CREATE SUBSCRIPTION OBJECT
   target: create subscription object, 1 exchange, un-cancellable
   nested transaction count: 1
-  consumed: 700,169
+  consumed: 330,605
 
 
   target: create subscription object, 1 exchange, cancellable
   nested transaction count: 1
-  consumed: 749,731
+  consumed: 351,172
 
-  +50,000g for cancellable.
+  +21,000g for cancellable.
 
 
   target: create subscription object, 2 exchanges, un-cancellable
   nested transaction count: 1
-  consumed: 808,469
+  consumed: 389,643
 
 
   target: create subscription object, 3 exchanges, un-cancellable
   nested transaction count: 1
-  consumed: 916,771
+  consumed: 448,683
 
-  700,169g
-  +108,000g per exchange.
-
-
-  ——e——
-
-
-  target: create subscription object, 1 exchange, un-cancellable
-  nested transaction count: 1
-  consumed: 708,597
-
-
-  target: create subscription object, 1 exchange, un-cancellable
-  nested transaction count: 2
-  consumed: 1,382,867
-
-
-
-  target: create subscription object, 1 exchange, un-cancellable
-  nested transaction count: 3
-  consumed: 2,111,141
-
-
-
-  target: create subscription object, 1 exchange, un-cancellable
-  nested transaction count: 4
-  consumed: 2,893,419
-
-  +675,000g + (n * 53,000g)  per exchange.
-
+  330,605g
+  +59,040g per exchange.
 
 
 
@@ -34353,67 +34694,45 @@ describe("E5's", function () {
   CREATE CONTRACT OBJECTS
   target: create contract object, 1 exchange
   nested transaction count: 1
-  consumed: 1,404,831
+  consumed: 664,043
 
   target: create contract object, 1 exchange
   nested transaction count: 1 (+1 val)
-  consumed: 1,443,771
+  consumed: 686,610
 
   target: create contract object, 1 exchange
   nested transaction count: 1(+2 val)
-  consumed: 1,484,905
+  consumed: 709,177
 
   target: create contract object, 1 exchange
   nested transaction count: 1(+3 val)
-  consumed: 1,526,039
+  consumed: 731,744
 
-  +41,000g per val.
+  +22,600g per val.
 
 
 
   ———e————
 
+
+
+  target: create contract object, 1 exchange
+  nested transaction count: 1
+  consumed: 664,043
 
 
   target: create contract object, 2 exchanges
   nested transaction count: 1
-  consumed: 1,507,621
+  consumed: 721,728
 
 
   target: create contract object, 3 exchanges
   nested transaction count: 1
-  consumed: 1,612,601
+  consumed: 779,414
 
 
 
-  +103,000g per exchange.
-
-
-
-  ———e————
-
-
-
-  target: create contract object, 1 exchange
-  nested transaction count: 2
-  consumed: 2,650,855
-
-
-  target: create contract object, 1 exchange
-  nested transaction count: 3
-  consumed: 3,990,989
-
-
-  target: create contract object, 1 exchange
-  nested transaction count: 4
-  consumed: 5,423,037
-
-
-  1,404,831g
-  +1,246,024g + (n * 91,914g)  per transaction.
-
-
-
+  +57,686g per exchange.
 
 
 
@@ -34427,20 +34746,20 @@ describe("E5's", function () {
   CREATE PROPOSALS
   target: create spend proposal object, 1 exchange
   nested transaction count: 1
-  consumed: 752,462
+  consumed: 609,849
 
   target: create spend proposal object, 2 exchanges
   nested transaction count: 1
-  consumed: 831,279
+  consumed: 688,830
 
   target: create spend proposal object, 3 exchanges
   nested transaction count: 1
-  consumed: 910,097
+  consumed: 767,811
 
 
   target: create spend proposal object, 4 exchanges
   nested transaction count: 1
-  consumed: 988,928
+  consumed: 846,795
 
   +78,818g per exchange.
 
@@ -34452,150 +34771,24 @@ describe("E5's", function () {
 
   target: create proposal object, 1 exchange
   nested transaction count: 1
-  consumed: 752,462
+  consumed: 609,849
 
 
   target: create proposal object, 1 exchange
   nested transaction count: 1(+1 val)
-  consumed: 775,029
+  consumed: 632,416
 
 
   target: create proposal object, 1 exchange
   nested transaction count: 1(+2 val)
-  consumed: 797,596
+  consumed: 654,983
 
 
   target: create proposal object, 1 exchange
   nested transaction count: 1(+3 val)
-  consumed: 820,163
+  consumed: 677,550
 
   +23,000g per value.
-
-
-
-  ———e————
-
-
-
-  target: create spend proposal object, 1 exchange
-  nested transaction count: 1
-  consumed: 752,462
-
-
-  target: create spend proposal object, 1 exchange
-  nested transaction count: 2
-  consumed: 1,388,368
-
-
-  target: create spend proposal object, 1 exchange
-  nested transaction count: 3
-  consumed: 2,065,984
-
-
-  target: create spend proposal object, 1 exchange
-  nested transaction count: 4
-  consumed: 2,785,312
-
-
-  752,462g
-  +635,000g + (n * 42,000g)  per transaction.
-
-
-
-  ———e————
-
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 1
-  consumed: 993,296g
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 2
-  consumed: 1,774,146g
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 3
-  consumed: 2,596,707g
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 4
-  consumed: 3,460,978g
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 5
-  consumed: 4,366,961g
-
-
-  993,296g
-  +780,850g + (n * 42,000g)  per transaction.
-
-
-
-  ———e————
-
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 1
-  consumed: 949,960g
-
-
-  target: create re-config proposal object, 2 exchanges
-  nested transaction count: 1
-  consumed: 1,005,777g
-
-
-  target: create re-config proposal object, 3 exchanges
-  nested transaction count: 1
-  consumed: 1,061,594g
-
-
-  target: create re-config proposal object, 4 exchange
-  nested transaction count: 1
-  consumed: 1,117,426g
-
-
-  +55,000g per exchange.
-
-
-
-  ———e————
-
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 1
-  consumed: 949,960g
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 2
-  consumed: 1,693,474g
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 3
-  consumed: 2,478,699g
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 4
-  consumed: 3,305,634g
-
-
-  target: create re-config proposal object, 1 exchange
-  nested transaction count: 5
-  consumed: 4,174,281g
-
-
-  949,960g
-  +743,514g + (n * 42,000g)  per transaction.
-
 
 
 
@@ -34609,20 +34802,20 @@ describe("E5's", function () {
   MAKE TOKENS
   target: make uncapped buy token, 1 exchange
   nested transaction count 1
-  consumed: 881,790g
+  consumed: 676,263g
 
 
   target: make uncapped buy token, 2 exchanges
   nested transaction count 1
-  consumed: 938,230g
+  consumed: 718,236g
 
 
   target: make uncapped buy token, 3 exchanges
   nested transaction count 1
-  consumed: 994,673g
+  consumed: 758,972g
 
 
-  +57,000g per exchange.
+  +40,736g per exchange.
 
 
   ———e————
@@ -34630,50 +34823,21 @@ describe("E5's", function () {
 
   target: make uncapped buy token, 1 exchanges
   nested transaction count 1(+1 val)
-  consumed: 886,024g
+  consumed: 696,631g
 
 
   target: make uncapped buy token, 1 exchanges
   nested transaction count 1(+2 vals)
-  consumed: 906,392g
+  consumed: 716,999g
 
 
   target: make uncapped buy token, 1 exchanges
   nested transaction count 1(+3 vals)
-  consumed: 926,760g
+  consumed: 737,367g
 
 
 
   +20,000g per value.
-
-
-  ———e————
-
-
-  target: make uncapped buy token, 1 exchange
-  nested transaction count 1
-  consumed: 881,790g
-
-
-  target: make uncapped buy token, 1 exchange
-  nested transaction count 2
-  consumed: 1,680,330g
-
-
-  target: make uncapped buy token, 1 exchange
-  nested transaction count 3
-  consumed: 2,532,174g
-
-
-  target: make uncapped buy token, 1 exchange
-  nested transaction count 4
-  consumed: 3,437,324g
-
-
-
-  881,790g
-  +798,540g + (n * 53,000g)  per transaction.
-
 
 
 
@@ -34684,51 +34848,30 @@ describe("E5's", function () {
   BUY TOKENS
   target: buy end
   nested transaction count 1
-  consumed: 660,191g
+  consumed: 493,469g
 
 
   target: buy spend
   nested transaction count 1
-  consumed: 664,659g
+  consumed: 548,284g
 
 
   target: buy end, spend
   nested transaction count 1
-  consumed: 961,606g
+  consumed: 884,255g
 
 
-  target: buy end, spend, 1 custom end
+  target: buy end, spend, 1 custom spend
   nested transaction count 1
-  consumed: 1,304,613g
+  consumed: 1,317,700g
 
 
   target: buy end, spend, 1 custom end, 1 custom spend
   nested transaction count 1
-  consumed: 1,608,652g
+  consumed: 1,737,503g
 
 
-  +310,000g per exchange.
-
-
-  ———e————
-
-
-  target: buy end, spend
-  nested transaction count 2
-  consumed: 1,321,215
-
-
-  target: buy multi
-  nested transaction count 3
-  consumed: 2,051,668
-
-
-  target: buy multi
-  nested transaction count 4
-  consumed: 2,771,997g
-
-
-  +700,000g  per transaction.
+  +433,445g per exchange.
 
 
 
@@ -34741,69 +34884,26 @@ describe("E5's", function () {
   SEND TOKENS:
   target: send tokens, 1 exchange
   nested transaction count 1
-  consumed: 287,566g
+  consumed: 99,192g
 
 
   target: send tokens, 2 exchanges
   nested transaction count 1
-  consumed: 305,919g
+  consumed: 131,231g
 
 
   target: send tokens, 3 exchange
   nested transaction count 1
-  consumed: 319,470g
+  consumed: 168,070g
 
 
   target: send tokens, 4 exchange
   nested transaction count 1
-  consumed: 333,024g
+  consumed: 200,112g
 
 
-
-  target: send tokens, 5 exchange
-  nested transaction count 1
-  consumed: 346,577g
-
-
-  287,566g
-  +14,000g  per transfer.
-
-
-
-  ———e———
-
-
-  target: send tokens, 1 exchange
-  nested transaction count 1
-  consumed: 287,566g
-
-
-
-  target: send tokens, 1 exchange
-  nested transaction count 2
-  consumed: 575,577g
-
-
-
-  target: send tokens, 1 exchange
-  nested transaction count 3
-  consumed: 885,377g
-
-
-
-  target: send tokens, 1 exchange
-  nested transaction count 4
-  consumed: 1,216,968g
-
-
-
-  target: send tokens, 1 exchange
-  nested transaction count 5
-  consumed: 1,570,365
-
-
-  287,566g
-  +288,000g + (n * 22,000g) per transaction.
+  99,192g
+  +32,000g per transfer.
 
 
 
@@ -34815,45 +34915,20 @@ describe("E5's", function () {
   ENTER CONTRACT:
   target: enter contract, 1 exchange
   nested transaction count 1
-  consumed: 601,235
-
-
-  target: enter contract, 1 exchange
-  nested transaction count 2
-  consumed: 1,151,935
-
-
-  target: enter contract, 1 exchange
-  nested transaction count 3
-  consumed: 1,718,830
-
-
-
-  601,235g
-  +570,000g + (n * 16,000g)  per transaction.
-
-
-
-  ———e———
-
-
-
-  target: enter contract, 1 exchange
-  nested transaction count 1
-  consumed: 601,235g
+  consumed: 463,051g
 
 
   target: enter contract, 2 exchanges
   nested transaction count 1
-  consumed: 851,661g
+  consumed: 489,070g
 
 
   target: enter contract, 3 exchanges
   nested transaction count 1
-  consumed: 1,102,172g
+  consumed: 541,791g
 
 
-  +250,000g per exchange.
+  +52,000g per exchange.
 
 
 
@@ -34866,60 +34941,31 @@ describe("E5's", function () {
   VOTE PROPOSAL:
   target: vote proposal, 1 proposal
   nested transaction count 1
-  consumed: 523,326g
+  consumed: 385,179g
 
 
 
-  target: vote proposal, 2 proposal
-  nested transaction count 2
-  consumed: 641,688g
+  target: vote proposal, 2 bounty exchanges
+  nested transaction count 1
+  consumed: 406,757g
 
 
+  —————e———--- 
 
-  target: vote proposal, 3 proposal
-  nested transaction count 3
+
+  target: vote proposal, 2 proposals
+  nested transaction count 1
   consumed: 758,264g
 
 
 
-  target: vote proposal, 4 proposal
+  target: vote proposal, 3 proposals
   nested transaction count 1
-  consumed: 874,957g
+  consumed: 922,133g
 
 
-  +117,000g per proposal.
+  +163,869g per proposal.
   +20,000g per bounty exchange.
-
-
-  ————e————
-
-
-  target: vote proposal, 1 exchange
-  nested transaction count 1
-  consumed: 523,326g
-
-
-
-  target: vote proposal, 1 exchange
-  nested transaction count 2
-  consumed: 929,768g
-
-
-
-  target: vote proposal, 1 exchange
-  nested transaction count 3
-  consumed: 1,355,197g
-
-
-
-  target: vote proposal, 1 exchange
-  nested transaction count 4
-  consumed: 1,799,616g
-
-
-
-  523,326g
-  +406,000g + (n * 19,000g)  per transaction.
 
 
 
@@ -34929,7 +34975,7 @@ describe("E5's", function () {
   SUBMIT PROPOSAL
   target: submit spend proposal, 1 exchange
   nested transaction count 1
-  consumed: 468,182g
+  consumed: 462,392g
 
 
   target: submit spend proposal, 2 exchange
@@ -34961,21 +35007,21 @@ describe("E5's", function () {
 
   target: submit re-config contract proposal, 1 value
   nested transaction count 1
-  consumed: 517,987g
+  consumed: 793,555g
 
 
   target: submit re-config contract proposal, 2 values
   nested transaction count 1
-  consumed: 565,564g
+  consumed: 932,049g
 
 
   target: submit re-config contract proposal, 3 values
   nested transaction count 1
-  consumed: 616,054
+  consumed: 1,070,710g
 
 
-  517,987g
-  +40,000g  per value.
+  793,555g
+  +138,494g  per value.
 
 
 
@@ -34985,21 +35031,21 @@ describe("E5's", function () {
 
   target: submit re-config subscription proposal, 1 value
   nested transaction count 1
-  consumed: 481,717g
+  consumed: 445,932g
 
 
   target: submit re-config subscription proposal, 2 value
   nested transaction count 1
-  consumed: 514,359
+  consumed: 504,510g
 
 
-  target: submit re-config subscription proposal, 1 value
+  target: submit re-config subscription proposal, 3 value
   nested transaction count 1
-  consumed: 547,003
+  consumed: 563,097g
 
 
-  481,717g
-  +30,000g per value.
+  445,932g
+  +58,578g per value.
 
 
 
@@ -35009,22 +35055,22 @@ describe("E5's", function () {
 
   target: submit re-config token proposal, 1 value
   nested transaction count 1
-  consumed: 625,617g
+  consumed: 584,544g
 
 
-  target: submit re-config token proposal, 1 value
+  target: submit re-config token proposal, 2 value
   nested transaction count 1
-  consumed: 732,639
+  consumed: 712,212g
 
 
-  target: submit re-config token proposal, 1 value
+  target: submit re-config token proposal, 3 value
   nested transaction count 1
-  consumed: 839,788
+  consumed: 840,024g
 
 
 
-  625,617g
-  +100,000g per value
+  584,544g
+  +127,812g per value
 
 
   ————e—————
@@ -35032,27 +35078,22 @@ describe("E5's", function () {
 
   target: submit buy proposal, 1 value
   nested transaction count 1
-  consumed: 518,096g
+  consumed: 577,452g
 
 
   target: submit buy proposal, 2 value
   nested transaction count 1
-  consumed: 601,934g
+  consumed: 639,838g
 
 
-  target: submit buy proposal, 1 value
+  target: submit buy proposal, 3 value
   nested transaction count 1
-  consumed: 650,298
-
-
-  target: submit buy proposal, 1 value
-  nested transaction count 1
-  consumed: 698,666
+  consumed: 698,846g
 
 
 
-  548,096g
-  +50,000g per value
+  577,452g
+  +59,008g per value
 
 
   —————e—————
@@ -35060,21 +35101,21 @@ describe("E5's", function () {
 
   target: submit freeze proposal, 1 value
   nested transaction count 1
-  consumed: 639,137g
+  consumed: 590,837g
 
 
   target: submit freeze proposal, 2 values
   nested transaction count 1
-  consumed: 771,015g
+  consumed: 745,020g
 
 
-  target: submit freeze proposal, 1 value
+  target: submit freeze proposal, 3 value
   nested transaction count 1
-  consumed: 907,577g
+  consumed: 899,480g
 
 
-  640,000g
-  +130,000g per value
+  590,837g
+  +154,460g per value
 
 
 
@@ -35083,21 +35124,21 @@ describe("E5's", function () {
   AUTH MODIFY SUBSCRIPTION
   target: auth modify subscription, 1 value
   nested transaction count 1
-  consumed: 396,205g
+  consumed: 134,391g
 
 
   target: auth modify subscription, 2 values
   nested transaction count 1
-  consumed: 399,396
+  consumed: 159,913g
 
 
-  target: auth modify subscription, 2 values
+  target: auth modify subscription, 3 values
   nested transaction count 1
-  consumed: 402,588
+  consumed: 185,438g
 
 
-  396,205g
-  +3,000g per value
+  134,391g
+  +25,522g per value
 
 
 
@@ -35107,21 +35148,21 @@ describe("E5's", function () {
   AUTH MODIFY EXCHANGE
   target: auth modify token, 1 value
   nested transaction count 1
-  consumed: 539,565g
+  consumed: 276,037g
 
 
   target: auth modify subscription, 2 values
   nested transaction count 1
-  consumed: 541,693g
+  consumed: 370,881g
 
 
-  target: auth modify subscription, 2 values
+  target: auth modify subscription, 3 values
   nested transaction count 1
-  consumed: 543,820g
+  consumed: 465,865g
 
 
-  396,205g
-  +2,000g per value
+  276,037g
+  +94,844 per value
 
 
   —————————————————e——————————————————————
@@ -35129,21 +35170,21 @@ describe("E5's", function () {
   AUTH FREEZE TOKENS
   target: auth modify subscription, 2 values
   nested transaction count 1
-  consumed: 605,429g
+  consumed: 305,717g
 
 
   target: auth modify subscription, 2 values
   nested transaction count 1
-  consumed: 720,111g
+  consumed: 428,054g
 
 
-  target: auth modify subscription, 2 values
+  target: auth modify subscription, 3 values
   nested transaction count 1
-  consumed: 834,914g
+  consumed: 550,625g
 
 
-  605,429g
-  +115,000g per value
+  305,717g
+  +122,337g per value
 
 
 
@@ -35154,21 +35195,21 @@ describe("E5's", function () {
   EXTEND ENTER CONTRACT
   target: extend enter contract, 1 values
   nested transaction count 1
-  consumed: 508,626g
+  consumed: 326,227g
 
 
   target: extend enter contract, 2 values
   nested transaction count 1
-  consumed: 583,980g
+  consumed: 460,093g
 
 
   target: extend enter contract, 3 values
   nested transaction count 1
-  consumed: 659,416g
+  consumed: 594,394g
 
 
-  508,626g
-  +70,000g per value
+  326,227g
+  +134,301g per value
 
 
 
@@ -35180,17 +35221,21 @@ describe("E5's", function () {
   EXIT CONTRACT
   target: exit contract, 1 values
   nested transaction count 1
-  consumed: 381,612g
+  consumed: 312,402g
+
+
+  target: extend enter contract, 2 values
+  nested transaction count 1
+  consumed: 545,027g
 
 
   target: extend enter contract, 3 values
   nested transaction count 1
-  consumed: 397,008g
-
+  consumed: 778,082g
 
 
   381,612g
-  +20,000g per value
+  +233,055g per value
 
 
   —————————————————e——————————————————————
@@ -35199,40 +35244,37 @@ describe("E5's", function () {
   ARCHIVE DATA
   target: archive contract
   nested transaction count 1
-  consumed: 662,611g
+  consumed: 937,673g
 
 
-  target: archive contract and proposal
+  target: archive proposal
   nested transaction count 1
-  consumed: 882,398g
+  consumed: 368,652g
 
-
-  662,611g
-  +220,000g per value
 
   —————————————————e——————————————————————
 
 
 
   PAY SUBSCRIPTION
-  target: archive contract and proposal
+  target: pay subscription, 1 value
   nested transaction count 1
-  consumed: 515,052g
+  consumed: 251,891g
 
 
-  target: archive contract and proposal
+  target: pay subscription 2 values
   nested transaction count 1
-  consumed: 560,740g
+  consumed: 286,325g
 
 
-  target: archive contract and proposal
+  target: pay subscription 3 values
   nested transaction count 1
-  consumed: 606,436g
+  consumed: 320,767g
 
 
 
-  515,052g
-  +40,000g per value
+  251,891g
+  +34,442g per value
 
   —————————————————e——————————————————————
 
@@ -35241,17 +35283,12 @@ describe("E5's", function () {
   COLLECT SUBSCRIPTION
   target: collect subscription, 1 collect account
   nested transaction count 1
-  consumed: 484,459g
+  consumed: 173,441g
 
 
   target: collect subscription, 2 collect account
   nested transaction count 1
-  consumed: 496,997g
-
-
-  target: collect subscription, 3 collect account
-  nested transaction count 1
-  consumed: 509,536g
+  consumed: 185,974g
 
 
   +12,000g per collect account
@@ -35260,26 +35297,20 @@ describe("E5's", function () {
   ———e————
 
 
-  target: collect subscription, 2 targets, 1 collect account
+  target: collect subscription, 1 targets, 1 collect account
   nested transaction count 1
-  consumed: 484,459g
-
-
-
-  target: collect subscription, 2 targets, 1 collect account
-  nested transaction count 1
-  consumed: 535,268g
+  consumed: 173,441g
 
 
 
   target: collect subscription, 2 targets, 1 collect account
   nested transaction count 1
-  consumed: 585,253g
+  consumed: 247,720g
 
 
 
-  484,459g
-  +50,000g per target
+  173,441g
+  +74,279g per target
 
 
   —————————————————e——————————————————————
@@ -35289,26 +35320,26 @@ describe("E5's", function () {
   SEND AWARDS
   target: send 1 award, 1 exchange
   nested transaction count 1
-  consumed: 416,436g
+  consumed: 112,065g
 
 
   target: send 1 award, 2 exchange
   nested transaction count 1
-  consumed: 450,338g
+  consumed: 120,665g
 
 
   target: send 1 award, 3 exchange
   nested transaction count 1
-  consumed: 457,251g
+  consumed: 129,264g
 
 
   target: send 1 award, 4 exchange
   nested transaction count 1
-  consumed: 464,455g
+  consumed: 137,865g
 
 
-  416,436g
-  +7,000g per exchange
+  112,065g
+  +8,000g per exchange
 
 
   ———e———
@@ -35316,85 +35347,62 @@ describe("E5's", function () {
 
   target: send 1 award
   nested transaction count 1
-  consumed: 416,436g
+  consumed: 112,065g
 
 
   target: send 2 award
   nested transaction count 1
-  consumed: 446,975g
+  consumed: 168,124g
 
 
-  target: send 1 award
+  target: send 3 awards
   nested transaction count 1
-  consumed: 477,812g
+  consumed: 224,198g
 
 
-  416,436g
-  +30,000g per exchange
+  112,065g
+  +56,074g per exchange
 
   —————————————————e——————————————————————
 
   MODIFY PROPOSAL
   target: modify 1 proposal
   nested transaction count 1
-  consumed: 97,651g
+  consumed: 112,364g
 
 
-  target: modify 1 proposal
-  nested transaction count 2
-  consumed: 136,185g
+  target: modify 1 proposal, 2 values
+  nested transaction count 1
+  consumed: 130,839g
 
 
-  target: modify 1 proposal
-  nested transaction count 3
-  consumed: 157,757g
+  target: modify 1 proposal, 3 values
+  nested transaction count 1
+  consumed: 149,314g
 
-  97,651g
-  +30,000g per value (20,000g if value exists)
+  112,364g
+  +18,475g per value
 
 
   —————————————————e——————————————————————
 
   MODIFY CONTRACT
-  target: modify 1 contract
+  target: modify 1 contract, 1 value
   nested transaction count 1
-  consumed: 189,216g
+  consumed: 530,599g
 
 
-  target: modify 1 contract
-  nested transaction count 2
-  consumed: 235,932g
+  target: modify 1 contract, 2 values
+  nested transaction count 1
+  consumed: 644,254g
 
 
-  target: modify 1 contract
-  nested transaction count 3
-  consumed: 282,679g
+  target: modify 1 contract, 3 values
+  nested transaction count 1
+  consumed: 758,070g
 
-  189,216g
-  +46,000g per value
-
-
-  target: add 1 entry fee exchange
-  nested transaction count 2
-  consumed: 280,000g
-
-
-  target: add 2 entry fee exchanges
-  nested transaction count 4
-  consumed: 430,515g
-
-
-  target: add 3 entry fee exchanges
-  nested transaction count 6
-  consumed: 581,947g
-
-
-  target: add 4 entry fee exchanges
-  nested transaction count 8
-  consumed: 739,361g
-
-  280,000g
-  +146,000g + (5,000g * n) per exchange
+  530,599g
+  +113,655g per value
 
 */
 
@@ -35545,5 +35553,4 @@ describe("E5's", function () {
 
 */
 
-//287
-//
+//288

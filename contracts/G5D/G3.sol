@@ -55,12 +55,27 @@ library G3 {
         mapping(uint256 => mapping(uint256 => uint256)) storage v1/* new_obj_id_nums */ = p2/* self */.num[p3/* new_obj_id */];
         /* intialize a storage mapping that points to the new objects location */
 
+        // bool v2/* already_hashed */;
+
         for (uint256 e = 0; e < p1/* new_obj_id_num_data */.length; e++) {
             /* for each array in the new objects number data specified */
 
             if((e == 2 || e == 3 || e == 10) && p4/* obj_type */ == 32/* 32(consensus_request) */){
                 /* if its a consensus request object, we skip the second, third and eigth array since the bounty data isnt recorded */
             }else{
+                // if(p1/* new_obj_id_num_data */[1/* config */][4/* <4>externally_set_data */] != 0 && p4/* obj_type */ == 32/* 32(consensus_request) */ && e >= 4 && e <= 9){
+                //     /* if its a consensus object, its externally set data value is set to 1, and the array in focus is one of the consensus' data arrays */
+
+                //     if(!v2/* already_hashed */){
+                //         /* if the data has already been hashed and set in the externally_set_data array value */
+
+                //         v1/* new_obj_id_nums */[1/* config */][4/* <4>externally_set_data */] = f288/* hash_data | confirm_unedited_data */(p1/* new_obj_id_num_data */, 0/* hash */, 0);
+                //         /* set the extenally_set_data value as the hash value from the has_data function */
+
+                //         v2/* already_hashed */ = true;
+                //         /* set the already hashed value to true to avoid repeating action */
+                //     }
+                // }else{
                 for (uint256 v = 0; v < p1/* new_obj_id_num_data */[e].length; v++) {
                     /* for each item in the array in focus */
 
@@ -71,6 +86,7 @@ library G3 {
                         /* record its data in the specified position */
                     }
                 }
+                // }
             }
         }
         v1/* new_obj_id_nums */[0/* control */][0/* data_type */] = p4/* obj_type */;
@@ -569,7 +585,67 @@ library G3 {
         }
     }//-----TEST_OK-----
 
+    // /* hash_data | confirm_unedited_data */
+    // function f288(
+    //     uint256[][] memory p1/* target_num_data */,
+    //     uint256 p2/* action */,
+    //     uint256 p3/* require_hash_value */
+    // ) private returns (uint256){
+    //     /* hashes data for short storage and confirms supplied proposal data is unchanged */
+    //     /* action[0] = hash, action[1] = confirm */
 
+    //     for (uint256 v = 0; v < p1/* target_num_data */.length; v++) {
+    //         /* for each array in the supplied proposal data array group */
+
+    //         if(v < 4 || v > 9){
+    //             /* if the array in focus is less than four and greater than nine, or the array is not part of the data portion of the proposal */
+
+    //             p1/* target_num_data */[v] = new uint256[](0);
+    //             /* set the array as empty since its unneeded */
+    //         }
+    //     }
+        
+    //     uint256 v2/* hashed_data */ = uint256(keccak256(abi.encode(p1/* target_num_data */)));
+    //     /* hash the final arraygroup and convert the resulting bytes32 value to an unsigned integer */
+
+    //     if(p2/* action */ == 0/* hash */){
+    //         /* if the action is to hash the given data */
+
+    //         return v2/* hashed_data */;
+    //         /* return the hash value as an integer */
+    //     }
+    //     else{
+    //         /* if the action is to check if the data is unchanged */
+
+    //         require(v2/* hashed_data */ == p3/* require_hash_value */);
+    //         /* ensure that the supplied hash value is correct */
+    //     }
+    // }
+
+
+    // /* read_ids_with_hash_if_any */
+    // function f289(
+    //     uint256[] calldata p1/* targets */,
+    //     NumData storage p2/* self */,
+    //     uint256[][][] calldata p3/* supplied_target_data */
+    // ) external returns (uint256[][][] memory v1/* id_data */){
+    //     v1/* id_data */ = new uint256[][][](p1/* targets */.length);
+
+    //     for (uint256 v = 0; v < p1/* targets */.length; v++) {
+    //         uint256[][] memory v2/* target_data */ = f77/* read_id */(p1/* targets */[v], p2/* self */, false);
+
+    //         if(v2/* target_data */[1/* config */][4/* <4>externally_set_data */] != 0){
+                
+    //             for (uint256 t = 4; t < 10; t++) {
+
+    //                 v2/* target_data */[t] = p3/* supplied_target_data */[v][t];
+    //             }
+    //             f288/* hash_data | confirm_unedited_data */(v2/* target_data */, 1/* confirm */, v2/* target_data */[1/* config */][4/* <4>externally_set_data */]);
+    //         }
+
+    //         v1/* id_data */[v] = v2/* target_data */;
+    //     }
+    // }
 
 
     /* read_ids */
