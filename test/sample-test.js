@@ -272,6 +272,7 @@ before(async () => {
 
 });
 
+/* run each one by one, not all at once. Enjoy the scroll! */
 describe("E3's", function () {
 
   xit("0. can run e", async () => {
@@ -34397,7 +34398,7 @@ describe("E5's", function () {
       [ /* index data in tags */
         [20000, 12, 0],
         [1003], [23]/* target objects */
-      ]
+      ]/* action used for indexing data against a given tag object. the tag in this case is just a string thats a hash value of a given tag(like 'jeans' or 'sports') */
     ];
 
 
