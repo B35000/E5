@@ -272,7 +272,7 @@ before(async () => {
 
 });
 
-/* run each one by one, not all at once. Enjoy the scroll! */
+/* run each test one by one, not all at once. Enjoy the scroll! */
 describe("E3's", function () {
 
   xit("0. can run e", async () => {
@@ -35709,7 +35709,7 @@ describe("E5's", function () {
 */
 
 /*
-
+ ???@BPC E5 % yarn hardhat size-contracts 
  ·-----------------------|----------------------------|----------------·
  |  Solc version: 0.8.4  ·  Optimizer enabled: false  ·  Runs: 1       │
  ························|····························|·················
