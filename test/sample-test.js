@@ -34363,7 +34363,7 @@ describe("E5's", function () {
       [ /* set account to be interactible */
         [20000, 2, 0],
         [1003], [23],/* target objects */
-        [1007], [23],/* target moderator account ids*/
+        [1007], [23],/* target account ids*/
         [1649941427]/* interacible expiry time limit */
       ],
       [/* revoke author's moderator privelages */
@@ -34379,7 +34379,8 @@ describe("E5's", function () {
       [ /* set metadata */
         [20000, 1, 0],
         [1003], [23],/* target objects */
-        [0], [23]
+        [0]/* contexts */, 
+        [23]/* int_data */
       ],
       [ /* set data */
         [20000, 13, 0],
@@ -34413,7 +34414,7 @@ describe("E5's", function () {
       [/* create contract */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
         [30], [23],
-        [0, bgN(1, 16), bgN(1, 43)/* 2 */, 0, 900_000, 30_000, 90_000/* 6 */, 0, 0, 0, 300_000, 0, 0, 0/* 13 */, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,bgN(2,23)/* 27 */,1,1,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
+        [0, bgN(1, 16), bgN(1, 43)/* 2 */, 0, 900_000, 30_000, 1000_000_000/* 6 */, 0, 0, 0, 300_000, 0, 0, 0/* 13 */, 0, bgN(1, 63), 0,0,0,0,0/* 20 */,0,0,0,0,0,0,bgN(2,23)/* 27 */,1,1,0,0,0,0,0/* 34 */,0,0,0,1,0,0], 
         [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
         [3], [23],/* exchanges */
         [3_000_000], [23],/* amounts */
@@ -34427,13 +34428,13 @@ describe("E5's", function () {
 
       [ /* enter contract */
         [30000, 3, 0],
-        [1003], [23],/* contract ids */
+        [1003], [23, 23, 23],/* contract ids */
         [tt+100_000_000]/* expiry time (seconds) */
       ],
 
-      [/* create buy spend token */
+      [/* create token */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 31, 0],
-        [0, 0, 0, 5],
+        [1, 1, 0, 5],
         [23, 23, 23, 23],
 
         [bgN(35, 12), 0, 0, 0/* 3 */, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 1002, 1002, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0],
@@ -34447,81 +34448,22 @@ describe("E5's", function () {
         [0], [23]
       ],//1004
 
-      [/* create buy end token */
-        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 31, 0],
-        [0, 0, 0, 3],
-        [23, 23, 23, 23],
-
-        [bgN(35, 12), 0, 0, 0/* 3 */, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 1003, 1002, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0],
-        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 53, 23, 23, 23, 23, 23, 23, 23, 23],
-
-        [bgN(1, 30), bgN(1, 30), bgN(1, 30)/* 2 */, 0, 0, 0, 0],
-        [23, 23, 23, 23, 23, 23, 23],
-
-        [3], [23, 23],
-        [1000], [23, 23],
-        [0], [23]
-      ],//1005
-
-      [/* buy token */
+      [/* buy end/spend */
         [30000, 8, 0],
         [1004], [23],/* exchanges */
         [0], [53],/* receivers */
-        [350]/* amounts */, [0, 0],/* action */
+        [10000]/* amounts */, [0],/* action */
         []/* lower_bounds */, []/* upper_bounds */
       ],
 
       [/* create subscription */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 33, 0],
         [0], [23],
-        [1002, 1, 1, 100, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23],
+        [1001, 1, 0, 100, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23],
         [3], [23],
         [100], [23],
         [0, 0], [23, 23]
-      ],//1006
-
-      [/* create contract */
-        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 30, 0],
-        [30], [23],
-        [0, bgN(1, 16), bgN(1, 43)/* 2 */, 0, 900_000, 30_000, 90_000/* 6 */, 0, 0, 0, 300_000, 0, 0, 0/* 13 */, 0, tt+1000, 0,0,0,0,0/* 20 */,0,0,0,0,0,0,0/* 27 */,0,1,0,0,0,0,0/* 34 */,0,0,0,0,0,0], 
-        [23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
-        [3], [23],/* exchanges */
-        [3_000_000], [23],/* amounts */
-        [0], [23],/* depths */
-        [0], [23],
-        [0], [23],
-        [0], [23],
-        [0], [23],
-        [0], [23]
-      ],//1007
-
-      [ /* enter contract */
-        [30000, 3, 0],
-        [1007], [23],/* contract ids */
-        [tt+100_000_000]/* expiry time (seconds) */
-      ],
-
-      [/* create proposal */
-        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
-        [0], [23],
-        [0, bgN(3, 23), 0/* 2 */, bgN(4, 23), 0, 1003, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
-        [3], [23],
-        [3_000_000], [23],
-        [3], [23],/* 4 <exchanges> */
-        [9000], [23],
-        [2], [23],
-        [0], [23],
-        [0], [23],
-        [0], [23],
-        [0], [23]
-      ],//1008
-
-      [/* vote proposal */
-        [30000, 4, 0],
-        [1008], [23],/* proposal ids */
-        [1],/* votes */
-        [3], [23], [0]/* target bounty exchanges */
-      ],
+      ],//1005
     ];
 
     var vv3 = [
@@ -34547,28 +34489,43 @@ describe("E5's", function () {
     var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
 
     var vals = [
-      [/* auth modify contract */
-        [20000, 15, 0],
-        [1003], [23],/* targets */
-        [1],/* target_array_pos */
-        [0],/* target_array_items */
-        [3602], [23]/* new_items */
-      ],
+      [ /* index data in tags */
+        [20000, 12, 0],
+        [1003, 1003, 1003], [23, 23, 23]/* target objects */
+      ]
     ];
 
+    var ss = [
+      [
+        ["eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"],
+        ["eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"]
+      ]
+    ]
+
     //tesssssssssssst
-    // await e5.connect(addr1).f2232();
+    await e5.connect(addr1).f2232();
+    /* calls the test function used to ensure the user can vote in the main contract */
+
     await e5.connect(addr1).e(v5/* t_limits */, aa, vals, ss, { gasLimit: 5_100_000, value: 35 });
+    /* send the transaction to e for recording the gas figures */
+
     var gas_cons = await e5./* get_gas_consumed */f5300g();
-    console.log("target: create object");
+    /* fetches the consumed amount of gas */
+
+    console.log("target:");
+    /* log the title of the test */
+
     console.log("nested transaction count " + vals.length);
+    /* log the number of transactions inside the stack(unused) */
+    
     console.log("consumed: "/* GasEst */ + nWC(gas_cons)+"g");
+    /* log the estimated consumed gas */
 
   });
   
   /* ?????? ????????? */
   xit("?????? ?????????", async () => {
-    
+    /* applaud god damn it! THAT WAS PURE PORNOGRAPHY */
     
   });
 
@@ -35404,47 +35361,399 @@ describe("E5's", function () {
   530,599g
   +113,655g per value
 
+
+
+
+  —————————————————e——————————————————————
+
+  FORCE EXIT ACCOUNT
+  target: force exit 1 account
+  nested transaction count 1
+  consumed: 338,394g
+
+
+  target: force exit 2 accounts
+  nested transaction count 1
+  consumed: 581,452g
+
+
+  target: force exit 3 accounts
+  nested transaction count 1
+  consumed: 824,945g
+
+
+  target: force exit 4 accounts
+  nested transaction count 1
+  consumed: 964,069g
+
+  338,394g
+  +139,124g per account
+
+
+
+  —————————————————e——————————————————————
+
+  DEPTH AUTH-MINT
+
+  target: depth auth-mint 1 depth
+  nested transaction count 1
+  consumed: 300,510g
+
+
+  target: depth auth-mint 2 depths
+  nested transaction count 1
+  consumed: 444,237g
+
+
+  target: depth auth-mint 3 depths
+  nested transaction count 1
+  consumed: 588,198g
+
+
+  300,510g
+  +143,961g per depth
+
+
+
+  —————————————————e——————————————————————
+
+  SWAP UP
+
+  target: depth swap up 1 swap
+  nested transaction count 1
+  consumed: 287,295g
+
+
+  target: depth swap up 2 swaps
+  nested transaction count 1
+  consumed: 413,007g
+
+
+  target: depth swap up 3 swaps
+  nested transaction count 1
+  consumed: 556,053g
+
+
+  287,295g
+  +143,046g per swap
+
+
+
+
+  —————————————————e——————————————————————
+
+  SWAP DOWN
+
+  target: depth swap down, 1 swap
+  nested transaction count 1
+  consumed: 304,394g
+
+
+  target: depth swap down, 2 swaps
+  nested transaction count 1
+  consumed: 423,177g
+
+
+  target: depth swap down, 3 swaps
+  nested transaction count 1
+  consumed: 543,253g
+
+
+  304,394g
+  +120,076g per swap
+
+
+
+
+  —————————————————e——————————————————————
+
+  EXCHANGE TRANSFER
+
+  target: exchange transfer, 1 transfer
+  nested transaction count 1
+  consumed: 140,068g
+
+
+  target: exchange transfer, 2 transfers
+  nested transaction count 1
+  consumed: 182,596g
+
+
+  target: exchange transfer, 3 transfers
+  nested transaction count 1
+  consumed: 225,129g
+
+
+  140,068g
+  +42,533g per transfer
+
+
+
+
+  —————————————————e——————————————————————
+
+  SET MODERATOR
+
+  target: set 1 account as moderator
+  nested transaction count 1
+  consumed: 121,897g
+
+
+  target: set 2 accounts as moderator
+  nested transaction count 1
+  consumed: 157,475g
+
+
+  target: set 3 accounts as moderator
+  nested transaction count 1
+  consumed: 193,053g
+
+
+  121,897g
+  +35,578g per setting
+
+
+
+
+
+  —————————————————e——————————————————————
+
+  ENABLE INTERACTIBLE CHECKERS
+
+  target: enable interactible checker, 1 target
+  nested transaction count 1
+  consumed: 118,683g
+
+
+  target: enable interactible checker, 2 targets
+  nested transaction count 1
+  consumed: 161,326g
+
+
+  target: enable interactible checker, 3 targets
+  nested transaction count 1
+  consumed: 203,970g
+
+
+  118,683g
+  +42,644g per target
+
+
+
+
+  —————————————————e——————————————————————
+
+  SET ACCOUNT'S INTERACTIBLE TIME LIMIT
+
+  target: set account as interactible, 1 account
+  nested transaction count 1
+  consumed: 128,778g
+
+
+  target: set account as interactible, 2 account
+  nested transaction count 1
+  consumed: 167,624g
+
+
+  target: set account as interactible, 3 account
+  nested transaction count 1
+  consumed: 206,470g
+
+
+  128,778g
+  +38,846g per account
+
+
+
+
+  —————————————————e——————————————————————
+
+  REVOKE AUTHORS MODERATOR PRIVELAGES
+
+  target: revoke 1 target
+  nested transaction count 1
+  consumed: 112,768g
+
+
+  target: revoke 2 target
+  nested transaction count 1
+  consumed: 151,252g
+
+
+  target: revoke 3 target
+  nested transaction count 1
+  consumed: 189,736g
+
+
+  112,768g
+  +38,484g per target
+
+
+
+  —————————————————e——————————————————————
+
+  BLOCK ACCOUNTS
+
+  target: block 1 target
+  nested transaction count 1
+  consumed: 128,830g
+
+
+  target: block 2 targets
+  nested transaction count 1
+  consumed: 167,684g
+
+
+  target: block 3 targets
+  nested transaction count 1
+  consumed: 206,538g
+
+
+  128,830g
+  +38,854g per target
+
+
+
+  —————————————————e——————————————————————
+
+  SET METADATA
+
+  target: set 1 target
+  nested transaction count 1
+  consumed: 73,398g
+
+
+  target: set 2 targets
+  nested transaction count 1
+  consumed: 86,165g
+
+
+  target: set 3 targets
+  nested transaction count 1
+  consumed: 98,933g
+
+
+  73,398g
+  +12,768g per target
+
+
+
+  —————————————————e——————————————————————
+
+  SET DATA
+
+  target: set 1 target
+  nested transaction count 1
+  consumed: 76,954g
+
+
+  target: set 2 targets
+  nested transaction count 1
+  consumed: 91,334g
+
+
+  target: set 3 targets
+  nested transaction count 1
+  consumed: 105,716g
+
+
+  76,954g
+  +14,382g per target
+
+
+
+  —————————————————e——————————————————————
+  
+  ALIAS DATA
+
+  target: alias 1 target
+  nested transaction count 1
+  consumed: 71,243g
+
+
+  target: alias 2 targets
+  nested transaction count 1
+  consumed: 83,643g
+
+
+  target: alias 3 targets
+  nested transaction count 1
+  consumed: 96,045g
+
+  
+  71,243g
+  +12,402g per target
+  —————————————————e——————————————————————
+
+  INDEX DATA
+  target: index 1 target
+  nested transaction count 1
+  consumed: 122,852g
+
+
+  target: index 2 targets
+  nested transaction count 1
+  consumed: 139,843g
+
+
+  target: index 3 targets
+  nested transaction count 1
+  consumed: 156,835g
+
+
+  122,852g
+  +16,992g per target
+
+  —————————————————e——————————————————————
 */
 
 /*
 
- ·-----------------|--------------|----------------·
- |  Contract Name  ·  Size (KiB)  ·  Change (KiB)  │
- ··················|··············|·················
- |  F5             ·      19.210  ·                │
- ··················|··············|·················
- |  H32            ·      20.007  ·                │
- ··················|··············|·················
- |  E34            ·      20.530  ·                │
- ··················|··············|·················
- |  F3             ·      21.100  ·                │
- ··················|··············|·················
- |  E32            ·      21.630  ·                │
- ··················|··············|·················
- |  E33            ·      22.150  ·                │
- ··················|··············|·················
- |  G3             ·      22.161  ·                │
- ··················|··············|·················
- |  H3             ·      22.336  ·                │
- ··················|··············|·················
- |  G33            ·      23.045  ·                │
- ··················|··············|·················
- |  G52            ·      23.139  ·                │
- ··················|··············|·················
- |  G32            ·      23.253  ·                │
- ··················|··············|·················
- |  G5             ·      23.419  ·                │
- ··················|··············|·················
- |  E52            ·      23.848  ·                │
- ··················|··············|·················
- |  E3             ·      23.917  ·                │
- ··················|··············|·················
- |  E5             ·      23.918  ·                │
- ··················|··············|·················
- |  H5             ·      23.924  ·                │
- ··················|··············|·················
- |  H52            ·      23.977  ·                │
- ·-----------------|--------------|----------------·
+ ·-----------------------|----------------------------|----------------·
+ |  Solc version: 0.8.4  ·  Optimizer enabled: false  ·  Runs: 1       │
+ ························|····························|·················
+ |  Contract Name        ·  Size (KiB)                ·  Change (KiB)  │
+ ························|····························|·················
+ |  E2                   ·                     1.880  ·         0.000  │
+ ························|····························|·················
+ |  F33                  ·                     5.358  ·         0.000  │
+ ························|····························|·················
+ |  F5                   ·                    19.793  ·         0.000  │
+ ························|····························|·················
+ |  F3                   ·                    20.435  ·         0.000  │
+ ························|····························|·················
+ |  E34                  ·                    20.760  ·         0.000  │
+ ························|····························|·················
+ |  G3                   ·                    21.981  ·         0.000  │
+ ························|····························|·················
+ |  H32                  ·                    22.036  ·         0.000  │
+ ························|····························|·················
+ |  E32                  ·                    22.067  ·         0.000  │
+ ························|····························|·················
+ |  H3                   ·                    22.336  ·         0.000  │
+ ························|····························|·················
+ |  E3                   ·                    22.967  ·         0.000  │
+ ························|····························|·················
+ |  F32                  ·                    23.220  ·         0.000  │
+ ························|····························|·················
+ |  G33                  ·                    23.323  ·         0.000  │
+ ························|····························|·················
+ |  G52                  ·                    23.324  ·         0.000  │
+ ························|····························|·················
+ |  H5                   ·                    23.364  ·         0.000  │
+ ························|····························|·················
+ |  E5                   ·                    23.490  ·         0.000  │
+ ························|····························|·················
+ |  E52                  ·                    23.503  ·         0.000  │
+ ························|····························|·················
+ |  E33                  ·                    23.513  ·         0.000  │
+ ························|····························|·················
+ |  G32                  ·                    23.513  ·         0.000  │
+ ························|····························|·················
+ |  G5                   ·                    23.632  ·         0.000  │
+ ························|····························|·················
+ |  H52                  ·                    23.873  ·         0.000  │
+ ·-----------------------|----------------------------|----------------·
 
 */
 
@@ -35474,11 +35783,6 @@ describe("E5's", function () {
   hope you dont mind
   promise ill put it back
   you werent using it anyways
-
-
-  ????:
-  I think i just got robbed
-  seems its time to change locks
 
 
   ????:
@@ -35540,16 +35844,13 @@ describe("E5's", function () {
   i dont know what else to tell you
 
 
-  ????:
-  ...
-
-
-  ????:
-  mostly sandwiches for two weeks
+  e:
+  you shall! do green tea
 
 
   ????:
   ...
+
 
 */
 

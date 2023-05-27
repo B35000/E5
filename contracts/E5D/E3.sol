@@ -5,18 +5,43 @@ pragma solidity 0.8.4;
 library E3 {
 
     struct TD/* TransactionData */ {
+        /* struct used to house all the transaction data in the stack of a given run */
+
         uint256 sv1/* user_acc_id */;
+        /* stores the user account id for the sender of the transaction */
+
         bool sv2/* can_sender_vote_in_main_contract */;
+        /* set to true if the sender can vote in the main contract. Usually calculated using the number of transactions run with e and number of entered contracts for the transaction sender. by default in the test values, its two transactions and one entered contract, but just one transaction should do to keep out bots and stuff like that */
+
         uint256[] sv3/* temp_transaction_data */;
+        /* transaction data used for recording the ids created for previous or future transactions in and within a given run */
+
         uint256[][] sv4/* vals */;
+        /* stores the integer data vaules for a given transaction stack */
+
         address[] sv5/* adds */;
+        /* stores the address data values for a given transaction stack */
+
         string[][] sv6/* strs */;
+        /* stores the string data values for a given transaction stack */
+
         uint256 t;
+        /* stores the transaction stack number in focus during a given run */
+
         uint256 sv7/* new_obj_id */;
+        /* stores the id of a new object being created */
+
         uint256 sv8/* tx_value_available */;
+        /* stores the amount of ether available for using to buy end if included in a given run */
+
         uint256[2] sv9/* user_acc_data */;
+        /* stores the user account data including the number of entered contracts and the number of runs made with e */
+
         bool sv10/* auto_wait_data_exists */;
+        /* set to true if e is meant to record an auto wait vote for each participant of a given contract when sending a proposal to said contract */
+
         uint256[] sv11/* route_data */;
+        /* stores the route values for transactions in the stack involving the other smart contracts such as F5, G52, G5, H5 and H52 */
     }
 
     /* get_multi_stack_or_real_ids */
