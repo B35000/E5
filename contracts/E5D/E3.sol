@@ -578,7 +578,7 @@ library E3 {
             for ( uint256 e = 0; e < v6/* bounty_exchanges_arrays_count */; e++ ) {
                 /* for each bounty exchange array and bounty exchange depth array specified */
 
-                uint256 v7/* pos */ = v2/* int_data */[0/* tx_config */][4/* vote_proposal_bounty_data_start */ ] + (2 * e);
+                uint256 v7/* pos */ = v2/* int_data */[0/* tx_config */][4/* vote_proposal_bounty_data_start */ ] + (2 * e);/* record the position in focus */
 
                 v4/* target_bounty_exchanges_depth-data */[0/* exchanges */][e] = v2/* int_data */[v7/* pos */];
                 v4/* target_bounty_exchanges_depth-data */[1/* depths */][e] = v2/* int_data */[v7/* pos */+1];

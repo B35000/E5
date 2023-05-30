@@ -387,7 +387,8 @@ contract G5 {
             /* call the consensus moderator actions function in the E52 contract */
         }
 
-        /* order: 11, 12, 13, 14, 15,   0/2, 1,3, 4, 5, 6, 7,    8, 9, 10,   16, 17, 18, 19, 20 */
+        /* processing order: 11, 12, 13, 14, 15,   0/2, 1,3, 4, 5, 6, 7,    8, 9, 10,   16, 17, 18, 19, 20 */
+        /* those are proposal id types, for instance 0(zero) is a spend proposal and 2 is a buy proposal. so the order is based on the type of proposal with the contract actions taking precedence over the others */
     }
 
     //

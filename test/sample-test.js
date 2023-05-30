@@ -34131,7 +34131,7 @@ describe("E5's", function () {
   });
 
   /* gas! */
-  it("gassssssssssssss", async () => {
+  xit("gassssssssssssss", async () => {
     const [booter, addr1, addr2, addr3, addr4, addr5, addr6] = await ethers.getSigners();
     var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
     /* 126000: 35hrs 3024000: 35dys */
@@ -34249,6 +34249,8 @@ describe("E5's", function () {
         [1],/* votes */
         [3], [23], [0]/* target bounty exchanges */
       ],
+      /* action used to vote on a given proposal sent to a contract. three types of votes can be cast, a yes(1), no() */
+
       [/* auth modify subscription */
         [20000, 11, 0],
         [1003], [23],/* targets */
@@ -34256,6 +34258,8 @@ describe("E5's", function () {
         [3],/* target_array_items */
         [108], [23]/* new_items */
       ],
+      /* action used to modify a subscriptions data as a moderator. the targets are subscription ids and the following three arrays are the data to be modified. by default, only the subscriptions authority can modify a given subscription and certain values are restricted from modifying based on the type of subscription in focus. for instance the time_unit setting cant be modified after creation if your dealing with a cancellable subscription */
+
       [/* auth modify token exchange */
         [20000, 3, 0],
         [1003], [23],/* targets */
@@ -34263,6 +34267,8 @@ describe("E5's", function () {
         [17],/* target_array_items */
         [2], [23]/* new_items */
       ],
+      /* action used to modify a tokens data as a moderator. the targets are exchange ids and the following three arrays are the data to be modified. by default, only the exchanges authority can modify a given exchange and only the exchange's configuration can be modified. to have full control over the exchange and set details like the tokens exchange ratios and buying price, fully_custom setting should be turned on while creating the exchange(its not something you can change after creating the token)*/
+
       [/* auth modify contract */
         [20000, 15, 0],
         [1003], [23],/* targets */
@@ -34270,6 +34276,8 @@ describe("E5's", function () {
         [2],/* target_array_items */
         [3602], [23]/* new_items */
       ],
+      /* action used to modify a contracts data as a moderator. the targets are contract ids and the following three arrays indicates the data to be modified. to run this action in a contract, its can_modify_contract_as_moderator setting should be turned on and the sender has to be a moderator of the contract */
+
       [/* auth modify proposal */
         [20000, 14, 0],
         [1005], [23],/* targets */
@@ -34277,6 +34285,8 @@ describe("E5's", function () {
         [0],/* target_array_items */
         [136], [23]/* new_items */
       ],
+      /* action used to modify a proposals data as the author. the targets are proposal ids and the following three arrays indicates the data to be modified. you cant modify a proposal thats already expired and it has to be modified before an expiry time set by the contract authority its targeting(check out the proposal_modify_expiry_duration_limit value in contracts) */
+
       [/* auth freeze tokens [1-freeze_tokens , 0-unfreeze_tokens] */
         [30000, 6, 0],
         [1003], [23],/* target_exchanges */
@@ -34285,43 +34295,79 @@ describe("E5's", function () {
         [1],/* action */
         [0]/* depths */
       ],
+      /* action used to freeze tokens in specific targeted accounts. for each targeted account, a target exchange is passed and a targetes amount and depth is also passed. two actions can occur, freezing(1) and unfreezing(0). to freeze the balance of a particular account, i should be the exchanges authority. meaning you cant freeze someones spend for instance.  */
+
       [/* submit consensus request */
-        [30000, 5, 0, 0, 0, 0, 0],
-        [1004], [23]/* targets */
+        [30000, 5, 0/* payer_account_data_start */, 0/* payer_account_data_end */, 0/* vote_proposal_bounty_data_start */, 0/* vote_proposal_bounty_data_end */, 0],
+        [1004, 1009], [23, 23],/* targets */
+        /* payer_account_data */
+        [1002, 1004],/* for 1004 */
+        [1002, 1003],/* for 1009 */
+        /* vote_proposal_bounty_data */
+        [3, 5],/* bounty_exchanges for 1004 */
+        [0, 0],/* bounty_exchange depths for 1004*/
+        [3, 5],/* bounty_exchanges for 1009*/
+        [0, 0]/* bounty_exchange depths for 1009*/
       ],
+      /* action used to submit proposals after receiving consensus. the targets passed are proposal ids and do not necessarily have to be of the same contract. also you should know that the proposals passed are not processed in the order of their appearance(you should check out the bottom of function f200 in G5). if you prefer a specific order of processing your proposals(for instance all the collect subscription proposals first, before the spend proposals), just use multiple stacks(two or more of these👆 2d arrays in that case). in the event youre submitting collect subscription proposal, the payer account data is included since to collect subscriptions, you need account ids for the accounts that paid for the subscription. in the event youre submitting a vote proposal, the vote proposal bounty data is passed, since when voting I collect bounty(in this case the contract that received the vote proposal would be receiving the bounty) */
+
       [/* extend enter contract */
         [30000, 14, 0],
         [1003], [23],/* contract ids */
-        [1650549977]/* expiry time (seconds) */
+        [tt+100_000]/* expiry time (seconds) */
       ],
+      /* action used for extending stay in a given contract. when you enter a contract, you specify a time after which you cant participate in consensus activity. when this time has almost reached, you can use this action to reset that time to a future time, that way you can keep participating in consensus activity. by default, you can only extend stay in a contract when that time has almost reached, unless you turn on the can_extend_enter_contract_at_any_time setting in the contract. so for instance if i can only extend stay in my contract by four hours, i can only extend my stay when im at most four hours away from my expiry time. but if that can_extend_enter_contract_at_any_time setting is turned on, i can extend at any time(even immediately after entering the contract)*/
+
       [/* exit contract */
         [30000, 11, 0],
         [1003], [23]/* contract ids */
       ],
+      /* action used for exiting a contract. exiting basically means you no longer wish to participate in consensus activities in a particular contract. to exit a contract, specify its id as the target. you can argue that this action doesnt need to be carried out since when entering a contract, a specific expiry time is specified, a time after which you cant participate in the consensus. so this action is useful if you had entered a contract indefinitely. oh and you cant exit the main contract(because its special, like you. yeah. you. one in a million, all 8 thousand of you) */
+
       [/* archive proposal/contract */
         [30000, 15, 0],
-        [1004], [23],/* proposal/contract ids */
+        [1004, 1005], [23, 23],/* proposal/contract ids */
+        /* for target 1004 */
+        [1002],/* voters/participants */
+        [3, 5],[0, 0]/* exchanges to loot */
+        /* for target 1005 */
         [1002],/* voters/participants */
         [3, 5],[0, 0]/* exchanges to loot */
       ],
+      /* action used for archiving, or deleting the data stored for a particular set of contracts or proposals. this is useful for keeping the blockchain small and optimized, only storing data thats in use. to archive a contract, the contract_expiry_time has to be specified while creating the contract, and by defualt all proposals can be archived, since they all wont always be in use. this feature is useful if youre looking to score gas refunds(its this thing when you delete data during a transaction, you pay for less gas since youre making the chain smaller).aside from the targeted proposals or contracts(they can be passed together as targets), account ids can be passed to delete the accounts that are recorded as voters or participants(voters if your archiving a proposal and participants if your archiving a contract) and exchanges to loot, which are the exchanges which the contract or proposal targets had balances(for instance if my contract had 1000END, id specify exchange 3 to recover those funds)*/
+
       [/* pay subscription */
         [30000, 2, 0],
         [1003, 1004], [23, 23],/* target subscription ids */
         [5, 10]/* subscription buy amounts */
       ],
+      /* action used for making subscription payments to specified subscriptions. works for both cancellable and non-cancellable subscription objects. the buy amounts are specified number of time units, not necessarily amounts of tokens. so for instance 5 means im paying for 5x53 minutes or 265 minutes for my subscription. the '53' in this case is the default time unit thats used in all subscriptions but you can specify your own value when creating the subscription object */
+
       [/* collect subscription */
         [30000, 13, 0],
-        [1003], [23],/* target subscription ids */
-        [1002]/* subscription collect accounts */
+        [1003, 1004], [23, 23],/* target subscription ids */
+        /* for target 1003 */
+        [1002, 1007],/* subscription collect accounts */
+        /* for target 1004 */
+        [1001, 1008]/* subscription collect accounts */
       ],
+      /* action used for collecting subscription payments from specified accounts. this action is only available for cancellable subscriptions. for each target, a list of accounts is specified and to perform this action, the sender must be the authority of the subscription*/
+
       [/* send awwards */
         [30000, 7, 0],
-        [10035], [23],/* target receivers */
-        [35],/* awward contexts */
+        [10035, 10036], [23, 23],/* target receivers */
+        [35, 45],/* awward contexts */
+        /* for target 10035 */
         [3], [23],/* exchange ids for first target receiver */
         [1000],/* amounts for first target receiver */
-        [0, 0]/* depths */
+        [0, 0],/* depths for the first targeted receiver*/
+        /* for target 10036 */
+        [3], [23],/* exchange ids for first target receiver */
+        [1000],/* amounts for first target receiver */
+        [0, 0]/* depths for the first targeted receiver*/
       ],
+      /* action used for sending awward tokens to specified target accounts. for each targeted receiver, a context(which could be the id of a post for instance) and a list of exchange ids, amounts and depths is specified. sending an awward is just sending tokens to a specified account, as a reaction to post or channel activity(this is instead of doing stuff like likes and upvotes)*/
+
       [/* auth mint token */
         [30000, 9, 0],
         [1003], [23],/* exchanges */
@@ -34329,6 +34375,8 @@ describe("E5's", function () {
         [17_000_000]/* amounts */, [0],/* action */
         []/* lower_bounds */, []/* upper_bounds */
       ],
+      /* action used for minting a given token as an authority. usually, all the limits specified by the exchange are not enforced while performing this action. also, the fee for buying the token isnt charged by the exchange while performing this auth mint action. to perform this action, sender must be the authority of the exchange. */
+
       [/* exchange transfer */
         [30000, 17, 0],
         [1003], [23],/* exchange ids */
@@ -34336,6 +34384,8 @@ describe("E5's", function () {
         [100_000], [0],/* amounts/depths */
         [3], [23],/* token targets */
       ],
+      /* transfers a specified amount of tokens from an exchange's account to a specified recipient. to use this action unlocked_liquidity setting should be turned on during creation of the exchange. to perform this action, sender must be the authority of the exchange */
+
       [/* depth_mint\swap up\swap down tokens [2(depth_auth_mint), 1(swap_up), 0(swap_down)] */
         [30000,16,0],
         [1004], [23],/* target exchange ids */
@@ -34344,11 +34394,14 @@ describe("E5's", function () {
         [1],/* depth */
         [bgN(1,72)]/* amount */
       ],
+      /* action used for minting as an authority and swapping between multiple depth values. three types of actions can be passed into this action, depth_auth_mint(action 2) which basically credits a specified accounts balance with a specified amount at a specified depth, swap_up(action 1) which is swapping from a lower depth value to a higher depth value(its like swapping a hundred cents for a dollar), and swap_down(action 0) which is swapping from a higher depth value to a lower depth value(like swapping a dollar for a hundred cents). to use this action, the unlocked_supply setting in the exchange should be turned on during creation of the exchange and the sender should be the authority of the exchange */
+
       [/* force exit account */
         [30000, 18, 0],
         [1003], [23],/* contract ids */
         [1002]/* target account */
       ]
+      /* action used to force a specified account to exit your contract. its like kicking out an account from a contract. to use this action, the contract_force_exit_enabled setting in the contract should be turned on and the sender should be a moderator of the contract */
     ];
 
     var mod_action_templates = [
@@ -34357,48 +34410,65 @@ describe("E5's", function () {
         [1003], [23],/* target objects */
         [2023], [23]/* target moderator account ids*/
       ],
+      /* action used for setting a specified account as a moderator for a specified set of targets. by default, the account that created the object is a moderator. moderators have access to add metadata and restrict access to specific accounts and block other accounts as well */
+
       [ /* enable interactible checkers */
         [20000, 5, 0],
         [1003], [23]/* target objects */
       ],
+      /* action used for turning on interactible checkers, in short access restriction. by default, all objects such as contracts or tokens have open access, until restricted access is turned on. */
+
       [ /* set account to be interactible */
         [20000, 2, 0],
         [1003], [23],/* target objects */
         [1007], [23],/* target account ids*/
-        [1649941427]/* interacible expiry time limit */
+        [tt+100_000]/* interacible expiry time limit */
       ],
+      /* action used for setting an account to be able to interact with a given set of targets. a time limit is used, meaning its a time before which access is granted and after which access is restricted */
+
       [/* revoke author's moderator privelages */
         [20000, 16, 0],
         [1003], [23],/* target objects */
       ],
+      /* action is used to revoke moderator privelages as an author for a specified set of targets. for instance when creating a token thats to be used and controlled by multiple accounts, the author of the token should not have moderator privelages unless set by other moderators. */
+
       [/* block account */
         [20000, 17, 0],
         [1003], [23],/* target objects */
         [1002], [23],/* target moderator account ids */
-        [tt+35_000]
+        [tt+35_000]/* expiry_time */
       ],
+      /* action used for blocking access to a given targeted object. when an account is blocked from a token exchange for instance, they are unable to add data, buy or sell the token from the exchange itself. an expiry time is set while blocking an account, a time before which access is restricted and after which a blocked account regains access */
+
       [ /* set metadata */
         [20000, 1, 0],
         [1003], [23],/* target objects */
         [0]/* contexts */, 
         [23]/* int_data */
       ],
+      /* action used for adding metadata to a given object. optional context and int data is passed with the target being indexed. the metadata is used to store data specific to moderators of a given target. data isnt stored directly in E5, instead, a hash pointing to the data is stored, the data itself residing externally. the hash is passed inside a two dimentional arry of strings, one for each target specified */
+
       [ /* set data */
         [20000, 13, 0],
         [1003], [23],/* target objects */
         [53], /* contexts */
         [65] /* int_data */
       ],
+      /* action used for adding data to a given object. optional context and int_data is passed with the target being indexed. data isnt stored directly in the E5, instead, a hash pointing to the data is stored, the data itself residing externally in another chain. the hash is passed inside a two dimentional array, one for each target specified */
+
       [ /* alias data */
         [20000, 10, 0],
         [1003], [23],/* target objects */
         [53], /* contexts */
         [65] /* int_data */
       ],
+      /* action used for aliasing or naming data objects. optional context and int_data is passed with the target being indexed. an array of strings is passed, one for each target, which would be the alias of the target */
+
       [ /* index data in tags */
         [20000, 12, 0],
         [1003], [23]/* target objects */
-      ]/* action used for indexing data against a given tag object. the tag in this case is just a string thats a hash value of a given tag(like 'jeans' or 'sports') */
+      ]
+      /* action used for indexing data against a given tag object. the tag in this case is just a string thats a hash value of a given tag(like 'jeans' or 'sports'). two arrays of strings are passed together with this 2d array of ints, one containing the tag being referenced and the other, tags associated with the object(since a post object contains multiple tags) for each target object specified. */
     ];
 
 
@@ -34466,6 +34536,7 @@ describe("E5's", function () {
         [0, 0], [23, 23]
       ],//1005
     ];
+    /* test transaction for the first address */
 
     var vv3 = [
       [/* buy end/spend */
@@ -34476,18 +34547,34 @@ describe("E5's", function () {
         []/* lower_bounds */, []/* upper_bounds */
       ],
     ];
+    /* test transaction for the second test address */
 
     console.log("-----------e-----------");
+    /* log space */
+
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 19_300_000, value: bgN(35_000_000, 9) });
+    /* send the setup transaction for the first test address */
+
     console.log("-----------e-----------");
+    /* log space */
+
     await e5.connect(addr2).e(v5/* t_limits */, [], vv3, ss, { gasLimit: 5_300_000, value: bgN(35_000_000, 9) });
+    /* send the setup transaction for the second test address */
     
     console.log("-----------e-----------");
+    /* log space */
+
     await network.provider.send("evm_increaseTime", [10_000_000]);
+    /* increase the blockchain timestamp by the specified amount */
+
     await network.provider.send("evm_mine");
+    /* increase the block by one */
 
     console.log("sender 2 account: " + await e5.f167([], [addr2.address], 2));//1006
+    /* log the second test address's account */
+
     var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
+    /* initialize a variable to contain the timestamp from the blockchain */
 
     var vals = [
       [ /* index data in tags */
@@ -34495,6 +34582,7 @@ describe("E5's", function () {
         [1003, 1003, 1003], [23, 23, 23]/* target objects */
       ]
     ];
+    /* test int data for the actions being tested for gas */
 
     var ss = [
       [
@@ -34502,6 +34590,7 @@ describe("E5's", function () {
         ["eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"]
       ]
     ]
+    /* test string data for the actions involving a string */
 
     //tesssssssssssst
     await e5.connect(addr1).f2232();
