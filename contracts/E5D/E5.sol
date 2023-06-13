@@ -133,7 +133,7 @@ contract E5 {
         /* set the main contract data configuration */
     }
 
-    
+    /* record_addresses */
     function f2023(address[7] calldata p1/* boot_addresses */) external {
         /* records the boot addresses for each E5 contract */
 
@@ -715,11 +715,11 @@ contract E5 {
 
 
     /* set_link_requirements */
-    function f2232() public {
-        mapping(uint256 => uint256) storage v1/* target_data */ = gv6/* num_data */.int_int_int[1002][1 /* data */];
-        v1/* target_data */[ 3 /* transaction_count */ ] = 50;
-        v1/* target_data */[ 4 /* entered_contracts */ ] = 50;
-    }
+    // function f2232() public {
+    //     mapping(uint256 => uint256) storage v1/* target_data */ = gv6/* num_data */.int_int_int[1002][1 /* data */];
+    //     v1/* target_data */[ 3 /* transaction_count */ ] = 50;
+    //     v1/* target_data */[ 4 /* entered_contracts */ ] = 50;
+    // }
 
     /* get_gas_consumed */
     // function f5300g() external view returns (uint256){

@@ -5,6 +5,8 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
+
+
 let e5; let e52;   
 let f5;    
 let g5; let g52;   
@@ -24,6 +26,9 @@ function bgN(number, power) {
 async function main() {
 
   const [booter, addr1, addr2] = await ethers.getSigners();
+
+
+  /* ------------------------------------------- DEPLOY LIBRARIES ------------------------------------ */
   const E3 = await hre.ethers.getContractFactory("E3");
   e3 = await E3.deploy();
   await e3.deployed();
@@ -191,14 +196,71 @@ async function main() {
   var v3/* boot_id_data_type_data */ = [[5, 31], [3, 31], [2, 30]];
   var v4/* boot_object_metadata */ = [["e", "e"], ["e2", "e2"], ["e3", "e3"]];
   await e5.connect(booter)./*boot*/f157(v1, v2, v3, v4, v2[2][1]);
+  await e5.connect(booter)./* record_addresses */f2023(v1);
   var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
 
   console.log(`E5 timestamp: ${tt}`);
+  console.log(`E5 address: ${e5.address}`);
+
+
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
+
+async function sub() {
+  var priv = '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d';
+
+  const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')
+  const signer = new ethers.Wallet(priv, provider);
+  console.log(signer.address);
+
+  var bal = await provider.getBalance(signer.address);
+  console.log(bal);
+
+}
+
+
+async function sub2(){
+  const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')
+
+  const senderPrivateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
+  const wallet = new ethers.Wallet(senderPrivateKey, provider);
+  const recipientAddress = '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199';
+  const amountToSend = ethers.utils.parseEther('2');;
+
+
+  const transactionObject = {
+    to: recipientAddress,
+    value: amountToSend
+  };
+
+  const sendPromise = wallet.sendTransaction(transactionObject);
+  sendPromise.then((transaction) => {
+    console.log('Transaction hash:', transaction.hash);
+    
+    provider.getBalance(recipientAddress).then((balance) => {
+      console.log('balance before: '+balance);
+    });
+    
+  }).catch((error) => {
+    console.error('Failed to send Ether:', error);
+  });
+}
+
+
+
+// main().catch((error) => {
+//   console.error(error);
+//   process.exitCode = 1;
+// });
+
+// sub().catch((error) => {
+//   console.error(error);
+//   process.exitCode = 1;
+// });
+
+sub2().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+
+
