@@ -188,7 +188,7 @@ async function main() {
       [bgN(35, 12), 0, 0, 0, 0, 0, 0, bgN(3, 16)/* 7 */, 0, 2, 0, bgN(35, 6)/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0], [bgN(1, 72), bgN(1, 72), bgN(1, 70)/* 2 */, 0, 0, 0, 0], [0], [bgN(1, 9)]
     ],
     [ /* main contract */
-      [0], [0, bgN(1, 16), 0, bgN(5, 6)/* 3 */, bgN(5, 6), 3024000, 0, 0/* 7 */, 0, bgN(5, 6), bgN(5, 6), bgN(53, 5), 0/* 12 */, 0, 1, 0/* 15 */, 72, 0, 0, 3/* 19 */, 0, 0, 0, bgN(53, 8)/* 23 */, bgN(90, 16), bgN(72, 8), 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      [0], [0, bgN(1, 16), 0, 350/* 3 */, 3500, 3024000, 0, 0/* 7 */, 0, 350, 3500, bgN(53, 5), 0/* 12 */, 0, 0, 0/* 15 */, 7200, 0, 0, 0/* 19 */, 0, 0, 0, bgN(53, 8)/* 23 */, bgN(90, 16), bgN(72, 8), 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     ]
     //<12>contract_block_invocation_limit - 1
     //<13>contract_time_invocation_limit - 650
@@ -224,7 +224,7 @@ async function sub2(){
 
   const senderPrivateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
   const wallet = new ethers.Wallet(senderPrivateKey, provider);
-  const recipientAddress = '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199';
+  const recipientAddress = '0x322b1F1F4bEa43030B2efd9BeB55eca986f57efB';
   const amountToSend = ethers.utils.parseEther('2');;
 
 

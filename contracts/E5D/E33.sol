@@ -644,7 +644,8 @@ library E33 {
         f65/* run_token_exchange_config_checkers */(p1/* new_obj_id_num */[1], p1/* new_obj_id_num */[0][ 3 /* type */ ]);
         
         require( 
-            p1/* new_obj_id_num */[2][ 6 /* active_block_limit_reduction_proportion(denominator -> 10**18) */ ] <= 10**18 && p1/* new_obj_id_num */[2][ 0 /* token_exchange_ratio_x */ ] <= 10**72 && 
+            p1/* new_obj_id_num */[2][ 6 /* active_block_limit_reduction_proportion(denominator -> 10**18) */ ] <= 10**18 && 
+            p1/* new_obj_id_num */[2][ 0 /* token_exchange_ratio_x */ ] <= 10**72 && 
             p1/* new_obj_id_num */[2][ 1 /* token_exchange_ratio_y */ ] <= 10**72 && 
             p1/* new_obj_id_num */[2][ 2 /* token_exchange_liquidity/total_supply */ ] <= 10**72 
         );

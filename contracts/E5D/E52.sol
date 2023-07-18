@@ -21,7 +21,7 @@ contract E52 {
     event e2/* IndexItem */( string indexed p1/* tag */, uint256 indexed p2/* item */, uint256 indexed p3/* item_type */, string p4/* string_data */, uint256 p5/* sender_account */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );
     /* event emitted when an item or object is indexed using a given or specified string */
     
-    event e3/* AliasObject */( uint256 indexed p1/* target_id */, uint256 indexed p2/* sender_acc_id */, string indexed p3/* alias_string */, uint256 p4/* timestamp */, uint256 p5/* block_number */ );
+    event e3/* AliasObject */( uint256 indexed p1/* target_id */, uint256 indexed p2/* sender_acc_id */, string p3/* alias_string */, uint256 p4/* timestamp */, uint256 p5/* block_number */ );
     /* event emitted when an object is aliased or named */
 
     event e4/* Data */( uint256 indexed p1/* target_id */, uint256 indexed p2/* sender_acc_id */, uint256 indexed p3/* context */, string p4/* string_data */, uint256 p5/* int_data */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );

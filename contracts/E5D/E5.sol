@@ -795,7 +795,8 @@ contract E5 {
         Entity Template Object Ids
         17(job object), 
         18(post object), 
-        24(shadow_object), 
+        24(shadow_object),
+        27(storefront-item) 
         28(storefront-object), 
         29(account_obj_id), 
         30(contract_obj_id), 
@@ -917,7 +918,7 @@ contract E5 {
 
         MAIN CONTRACT
         1[
-            <1>default_vote_bounty_split_proportion (denominator -> 10**18), <3>default_end_minimum_contract_amount, <4>default_minimum_end_vote_bounty_amount, <5>default_proposal_expiry_duration_limit, <9>default_spend_minimum_contract_amount, <10>default_minimum_spend_vote_bounty_amount, <11>tx_gas_limit <12>contract_block_invocation_limit, <13>contract_time_invocation_limit, <14>minimum_entered_contracts, <15>contract_expiry_time, <16>tag_indexing_limit <19>minimum_transaction_count, <23>gas_anchor_price, <24>tx_gas_reduction_proportion , <25>tx_gas_anchor_price , <26>tx_gas_lower_limit, <30>absolute_proposal_expiry_duration_limit, <32>invite_only_e5, <39>primary_tx_account, <40>primary_account_tx_period
+            <1>default_vote_bounty_split_proportion (denominator -> 10**18), <3>default_end_minimum_contract_amount, <4>default_minimum_end_vote_bounty_amount, <5>default_proposal_expiry_duration_limit, <9>default_spend_minimum_contract_amount, <10>default_minimum_spend_vote_bounty_amount, <11>tx_gas_limit <12>contract_block_invocation_limit, <13>contract_time_invocation_limit, <14>minimum_entered_contracts,  <16>tag_indexing_limit <19>minimum_transaction_count, <23>gas_anchor_price, <24>tx_gas_reduction_proportion , <25>tx_gas_anchor_price , <26>tx_gas_lower_limit, <30>absolute_proposal_expiry_duration_limit, <32>invite_only_e5, <39>primary_tx_account, <40>primary_account_tx_period
         ]
 
         int_int_int: [
@@ -972,7 +973,7 @@ contract E5 {
 
         <26>tx_gas_lower_limit: the mimimum amount of gas beyond which any amount of gas fee can be paid for its transaction.
 
-        <27>proposal_modify_expiry_duration_limit: the period of time before the expiry of a proposal during which the proposal cannot be modified
+        <27>proposal_modify_expiry_duration_limit: the period of time before the expiry of a proposal, during which the proposal cannot be modified
 
         <28>can_modify_contract_as_moderator: if set to 1, sender can directly modify a contract if they are a moderator of the contract.
 
@@ -1056,6 +1057,8 @@ contract E5 {
         <>fully_custom: if set to 1, the token exchange is fully customizable. Meaning all its data can be altered or changed
 
         <>unlocked_supply: if set to 1, exchange authority can perform depth mint actions
+
+        <>token_type: the type of token being handled. Can either be 3 (capped) or 5 (uncapped)
 
         --------e--------
 
@@ -1236,7 +1239,7 @@ contract E5 {
     //
     //
     // ------------------------SUBSCRIPTION-STRUCTURE-------------------------------
-    /*  
+    /*
         NEW SUBSCRIPTIONS
         1[ <0>target_authority_id, <1>minimum_buy_amount, <2>can_cancel_subscription(0 if false, 1 if true), <3>maximum_buy_amount, <4>minimum_cancellable_balance_amount, <5>time_unit, <6>subscription_beneficiary ]
         2[] <--- exchange_ids

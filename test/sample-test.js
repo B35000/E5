@@ -34462,7 +34462,7 @@ describe("E5's", function () {
         [53], /* contexts */
         [65] /* int_data */
       ],
-      /* action used for aliasing or naming data objects. optional context and int_data is passed with the target being indexed. an array of strings is passed, one for each target, which would be the alias of the target */
+      /* action used for aliasing or naming data objects. optional context and int_data is passed with the target being indexed. an array of strings is passed, one for each target, which would be the alias of the target. For most chains, naming an object involves storing the name on the chain itself, but here the name is stored in the emit event because its cheaper. Then when querying the name of a targeted object, the first emit event is the name used(incase there are duplicates) */
 
       [ /* index data in tags */
         [20000, 12, 0],
