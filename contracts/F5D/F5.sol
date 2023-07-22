@@ -16,13 +16,13 @@ import "../H5D/H52.sol"; /* import "./TokensData/TokensData2.sol"; */
 
 /* SubscriptionData */
 contract F5 {
-    event e1/* PaySubscription */( uint256 indexed p1/* subscription_id */, uint256 indexed p2/* sender_acc_id */, uint256 p3/* blocks_paid_for */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
+    event e1/* PaySubscription */( uint256 indexed p1/* subscription_id */, uint256 indexed p2/* sender_acc_id */, uint256 p3/* time_units_paid_for */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
     /* event emitted when a subscription is paid for */
 
-    event e2/* CancelSubscription */( uint256 indexed p1/* subscription_id */, uint256 indexed p2/* sender_acc_id */, uint256 p3/* blocks_canceled */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
+    event e2/* CancelSubscription */( uint256 indexed p1/* subscription_id */, uint256 indexed p2/* sender_acc_id */, uint256 p3/* time_units_canceled */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
     /* event emitted when a subscription is cancelled */
 
-    event e3/* ModifySubscription */( uint256 indexed p1/* subscription */, uint256 p2/* config_item_pos */, uint256 p3/* new_config_item */, uint256 p4/* timestamp */, uint256 p5/* block_number */, uint256 p6/* sender_account */ );
+    event e3/* ModifySubscription */( uint256 indexed p1/* subscription */, uint256 p2/* sender_account */, uint256 p3/* config_item_array */, uint256 p4/* config_item_pos */, uint256 p5/* new_config_item */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );
     /* event emitted when a subscription is modified */
 
     event e4/* CollectSubscription */( uint256 indexed p1/* subscription_id */, uint256 indexed p2/* sender_acc_id */, uint256 p3/* total_time_units_collected */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
@@ -318,7 +318,7 @@ contract F5 {
             uint256 v1/* sender */ = p1/* data */[ 4 /* authority */ ].length != 0 ? p1/* data */[ 4 /* authority */ ][t] : p2/* sender_account */;
             /* initialize a sender variable as either the value in the array containing the authority data if exists or the sender of the transaction */
 
-            emit e3/* ModifySubscription */( p1/* data */[ 0 /* targets */ ][t], p1/* data */[ 1 /* target_array_pos */ ][t], p1/* data */[ 2 /* target_array_items */ ][t], block.timestamp, block.number, v1/* sender */);
+            emit e3/* ModifySubscription */( p1/* data */[ 0 /* targets */ ][t], v1/* sender */, p1/* data */[ 1 /* target_array_pos */ ][t], p1/* data */[ 2 /* target_array_items */ ][t], p1/* data */[ 3 /* new_items */ ][t], block.timestamp, block.number);
             /* emit a modify subscription action */
         }
     }

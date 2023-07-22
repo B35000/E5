@@ -34131,7 +34131,7 @@ describe("E5's", function () {
   });
 
   /* gas! */
-  xit("gassssssssssssss", async () => {
+  it("gassssssssssssss", async () => {
     const [booter, addr1, addr2, addr3, addr4, addr5, addr6] = await ethers.getSigners();
     var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
     /* 126000: 35hrs 3024000: 35dys */
@@ -34499,7 +34499,7 @@ describe("E5's", function () {
 
       [ /* enter contract */
         [30000, 3, 0],
-        [1003], [23, 23, 23],/* contract ids */
+        [1003], [23],/* contract ids */
         [tt+100_000_000]/* expiry time (seconds) */
       ],
 
@@ -34577,10 +34577,26 @@ describe("E5's", function () {
     /* initialize a variable to contain the timestamp from the blockchain */
 
     var vals = [
-      [ /* index data in tags */
-        [20000, 12, 0],
-        [1003, 1003, 1003], [23, 23, 23]/* target objects */
-      ]
+      [/* create subscription */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 33, 0],
+        [0], [23],
+        [0, 1, 1, 100, 0, 0, 0], [53, 23, 23, 23, 23, 23, 53],
+        [3, 5], [23, 23],
+        [100, 200], [23, 23],
+        [0, 0], [23, 23]
+      ],
+      [/* buy end/spend */
+        [30000, 8, 0],
+        [5, 3], [23, 23],/* exchanges */
+        [0, 0], [53, 53],/* receivers */
+        [35_000_000, 35_000_000]/* amounts */, [0, 0],/* action */
+        []/* lower_bounds */, []/* upper_bounds */
+      ],
+      [/* pay subscription */
+        [30000, 2, 0],
+        [0], [35],/* target subscription ids */
+        [10]/* subscription buy amounts */
+      ],
     ];
     /* test int data for the actions being tested for gas */
 
@@ -34593,10 +34609,10 @@ describe("E5's", function () {
     /* test string data for the actions involving a string */
 
     //tesssssssssssst
-    await e5.connect(addr1).f2232();
+    // await e5.connect(addr1).f2232();
     /* calls the test function used to ensure the user can vote in the main contract */
 
-    await e5.connect(addr1).e(v5/* t_limits */, aa, vals, ss, { gasLimit: 5_100_000, value: 35 });
+    await e5.connect(addr1).e(v5/* t_limits */, aa, vals, ss, { gasLimit: 5_100_000, value: bgN(35_000_000, 9) });
     /* send the transaction to e for recording the gas figures */
 
     var gas_cons = await e5./* get_gas_consumed */f5300g();

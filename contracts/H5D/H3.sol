@@ -470,7 +470,7 @@ library H3 {
                     
                 }
 
-                v2/* exchange */[2][ 3 /* <3>parent_tokens_balance */ ] += p1/* data */[2][r]; /* target_amounts */
+                v2/* exchange */[2][ 3 /* <3>parent_tokens_balance */ ] += p1/* data */[2/* target_amounts */][r]; 
                 /* adjust the parent tokens balance. its increased since by buying, the exchange would receive tokens from the buyer in its account in other exchanges */
             }
         }

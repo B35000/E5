@@ -469,7 +469,7 @@ library F3 {
             require( 
                 p1/* data */[ 0 /* targets */ ][t] > 1000 && 
                 v2/* target_nums */[1][ 0 /* <0>target_authority_id */ ] == v1/* sender */ && 
-                (p1/* data */[ 1 /* target_array_pos */ ][t] == 1 || p1/* data */[ 1 /* target_array_pos */ ][t] == 2 || p1/* data */[ 1 /* target_array_pos */ ][t] == 3) 
+                (p1/* data */[ 1 /* target_array_pos */ ][t] == 1 || p1/* data */[ 1 /* target_array_pos */ ][t] == 2 || p1/* data */[ 1 /* target_array_pos */ ][t] == 3 || p1/* data */[ 1 /* target_array_pos */ ][t] == 4) 
             );
             // prevents modifying the data type array and ensures the sender is the correct authority
 
@@ -521,7 +521,7 @@ library F3 {
 
         f43/* run_subscription_checkers */(v4/* targets_data */);
         /* recheck the modified subscriptions to ensure their configuration remains valid */
-    }//-----RETEST_OK-----
+    }//-----CHANGED-----
 
 
 

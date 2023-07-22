@@ -446,35 +446,66 @@ library E34 {
 
 
 
-    /* archive_data */
+    // /* archive_data */
+    // function f96(
+    //     uint256[] calldata p1/* contract_proposal_ids */, 
+    //     NumData storage p2/* self */
+    // ) external {
+    //     /* archives or deletes the object type and author data for a given target */
+
+    //     for (uint256 t = 0; t < p1/* contract_proposal_ids */.length; t++) {
+    //         /* for each targeted contract or proposal object */
+
+    //         mapping(uint256 => uint256) storage v2/* obj_nums */ = p2/* self */.num[ p1/* contract_proposal_ids */[t] ][ 0 /* control */ ];
+    //         /* initialize a storage mapping that points to the targets interactible configuration */
+            
+    //         uint256 v1/* id_type */ = v2/* obj_nums */[ 0 /* data_type */ ];
+    //         /* fetch the target type for the target specified */
+
+    //         require(v1/* id_type */ == 32/* 32(consensus_request) */ || v1/* id_type */ == 30/* 30(contract_request) */);
+    //         /* ensure target specified is a consensus of contract object */
+
+    //         v2/* obj_nums */[ 0 /* data_type */ ] = 0;
+    //         /* set the data type value to zero */
+
+    //         v2/* obj_nums */[ 2 /* <2>author_privelage_disabled */ ] = 0;
+    //         /* set the author privelages value to zero */
+
+    //         p2/* self */.int_int_int[ p1/* contract_proposal_ids */[t] ][ 0 /* control */ ][ 0 /* author_owner */ ] = 0;
+    //         /* set the author owner value of the object back to zero */
+    //     }
+    // }//-----RETEST_OK-----
+
+
+    /* arquivar_dados */
     function f96(
-        uint256[] calldata p1/* contract_proposal_ids */, 
-        NumData storage p2/* self */
+        uint256[] calldata p1/* IDs_de_proposta_de_contrato */, 
+        NumData storage p2/* auto */
     ) external {
-        /* archives or deletes the object type and author data for a given target */
+        /* arquiva ou exclui o tipo de objeto e os dados do autor para um determinado destino */
 
-        for (uint256 t = 0; t < p1/* contract_proposal_ids */.length; t++) {
-            /* for each targeted contract or proposal object */
+        for (uint256 t = 0; t < p1/* IDs_de_proposta_de_contrato */.length; t++) {
+            /* para cada contrato alvo ou objeto de proposta */
 
-            mapping(uint256 => uint256) storage v2/* obj_nums */ = p2/* self */.num[ p1/* contract_proposal_ids */[t] ][ 0 /* control */ ];
+            mapping(uint256 => uint256) storage v2/* números_de_objeto */ = p2/* auto */.num[ p1/* IDs_de_proposta_de_contrato */[t] ][ 0 /* ao_controle */ ];
             /* initialize a storage mapping that points to the targets interactible configuration */
             
-            uint256 v1/* id_type */ = v2/* obj_nums */[ 0 /* data_type */ ];
-            /* fetch the target type for the target specified */
+            uint256 v1/* tipo_de_identificação */ = v2/* números_de_objeto */[ 0 /* tipo_de_dados */ ];
+            /* busca o tipo de alvo para o alvo especificado */
 
-            require(v1/* id_type */ == 32/* 32(consensus_request) */ || v1/* id_type */ == 30/* 30(contract_request) */);
-            /* ensure target specified is a consensus of contract object */
+            require(v1/* tipo_de_identificação */ == 32/* 32(pedido_de_consenso) */ || v1/* tipo_de_identificação */ == 30/* 30(pedido_de_contrato) */);
+            /* garantir que o alvo especificado seja um consenso do objeto do contrato */
 
-            v2/* obj_nums */[ 0 /* data_type */ ] = 0;
-            /* set the data type value to zero */
+            v2/* números_de_objeto */[ 0 /* tipo_de_dados */ ] = 0;
+            /* definir o valor do tipo de dados como zero */
 
-            v2/* obj_nums */[ 2 /* <2>author_privelage_disabled */ ] = 0;
-            /* set the author privelages value to zero */
+            v2/* números_de_objeto */[ 2 /* <2>aprivilégio_do_autor_desativado */ ] = 0;
+            /* defina o valor de privilégios do autor para zero */
 
-            p2/* self */.int_int_int[ p1/* contract_proposal_ids */[t] ][ 0 /* control */ ][ 0 /* author_owner */ ] = 0;
-            /* set the author owner value of the object back to zero */
+            p2/* auto */.int_int_int[ p1/* IDs_de_proposta_de_contrato */[t] ][ 0 /* ao_controle */ ][ 0 /* dono_do_autor */ ] = 0;
+            /* definir o valor do proprietário do autor do objeto de volta para zero */
         }
-    }//-----RETEST_OK-----
+    }//-----TESTE_OK-----
 
 
 

@@ -239,11 +239,11 @@ library G32 {
             require(p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[0/* targets */][t] > 1000 && p5/* target_nums_data */[t][0][0] == 32/* 32(consensus_request) */);
             /* ensure the targeted consensus object is a valid object and is a consensus request object */
 
-            if(p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[1/* votes */][t] == 1003 && p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[0/* targets */][t] == 1007){
-                if(p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[2/* sender_account */][t] == 1){
-                    revert("vote target is reversed");
-                }
-            }
+            // if(p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[1/* votes */][t] == 1003 && p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[0/* targets */][t] == 1007){
+            //     if(p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[2/* sender_account */][t] == 1){
+            //         revert("vote target is reversed");
+            //     }
+            // }
 
             require( block.timestamp <= p5/* target_nums_data */[t][1][ 1 /* <1>proposal_expiry_time */ ] && p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[1/* votes */][t] <= 3 && p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[1/* votes */][t] >= 1 );
             /* require that the consensus request has not expired and vote number passed is 1, 2 or 3 */

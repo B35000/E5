@@ -437,6 +437,7 @@ library H32 {
     external pure returns(uint256[][5] memory v1/* data */){
         
         v1/* data */ = [new uint256[](p1.length), p1/* exchanges */, new uint256[](p1.length), new uint256[](p1.length), new uint256[](p1.length)];
+        /* initialize the return 2D array with arrays with the specified number of targets as their sizes */
 
         for ( uint256 t = 0; t < p1/* exchanges */.length; t++ ) {
             /* for each exchange targeted */

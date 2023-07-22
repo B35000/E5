@@ -21,10 +21,10 @@ import "../F5D/F32.sol"; /* import "./SubscriptionHelperFunctions2.sol"; */
 
 /* ContractsData */
 contract G5 {
-    event e1/* MakeProposal */( uint256 indexed p1/* contract_id */, uint256 indexed p2/* proposal_id */, uint256 indexed p3/* consensus_type */, uint256 p4/* proposer_account_id */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
+    event e1/* MakeProposal */( uint256 indexed p1/* contract_id */, uint256 p2/* proposal_id */, uint256 indexed p3/* consensus_type */, uint256 indexed p4/* proposer_account_id */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
     /* event emitted when a new proposal is created */
 
-    event e2/* ModifyObject */( uint256 indexed p1/* contract_id */, uint256 p2/* config_array_pos */, uint256 p3/* config_item_pos */, uint256 p4/* new_config_item */, uint256 p5/* timestamp */, uint256 p6/* block_number */, uint256 p7/* modifier */ );
+    event e2/* ModifyObject */( uint256 indexed p1/* contract_or_proposal_id */, uint256 indexed p2/* modifier */, uint256 p3/* config_array_pos */, uint256 p4/* config_item_pos */, uint256 p5/* new_config_item */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );
     /* event emitted when a contract or proposal is modified */
 
 
@@ -424,7 +424,7 @@ contract G5 {
                 /* reset the sender account value as the contract authority in the data array */
             }
 
-            emit e2/* ModifyObject */( p1/* data */[ 0 /* targets */ ][t], p1/* data */[ 1 /* target_array_pos */ ][t], p1/* data */[ 2 /* target_array_items */ ][t], p1/* data */[ 3 /* new_items */ ][t], block.timestamp, block.number, v2/* sender_account */ );
+            emit e2/* ModifyObject */( p1/* data */[ 0 /* targets */ ][t], v2/* sender_account */ , p1/* data */[ 1 /* target_array_pos */ ][t], p1/* data */[ 2 /* target_array_items */ ][t], p1/* data */[ 3 /* new_items */ ][t], block.timestamp, block.number);
             /* emit a modify object action */
         }
 

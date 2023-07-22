@@ -24,12 +24,10 @@ contract G52 {
     /* event emitted when a proposal is voted on by the sender */
 
     event e2/* EnterExtendExitContract */( uint256 indexed p1/* contract_id */, uint256 indexed p2/* sender_acc */, uint256 indexed p3/* action */, uint256 p4/* expiry */, uint256 p5/* force_exit_account */, uint256 p6/* block_number */, uint256 p7/* timestamp */ );
-    /* event emitted when a sender enters a contract(action being 3) or extends their stay in a contract(action being 14) or exits a contract */
+    /* event emitted when a sender enters a contract(action 3) or extends their stay in a contract(action 14) or exits a contract(action 11) or force exit a contract(action 18) */
 
     event e3/* SubmitProposal */( uint256 indexed p1/* proposal_id */, uint256 indexed p2/* contract_id */, uint256 p3/* timestamp */, uint256 p4/* block_number */ );
     /* event emitted when a sender submits a proposal after consensus */
-
-    // event e4/* RecordTagBuySpend */( uint256 indexed p1/* action_type */, uint256 indexed p2/* contract_id */, uint256 p3/* consensus_id */, uint256 indexed p4/* exchange */, uint256 p5/* amount */, uint256 p6/* amount_depth */, uint256 p7/* timestamp */, uint256 p8/* block_number */ );
 
     event e6/* ArchiveProposal */( uint256 indexed p1/* proposal_id */, uint256 indexed p2/* sender_acc */, uint256 p3/* timestamp */, uint256 p4/* block_number */ );
     /* event emitted when a sender archives a proposal after expirty */
@@ -188,7 +186,7 @@ contract G52 {
         uint256 p5/* action */
     ) private {
         /* combined function used for entering, extending entering and exiting contract */
-        /* action: 3 = enter_contract, action: 14 = extend_enter_contract, action: 11 = exit_contract */
+        /* action: 3 = enter_contract, action: 14 = extend_enter_contract, action: 11 = exit_contract, action: 18 = force_exit_account */
 
         uint256[][][] memory v1/* targets_data */ = gv5/* contractsData */.f78/* read_ids */(p1/* targets|expiry|sender_accounts|target_force_exit_accounts */[0/* targets */], false);
         /* read the contract data from the G5 contract */
@@ -380,25 +378,6 @@ contract G52 {
 
             emit e3/* SubmitProposal */( p1/* targets */[t], p2/* target_nums_data */[t][1][ 5 /* target_contract_authority */ ], block.timestamp, block.number );
             /* emit a submit proposal event */
-
-            // if ( p2/* target_nums_data */[t][1][ 0 /* consensus_type */ ] == 2 || /* buy */ p2/* target_nums_data */[t][1][ 0 /* consensus_type */ ] == 0 /* spend */ ) {
-            //     /* if the target is a spend or buy proposal */
-
-            //     for ( uint256 e = 0; e < p2/* target_nums_data */[t][ 4 /* (mint/buy/spend_exchanges_pos) */ ].length; e++ ) {
-            //         /* for each exchange specified in the proposal */
-
-            //         emit e4/* RecordTagBuySpend */( 
-            //             p2/* target_nums_data */[t][1][ 0 /* consensus_type */ ], 
-            //             p2/* target_nums_data */[t][1][ 5 /* target_contract_authority */ ], 
-            //             p1/* targets */[t], 
-            //             p2/* target_nums_data */[t][ 4 /* (mint/buy/spend_exchanges_pos) */ ][e], 
-            //             p2/* target_nums_data */[t][ 5 /* amounts */ ][e], 
-            //             p2/* target_nums_data */[t][ 7 /* depths */ ][e],
-            //             block.timestamp,
-            //             block.number 
-            //         );
-            //     }
-            // }
         }
 
     }//-----CHANGED-----

@@ -19,7 +19,7 @@ contract H5 {
     event e2/* UpdateProportionRatios */( uint256 indexed p1/* exchange */, uint256 p2/* new_active_limit */, uint256 p3/* tokens_to_receive */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
     /* event emitted when an exchange's reduction proportion ratios are change when a mint action takes place. used by uncapped tokens like spend */
     
-    event e3/* ModifyExchange */( uint256 indexed p1/* exchange */, uint256 p2/* config_item_pos */, uint256 p3/* new_config_item */, uint256 p4/* timestamp */, uint256 p5/* block_number */, uint256 p6/* sender_account */ );
+    event e3/* ModifyExchange */( uint256 indexed p1/* exchange */, uint256 p2/* sender_account */, uint256 p3/* config_array_pos */, uint256 p4/* config_item_pos */, uint256 p5/* new_config_item */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );
     /* event emitted when an exchange's configuration is modified or changed */
 
 
@@ -206,7 +206,7 @@ contract H5 {
             uint256 v1/* sender */ = p1/* data */[ 4 /* authority */ ].length != 0 ? p1/* data */[ 4 /* authority */ ][t] : p2/* sender_account */;
             /* initialize a sender variable from the authority array if it exists or the sender account otherwise */
 
-            emit e3/* ModifyExchange */( p1/* data */[ 0 /* targets */ ][t], p1/* data */[ 2 /* target_array_items */ ][t], p1/* data */[ 3 /* new_items */ ][t], block.timestamp, block.number, v1/* sender */ );
+            emit e3/* ModifyExchange */( p1/* data */[ 0 /* targets */ ][t], v1/* sender */, p1/* data */[ 1 /* target_array_pos */ ][t], p1/* data */[ 2 /* target_array_items */ ][t], p1/* data */[ 3 /* new_items */ ][t], block.timestamp, block.number );
             /* emit a modify event */
         }
 

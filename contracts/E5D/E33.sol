@@ -85,7 +85,7 @@ library E33 {
 
     /* compound */
     function f3(uint256 p1/* p1: numb  */, uint256 p2/* p2: steps */) 
-    private pure returns (uint256 v1/* val */) {
+    public pure returns (uint256 v1/* val */) {
         /*  p1: numb 
             p2: steps 
             v1: val

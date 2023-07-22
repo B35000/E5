@@ -93,66 +93,66 @@ contract E2 {
     //---------------------------for_H32_library---------------------------------------
 
 
-    // function set_preset_data(uint256[][] calldata preset_data) public {
-    //     for ( uint256 r = 0; r < preset_data.length; r++ ) {
-    //         if(preset_data[r][0] == 1){
-    //             num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
-    //         }
-    //         else if(preset_data[r][0] == 2){
-    //             num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = preset_data[r][4];
+    function set_preset_data(uint256[][] calldata preset_data) public {
+        for ( uint256 r = 0; r < preset_data.length; r++ ) {
+            if(preset_data[r][0] == 1){
+                num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
+            }
+            else if(preset_data[r][0] == 2){
+                num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = preset_data[r][4];
 
-    //             if(preset_data[r].length > 5){
-    //                 if(preset_data[r][5] == 1){
-    //                     num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = block.number;
-    //                 }
-    //                 else if(preset_data[r][5] == 2){
-    //                     num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = block.timestamp;
-    //                 }
-    //                 if(preset_data[r].length > 6){
-    //                     if(preset_data[r][6] == 5){
-    //                         num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] += preset_data[r][7];
-    //                     }else{
-    //                         //3
-    //                         num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] -= preset_data[r][7];
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         else if(preset_data[r][0] == 3){
-    //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
-    //         }
-    //     }
-    // }
+                if(preset_data[r].length > 5){
+                    if(preset_data[r][5] == 1){
+                        num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = block.number;
+                    }
+                    else if(preset_data[r][5] == 2){
+                        num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = block.timestamp;
+                    }
+                    if(preset_data[r].length > 6){
+                        if(preset_data[r][6] == 5){
+                            num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] += preset_data[r][7];
+                        }else{
+                            //3
+                            num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] -= preset_data[r][7];
+                        }
+                    }
+                }
+            }
+            else if(preset_data[r][0] == 3){
+                num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
+            }
+        }
+    }
 
-    // function delete_preset_data(uint256[][] calldata preset_data) public {
-    //     for ( uint256 r = 0; r < preset_data.length; r++ ) {
-    //         if(preset_data[r][0] == 1){
-    //             num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
-    //         }
-    //         else if(preset_data[r][0] == 2){
-    //             num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = 0;
-    //         }
-    //         else if(preset_data[r][0] == 3){
-    //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
-    //         }
-    //     }
-    // }
+    function delete_preset_data(uint256[][] calldata preset_data) public {
+        for ( uint256 r = 0; r < preset_data.length; r++ ) {
+            if(preset_data[r][0] == 1){
+                num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
+            }
+            else if(preset_data[r][0] == 2){
+                num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = 0;
+            }
+            else if(preset_data[r][0] == 3){
+                num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
+            }
+        }
+    }
 
-    // function read_preset_data(uint256[][] calldata preset_data) 
-    // public view returns(uint256[] memory return_data) {
-    //     return_data = new uint256[](preset_data.length);
-    //     for ( uint256 r = 0; r < preset_data.length; r++ ) {
-    //         if(preset_data[r][0] == 1){
-    //             return_data[r] = num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
-    //         }
-    //         else if(preset_data[r][0] == 2){
-    //             return_data[r] = num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]];
-    //         }
-    //         else if(preset_data[r][0] == 3){
-    //             return_data[r] = num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
-    //         }
-    //     }
-    // }
+    function read_preset_data(uint256[][] calldata preset_data) 
+    public view returns(uint256[] memory return_data) {
+        return_data = new uint256[](preset_data.length);
+        for ( uint256 r = 0; r < preset_data.length; r++ ) {
+            if(preset_data[r][0] == 1){
+                return_data[r] = num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
+            }
+            else if(preset_data[r][0] == 2){
+                return_data[r] = num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]];
+            }
+            else if(preset_data[r][0] == 3){
+                return_data[r] = num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
+            }
+        }
+    }
 
 
 
@@ -1272,10 +1272,10 @@ contract E2 {
     // }
 
     /* modify_subscription */
-    // F3.NumData private num_data;
-    // function f104( uint256[][5] memory p1/* data */, uint256 p2/* sender_account */ ) public {
-    //     F3.f104(p1/* data */, p2/* sender_account */, num_data);
-    // }
+    F3.NumData private num_data;
+    function f104( uint256[][5] memory p1/* data */, uint256 p2/* sender_account */ ) public {
+        F3.f104(p1/* data */, p2/* sender_account */, num_data);
+    }
 
     // F3.NumData private num_data;
     // function f103(uint256 p1/* new_obj_id */, uint256[][] memory p2/* new_obj_id_num_data */) external {

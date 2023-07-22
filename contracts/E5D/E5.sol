@@ -164,7 +164,7 @@ contract E5 {
         E3.TD/* TransactionData */ memory v3/* tx_data */ = f167/* set_up_transaction_data_struct */( p3/* _ints */, p4/* _strs */, p2/* _adds */, v1/* gas */ );
         /* sets up a transaction data struct for the given transaction  */
 
-        // g = 1;
+        g = 1;
         for (uint256 t = 0; t < p3/* _ints */.length; t++) {
             /* for each transaction stack specified in the ints data array */
             v3/* tx_data */.t = t;
@@ -193,18 +193,18 @@ contract E5 {
             if ( p3/* _ints */[t][0][0] == 10000 /* entity contructor */ ) {
                 /* if the action involves creating a new entity */
 
-                // uint256 v4/* gas_start */ = gasleft();
+                uint256 v4/* gas_start */ = gasleft();
 
                 (v3/* tx_data */.sv3/* temp_transaction_data */[t]) = f169/* create_entity */(v3/* tx_data */);
                 /* starts the create entity function and records the return value in the temp transaction data array in the data struct */
 
-                // g += (v4/* gas_start */ - gasleft());
+                g += (v4/* gas_start */ - gasleft());
             } else {
-                // uint256 v4/* gas_start */ = gasleft();
+                uint256 v4/* gas_start */ = gasleft();
                 v3/* tx_data */.sv8/* tx_value_available */ = f178/* execute_sub_contract_work */(v3/* tx_data */);
                 /* starts the token transaction or moderator action function */
 
-                // g += (v4/* gas_start */ - gasleft());
+                g += (v4/* gas_start */ - gasleft());
             }
         }
 
@@ -220,9 +220,9 @@ contract E5 {
     }
 
     /* get_gas_consumed */
-    // function f5300g() public view returns (uint256){
-    //     return g;
-    // }
+    function f5300g() public view returns (uint256){
+        return g;
+    }
 
 
     /* withdraw */
@@ -397,6 +397,7 @@ contract E5 {
             } 
             else if ( v1/* object_type */ == 36 /* 36(type-channel-target) */ ) {
                 /* if the action is to create a new channel */
+                
                 emit e5/* Channel */( p1/* tx_data */.sv7/* new_obj_id */, p1/* tx_data */.sv6/* strs */[ 0 /* target_string_array_pos */ ][0], block.number, block.timestamp );
                 /* emit an event with the corresponding new channels information stored in the data struct */
             }
@@ -514,7 +515,7 @@ contract E5 {
             gv6/* num_data */.int_int_int[p1/* tx_data */.sv1/* user_acc_id */][ 1 /* data */ ][ 4 /* entered_contracts */ ] += v3/* entered_contracts */;
             /* record the new number of entered contracts for teh specified sender account */
         }
-        else if(v1/* route */ == 85){
+        else if(v1/* route */ == 85/* Tokens_transaction */){
             /* if the action involves the H5 tokens contract */
             uint256[3] memory v4/* buy_sell_data */ = gv11/* tokensData */.f179/* run_token_transaction */(p1/* tx_data */);
             /* send the transaction to H5 and record the return data */
@@ -529,7 +530,7 @@ contract E5 {
                 /* call the update external amount value with the specified arguments */
             }
         }
-        else if(v1/* route */ == 852){
+        else if(v1/* route */ == 852/* Tokens2_transaction */){
             /* if the actioin involves the second H52 tokens contract */
 
             gv12/* tokensData2 */.f185/* run_h52_work */(p1/* tx_data */);
@@ -1140,6 +1141,8 @@ contract E5 {
         8[] <--- consensus_data
         9[] <--- consensus_data
         10[] <--- bounty_exchange_depths
+
+        vote: YES=1, WAIT=2, NO=3
 
         int_int_int: [
             <1>data: [<1>target_payer_for_buy, <2>vote_wait's, <3>vote_yes', <4>vote_no's, <6>consumed, <7>auto_waits_set], 
