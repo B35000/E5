@@ -20,7 +20,7 @@ contract H52 {
     event e5/* Awward */( uint256 indexed p1/* awward_sender */, uint256 indexed p2/* awward_receiver */, uint256 indexed p3/* awward_context */, string p4/* metadata */, uint256 p5/* timestamp */, uint256 p6/* block_number */);
     /* event emitted when an awward is sent from a sender to a targeted recipient with a context */
 
-    event e6/* StackDepthSwap */( uint256 indexed p1/* exchange */, uint256 p2/* action */, uint256 indexed p3/* receiver */, uint256 p4/* depth_val */, uint256 p5/* amount */, uint256 indexed p6/* sender */, uint256 p7/* timestamp */, uint256 p8/* blocknumber */);
+    event e6/* StackDepthSwap */( uint256 indexed p1/* exchange */, uint256 indexed p2/* action */, uint256 p3/* receiver */, uint256 p4/* depth_val */, uint256 p5/* amount */, uint256 indexed p6/* sender */, uint256 p7/* timestamp */, uint256 p8/* blocknumber */);
     /* event emitted when a token depth swap takes place */
 
 

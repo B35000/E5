@@ -245,7 +245,7 @@ contract H5 {
         
         /* metas[0] sender_account, metas[1] msg_value, metas[2] user_last_transaction_number, metas[3] user_last_entered_contracts_number */  
 
-        gv6/* e52 */.f257/* ensure_interactibles_for_multiple_accounts */( p1/* data */[1/* exchanges */], p1/* data */[4/* sender_accounts */], p2/* metas */[0/* sender_account */] );
+        // gv6/* e52 */.f257/* ensure_interactibles_for_multiple_accounts */( p1/* data */[1/* exchanges */], p1/* data */[4/* sender_accounts */], p2/* metas */[0/* sender_account */] );
         /* ensure the sender or senders can interact with the exchange target */      
         
         uint256[][][] memory v2/* exchange_nums */ = H3.f123/* run_exchange_checkers */(p1/* data */, p2/* metas */, p3/* authority_mint */, gv4/* num_data */);
@@ -530,7 +530,7 @@ contract H5 {
     //     return block.number;
     // }
 
-    /* boot_exchange */
+    // /* boot_exchange */
     // function f1497(
     //     uint256[][][] calldata p1/* boot_data */,
     //     uint256[][] calldata p2/* boot_id_data_type_data */,

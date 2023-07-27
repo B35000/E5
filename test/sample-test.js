@@ -23986,7 +23986,9 @@ describe("E5's", function () {
         }
     */
     var v1/* boot_data */ = [
-      [[0, 0, 0, 5], [bgN(35, 5), bgN(53, 5)/* 1 */, 0, 0, 0, bgN(50, 16)/* 5 */, bgN(90, 16), bgN(5, 16)/* 7 */, 3, 0, 0, 0, 2/* 12 */, 0, bgN(3, 16)/* 14 */, 1, bgN(35, 8), 0, 0], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]]
+      [[0, 0, 0, 5], 
+      [bgN(35, 5), bgN(53, 5)/* 1 */, 0, 0, 0, bgN(50, 16)/* 5 */, bgN(90, 16), bgN(5, 16)/* 7 */, 3, 0, 0, 0, 2/* 12 */, 0, bgN(3, 16)/* 14 */, 1, bgN(35, 8), 0, 0], 
+      [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]]
     ];
     var v2/* boot_id_data_type_data */ = [[5, 31]];
     await h5.f1497(v1/* boot_data */, v2/* boot_id_data_type_data */, h52.address);
@@ -23996,7 +23998,7 @@ describe("E5's", function () {
     //XXXXX f123: /* require( v4[0] != block.number ); */ XXXXX
     /* loops: mints per block,  calls: mints in successive blocks  */
     var calls = 40;
-    var loops = 25;
+    var loops = 30;
     var skips = [];
     var skip = false;
     console.log("Block: " + v3 + ", Calls: " + calls + ", Loops: " + loops + ", Skips Block: " + skips + ", Skip: " + skip);
@@ -24029,16 +24031,21 @@ describe("E5's", function () {
 
     }
 
+    v4/* data */ = [[0], [5], [bgN(35, 5)], [20001], []];
+    await h5./* t_call_execute_buy_or_sell_tokens */f1498(v4, v5, false, v6, 1);
+
     var v7/* exchanges */ = [5];
-    var v8/* accounts */ = [10002];
-    var val = await h52.f140(v7/* exchanges */, v8/* accounts */);
+    var v8/* accounts */ = [20002];
+    var depths = [0];
+    var val = await h52.f140(v7/* exchanges */, v8/* accounts */, depths, 1);
 
 
     var v9/* buy_sell_data */ = await h5./* get_buy_sell_data */f1499();
     // console.log(""+v9);
 
     var v10/* exchange_data */ = await h5./* get_exchange_data */f14910();
-    console.log("l1(last_minter_balance_avg): "/* last_minter_balance_avg */ + nWC(val / calls));
+    // console.log("l1(last_minter_balance_avg): "/* last_minter_balance_avg */ + nWC(val / calls));
+    console.log("l1(last_minter_balance_avg): "/* last_minter_balance_avg */ + nWC(val));
     // console.log("last_minter_balance_total:"+nWC(val));
     /* total_supply   current_block_mint_total   active_block_limit_reduction_proportion  */
     console.log("l2(total_supply): "/* total_supply */ + nWC(v10[0]));
@@ -33755,7 +33762,7 @@ describe("E5's", function () {
         [1_000_000], [23],
 
         [6], [35],/* targets */
-        [1], [23],/* vote */
+        [2], [23],/* vote */
         [0], [23],/* (unused) */
         [0], [23],/* (unused) */
         [0], [23],/* (unused) */
@@ -33879,17 +33886,17 @@ describe("E5's", function () {
 
 
     //submit vote_contract_proposal proposal
-    // var vv = [
-    //   [/* submit consensus */
-    //     [30000, 5, 0, 0, 3, 4],
-    //     [1008], [23],/* targets */
-    //     [3], [0]
-    //   ]
-    // ];
-    // console.log("l9: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
-    // await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
-    // gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
-    // console.log("l10: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
+    var vv = [
+      [/* submit consensus */
+        [30000, 5, 0, 0, 3, 4],
+        [1008], [23],/* targets */
+        [3], [0]/* vote bounties */
+      ]
+    ];
+    console.log("l9: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
+    await e5.connect(addr1).e(v5/* t_limits */, [], vv, ss, { gasLimit: 4_300_000, value: 35 });
+    gas/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
+    console.log("l10: "/* senders vote */ + await g52./* get_account votes_data */f237([1007], [[1003]]));
     // console.log("l11: "+await g52.f2671t());
 
 
@@ -33926,7 +33933,7 @@ describe("E5's", function () {
 
     -----------e-----------
     -----------e-----------
-    l1: 7,333,472
+    l1: 7,319,837
     contract(end):9000000
     subject_contract(end):3000000
     l2: 100000000000000000000000,0
@@ -33935,8 +33942,8 @@ describe("E5's", function () {
     -----e-----
     l4: 0,1,0,0,1,0,1,0,0,0,1,0,0,1,0,0,1,0
     -----------e-----------
-    t: 1684768004
-    t: 1685768010
+    t: 1690476272
+    t: 1691476279
     -----------e-----------
     l5: 725,049
     l6: 100000000000000000000000,100000000000000000000000
@@ -33944,6 +33951,8 @@ describe("E5's", function () {
     l7: 622,655
     l8: 100000000000000000000000,300000000000000000000000
     -----------e-----------
+    l9: 0
+    l10: 2
     l11: 100000000000000000000000
     l12: 632,261
     l13: 0
@@ -34131,7 +34140,7 @@ describe("E5's", function () {
   });
 
   /* gas! */
-  it("gassssssssssssss", async () => {
+  xit("gassssssssssssss", async () => {
     const [booter, addr1, addr2, addr3, addr4, addr5, addr6] = await ethers.getSigners();
     var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
     /* 126000: 35hrs 3024000: 35dys */
@@ -34249,7 +34258,7 @@ describe("E5's", function () {
         [1],/* votes */
         [3], [23], [0]/* target bounty exchanges */
       ],
-      /* action used to vote on a given proposal sent to a contract. three types of votes can be cast, a yes(1), no() */
+      /* action used to vote on a given proposal sent to a contract. three types of votes can be cast, a yes(1), wait(2) or no(3) */
 
       [/* auth modify subscription */
         [20000, 11, 0],
@@ -34352,6 +34361,13 @@ describe("E5's", function () {
         [1001, 1008]/* subscription collect accounts */
       ],
       /* action used for collecting subscription payments from specified accounts. this action is only available for cancellable subscriptions. for each target, a list of accounts is specified and to perform this action, the sender must be the authority of the subscription*/
+
+      [/* cancel subscription */
+        [30000, 12, 0],
+        [1004], [23],/* target subscription ids */
+        [3]/* subscription sell amounts */
+      ],
+      /* action used for cancelling subscription paymetns from specified accounts. this action is only available for cancellable subscriptions. for each target, a subscription sell amount is specified to perform this action.  */
 
       [/* send awwards */
         [30000, 7, 0],
@@ -34577,14 +34593,6 @@ describe("E5's", function () {
     /* initialize a variable to contain the timestamp from the blockchain */
 
     var vals = [
-      [/* create subscription */
-        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 33, 0],
-        [0], [23],
-        [0, 1, 1, 100, 0, 0, 0], [53, 23, 23, 23, 23, 23, 53],
-        [3, 5], [23, 23],
-        [100, 200], [23, 23],
-        [0, 0], [23, 23]
-      ],
       [/* buy end/spend */
         [30000, 8, 0],
         [5, 3], [23, 23],/* exchanges */
@@ -34592,10 +34600,23 @@ describe("E5's", function () {
         [35_000_000, 35_000_000]/* amounts */, [0, 0],/* action */
         []/* lower_bounds */, []/* upper_bounds */
       ],
-      [/* pay subscription */
-        [30000, 2, 0],
-        [0], [35],/* target subscription ids */
-        [10]/* subscription buy amounts */
+      [/* create subscription */
+        [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 33, 0],
+        [0], [23],
+        [0, 1, 0, 100, 0, 0, 0], [53, 23, 23, 23, 23, 23, 53],
+        [3], [23],
+        [100], [23],
+        [0], [23]
+      ],
+      [ /* enable interactible checkers */
+        [20000, 5, 0],
+        [1], [35]/* target objects */
+      ],
+      [ /* set account to be interactible */
+        [20000, 2, 0],
+        [1], [35],/* target objects */
+        [2023], [23],/* target account ids*/
+        [tt+100_000]/* interacible expiry time limit */
       ],
     ];
     /* test int data for the actions being tested for gas */

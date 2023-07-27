@@ -6,7 +6,8 @@ module.exports = {
     defaultNetwork: "hardhat",
     networks: {
         hardhat: {
-            blockGasLimit: 80_000_000 // Network block gasLimit
+            blockGasLimit: 80_000_000, // Network block gasLimit
+            allowUnlimitedContractSize: true
         },
     },
 

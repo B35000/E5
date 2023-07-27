@@ -151,7 +151,14 @@ contract G52 {
                 uint256[][][2] memory v7/* target_bounty_exchanges_depth-data */ = E32.f228/* get_nested_exch_data_for_bounties */(p1/* tx_data */.sv4/* vals */, v6/* target_id_data */[ 0 /* target_proposals */ ], 4, p1/* tx_data */.sv3/* temp_transaction_data */, p1/* tx_data */.sv1/* user_acc_id */);
                 /* calculate and set the data used for exchange bounty collection after voting in a set of proposals */
 
-                f195/* execute_vote_proposals */(v6/* target_id_data */[ 0 /* target_ids */ ], /* proposal_ids */ p1/* tx_data */.sv1/* user_acc_id */, p1/* tx_data */.sv4/* vals */[ 3 /* target_proposal_votes */ ], p1/* tx_data */.sv2/* can_sender_vote_in_main_contract */, v7/* target_bounty_exchanges_depth-data */, v6/* target_id_data */[ 2 /* e */ ]);
+                f195/* execute_vote_proposals */(
+                    v6/* target_id_data */[ 0 /* target_ids */ ], /* proposal_ids */ 
+                    p1/* tx_data */.sv1/* user_acc_id */, 
+                    p1/* tx_data */.sv4/* vals */[ 3 /* target_proposal_votes */ ], 
+                    p1/* tx_data */.sv2/* can_sender_vote_in_main_contract */, 
+                    v7/* target_bounty_exchanges_depth-data */, 
+                    v6/* target_id_data */[ 2 /* e */ ]
+                );
                 /* calls the execute vote proposals function for voting in a set of specified proposals */
             }
             else if (v4/* action */ == 11 /* <11>exit_contract */ || v4/* action */ == 18 /* <18>contract_force_exit_accounts */) {
@@ -419,10 +426,10 @@ contract G52 {
             f195/* execute_vote_proposals */(
                 v4/* data */[2/* vote_contract_proposal_data */][0/* target_proposals */],
                 0/* sender_account */,
-                v4/* data */[2/* vote_contract_proposal_data */][2/* votes */],
+                v4/* data */[2/* vote_contract_proposal_data */][1/* votes */],
                 false,
                 p3/* target_bounty_exchanges_depth-data */,
-                v4/* data */[2/* vote_contract_proposal_data */][1/* sender_accounts */]
+                v4/* data */[2/* vote_contract_proposal_data */][2/* sender_accounts */]
             );
         }
 
