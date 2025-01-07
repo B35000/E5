@@ -1,4 +1,22 @@
- //SPDX-License-Identifier: Unlicense
+//SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 import "./E52.sol"; /* import "./E52.sol"; */
@@ -214,7 +232,7 @@ contract E5 {
         f144/* transaction_end */();
         /* ends the transaction */
 
-        emit e4/* Transaction */( v3/* tx_data */.sv1/* user_acc_id */, msg.sender, v2/* temp_transaction_id */, p3/* _ints */.length, (v1/* gas */ - gasleft()), msg.value, tx.gasprice, block.timestamp, block.number, block.coinbase, block.difficulty);
+        emit e4/* Transaction */( v3/* tx_data */.sv1/* user_acc_id */, msg.sender, v2/* temp_transaction_id */, p3/* _ints */.length, (v1/* gas */ - gasleft()), msg.value, tx.gasprice, block.timestamp, block.number, block.coinbase, 0);
         /* emits the transaction's data */
         
     }
@@ -542,7 +560,7 @@ contract E5 {
     function f141(uint256[3] memory p1/* buy_sell_data */) private {
         /* updates the pending withdraw data after a sell end action has occured  */
 
-        require(gv6/* num_data */.pending_withdrawals[ p1/* buy_sell_data */[1/* receiver_acc_id */] ] == 0);
+        // require(gv6/* num_data */.pending_withdrawals[ p1/* buy_sell_data */[1/* receiver_acc_id */] ] == 0);
         /* require the receiver of the sell order has no existing pending withdraw balance */
 
         gv6/* num_data */.pending_withdrawals[ p1/* buy_sell_data */[1/* receiver_acc_id */] ] = p1/* buy_sell_data */[0/* external_amount */];
@@ -587,12 +605,18 @@ contract E5 {
     }
 
 
-    /* get_all */
+    /* pending_withdraw_balance & get_accounts */
     function f167(uint256[] memory p1/* _ids */, address[] memory p2/* addresses */, uint256 p3/* action */) public view returns(uint256[] memory){
         /* returns the pending withdraw balance for a given set of accounts, or the account ids associated with a given set of addresses */
         /* <1>pending_withdraw_balance, <2>get_accounts, */
         return E33.f167/* get_all */(p1/* _ids */, p2/* addresses */, p3/* action */, gv6/* num_data */);
     }//-----TEST_OK-----
+
+    /* get_address */
+    function f289(uint256 p1/* account_id */) external view returns(address){
+        /* returns the address corresponding to the account id specified */
+        return gv6/* num_data */.int_add[ 10 /* accounts_obj_id */ ][p1/* account_id */];
+    }
 
 
     /* get_last_transaction_block & last_transaction_time & entered_contracts_count & transaction_count_data */
@@ -789,14 +813,26 @@ contract E5 {
         9(channels_container), 
         10(accounts_obj_id), 
         11(alias_obj_id) ,
+        12(stage_royalty_id),
+        13(record_royalty_payout_id)
         14(public_externals_obj_id), 
         15(private_externals_obj_id)
-
+        17(shadow_object_container)
+        19(token_symbol_registry)
+        20(tag_registry)
+        21(album_sale)
+        22(nitro node registry)
+        23(nitro node storage sale)
 
         Entity Template Object Ids
         17(job object), 
         18(post object), 
+        19(audio_object),
+        20(video_object),
+        21(nitro_object),
         24(shadow_object),
+        25(storefront_bag_object)
+        26(contractor_object)
         27(storefront-item) 
         28(storefront-object), 
         29(account_obj_id), 
@@ -826,7 +862,7 @@ contract E5 {
         ---------------------------------------e---------------------------------------
 
         MODERATOR-ACTION
-        <1>modify_metadata, <2>add_interactible account, <3>modify_token_exchange,  <4>modify_moderator_accounts, <5>enable/disable_interactible_checkers, <7>link_exchanges, <10>alias_objects, <11>modify_subscription, <13>add_data, <14>modify_proposal, <15>modify_contract, <16>revoke_author_privelages, <17>block_accounts
+        <1>modify_metadata, <2>add_interactible account, <3>modify_token_exchange,  <4>modify_moderator_accounts, <5>enable/disable_interactible_checkers, <7>link_exchanges, <10>alias_objects, <11>modify_subscription, <12>index_data_in_tags <13>add_data, <14>modify_proposal, <15>modify_contract, <16>revoke_author_privelages, <17>block_accounts
         
         0[<0>20000 (mod action) , <1>action, ]
 
@@ -903,10 +939,9 @@ contract E5 {
     /* 
         NEW CONTRACT
         1[
-            <1>default_vote_bounty_split_proportion (denominator -> 10**18), <2>max_extend_enter_contract_limit,<4>default_minimum_end_vote_bounty_amount, <5>default_proposal_expiry_duration_limit, 
+            <1>default_vote_bounty_split_proportion (denominator -> 10**18), <2>max_extend_enter_contract_limit, <4>default_minimum_end_vote_bounty_amount, <5>default_proposal_expiry_duration_limit, 
             <6>max_enter_contract_duration, <7>default_consensus_majority_limit(denominator -> 10**18) <8>auto_wait_for_all_proposals_for_all_voters(0 if no, 1 if yes),
-            <10>default_minimum_spend_vote_bounty_amount, <15>contract_expiry_time, <27>proposal_modify_expiry_duration_limit, <28>can_modify_contract_as_moderator, <29>can_extend_enter_contract_at_any_time, <31>allow_external_buy_proposals, <33>default_voter_weight_exchange, <34>default_voter_weight_exchange_depth, <35>mandatory_voter_weight(0 if no, 1 if yes), <36>maximum_proposal_expiry_submit_expiry_time_difference, <37>bounty_limit_type(0 if relative, 1 if absolute), <38>contract_force_exit_enabled
-        ] <----- new contract config data
+            <10>default_minimum_spend_vote_bounty_amount, <15>contract_expiry_time, <27>proposal_modify_expiry_duration_limit, <28>can_modify_contract_as_moderator, <29>can_extend_enter_contract_at_any_time, <31>allow_external_buy_proposals, <33>default_voter_weight_exchange, <34>default_voter_weight_exchange_depth, <35>mandatory_voter_weight(0 if no, 1 if yes), <36>maximum_proposal_expiry_submit_expiry_time_difference, <37>bounty_limit_type(0 if relative, 1 if absolute), <38>contract_force_exit_enabled ] <----- new contract config data
         2[] <----- contract entry exchange ids
         3[] <----- contract entry amounts
         4[] <----- contract entry amount depths
@@ -1037,6 +1072,8 @@ contract E5 {
         4[] <----- source amounts for buy
         5[] <----- source amount depths for buy
 
+        1: FREEZE, 0: UNFREEZE
+        
         int_int_int: [
             <1>data: [<>account_id: <>depth: balance], 
             <2>frozen_tokens: [<>account_id: balance_frozen],
@@ -1069,7 +1106,7 @@ contract E5 {
 
         <2>minimum_transactions_between_swap: the minimum number of transactions sender has to make between swaps for a given token.
 
-        <3>minimum_blocks_between_swap(inter-block-halfing): the minimum number of blocks sender has to wait between making a swap for a given token.
+        <3>minimum_blocks_between_swap: the minimum number of blocks sender has to wait between making a swap for a given token.
 
         <4>minimum_time_between_swap: the minimum amount of time a sender has to wait between making a swap for a given token.
 

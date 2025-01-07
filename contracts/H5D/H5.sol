@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 import "./H52.sol"; /* import "./TokensData2.sol"; */
@@ -13,7 +31,7 @@ import "../E5D/E34.sol"; /* import "../E5Data/E5HelperFunctions4.sol"; */
 
 /* TokensData */
 contract H5 {
-    event e1/* UpdateExchangeRatios */(uint256 indexed p1/* exchange */, uint256 indexed p2/* action */, uint256 indexed p3/* sender_account */, uint256 p4/* token_exchange_liquidity */, uint256 p5/* parent_tokens_balance */, uint256 p6/* amount */, uint256 p7/* timestamp */, uint256 p8/* block_number */);
+    event e1/* UpdateExchangeRatios */(uint256 indexed p1/* exchange */, uint256 indexed p2/* action */, uint256 indexed p3/* sender_account */, uint256 p4/* token_exchange_liquidity */, uint256 p5/* updated_exchange_ratio_x */, uint256 p6/* updated_exchange_ratio_y */, uint256 p7/* parent_tokens_balance */, uint256 p8/* amount */, uint256 p9/* timestamp */, uint256 p10/* block_number */);
     /* event emitted when an exchange's exchange-ratios change when a swap action takes place. used by capped tokens. */
 
     event e2/* UpdateProportionRatios */( uint256 indexed p1/* exchange */, uint256 p2/* new_active_limit */, uint256 p3/* tokens_to_receive */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
@@ -245,7 +263,7 @@ contract H5 {
         
         /* metas[0] sender_account, metas[1] msg_value, metas[2] user_last_transaction_number, metas[3] user_last_entered_contracts_number */  
 
-        // gv6/* e52 */.f257/* ensure_interactibles_for_multiple_accounts */( p1/* data */[1/* exchanges */], p1/* data */[4/* sender_accounts */], p2/* metas */[0/* sender_account */] );
+        gv6/* e52 */.f257/* ensure_interactibles_for_multiple_accounts */( p1/* data */[1/* exchanges */], p1/* data */[4/* sender_accounts */], p2/* metas */[0/* sender_account */] );
         /* ensure the sender or senders can interact with the exchange target */      
         
         uint256[][][] memory v2/* exchange_nums */ = H3.f123/* run_exchange_checkers */(p1/* data */, p2/* metas */, p3/* authority_mint */, gv4/* num_data */);
@@ -349,7 +367,16 @@ contract H5 {
             uint256 v2/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][r] : p3/* sender_account */;
             /* get the sender of the swap action from the sender accounts array or the sender of the transaction */
 
-            emit e1/* UpdateExchangeRatios */( p1/* data */[1][r], /* exchanges */ p1/* data */[0][r], /* actions */ v2/* sender */, v1/* exchange */[2][ 2 /* <2>token_exchange_liquidity*/ ], v1/* exchange */[2][ 3 /* <3>parent_tokens_balance */ ], p2/* tokens_to_receive */[r], block.timestamp, block.number);
+            emit e1/* UpdateExchangeRatios */( 
+                p1/* data */[1][r], /* exchanges */ 
+                p1/* data */[0][r], /* actions */ 
+                v2/* sender */, 
+                v1/* exchange */[2][ 2 /* <2>token_exchange_liquidity*/ ], 
+                v1/* exchange */[2][ 0 /* <0>token_exchange_ratio_x */ ],
+                v1/* exchange */[2][ 1 /* <1>token_exchange_ratio_y */ ],
+                v1/* exchange */[2][ 3 /* <3>parent_tokens_balance */ ], 
+                p2/* tokens_to_receive */[r], 
+                block.timestamp, block.number);
             /* emit an update exchange ratio event */
         }
     }//-----TEST_OK-----
@@ -389,8 +416,8 @@ contract H5 {
 
     /* scan_account_exchange_data */
     function f241(uint256[] memory p1/* accounts */, uint256[] memory p2/* exchanges */) 
-    external view returns (uint256[3][] memory) {
-        /* scans the int_int_int datastorage object for an accounts last_swap_block, last_swap_time and user_last_entered_contracts_number */
+    external view returns (uint256[4][] memory) {
+        /* scans the int_int_int datastorage object for an accounts last_swap_block, last_swap_time, last_transaction_number and user_last_entered_contracts_number */
         return H3./* scan_account_exchange_data */f241(p1, gv4/* num_data */, p2);
     }
 

@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 /* ContractsHelperFunctions2 */
@@ -41,8 +59,11 @@ library G32 {
             require(p1/* targets|expiry|sender_accounts|target_force_exit_accounts|target_authors */[1/* expiry */][t] > block.timestamp);
             /* ensures the sender is entering the contract for a valid period of time */
 
-            require(v1/* target_int_int_int */[ 2 /* participant_accounts */ ][v2/* sender */] == 0);
-            /* ensures the sender has not entered the contract before */
+            // require(v1/* target_int_int_int */[ 2 /* participant_accounts */ ][v2/* sender */] == 0);
+            // /* ensures the sender has not entered the contract before */
+
+            require(v1/* target_int_int_int */[ 2 /* participant_accounts */ ][v2/* sender */] < block.timestamp);
+            /* ensures the senders time in the contract has expired or non-existent */
 
             require(p1/* targets|expiry|sender_accounts|target_force_exit_accounts|target_authors */[0/* targets */][t] != v2/* sender */);
             /* ensures a contract cannot enter itself */
@@ -67,7 +88,7 @@ library G32 {
             v1/* target_int_int_int */[ 1 /* data */ ][ 1 /* voter_count */ ] += 1; 
             // increment the voter count
         }
-    }//-----RETEST_OK-----
+    }//-----CHANGED-----
 
     /* execute_extend_enter_contract_work */
     function f113(
@@ -238,12 +259,6 @@ library G32 {
             
             require(p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[0/* targets */][t] > 1000 && p5/* target_nums_data */[t][0][0] == 32/* 32(consensus_request) */);
             /* ensure the targeted consensus object is a valid object and is a consensus request object */
-
-            // if(p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[1/* votes */][t] == 1003 && p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[0/* targets */][t] == 1007){
-            //     if(p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[2/* sender_account */][t] == 1){
-            //         revert("vote target is reversed");
-            //     }
-            // }
 
             require( block.timestamp <= p5/* target_nums_data */[t][1][ 1 /* <1>proposal_expiry_time */ ] && p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[1/* votes */][t] <= 3 && p1/* targets|votes|sender_accounts|voter_weight_exchanges|weight_balances */[1/* votes */][t] >= 1 );
             /* require that the consensus request has not expired and vote number passed is 1, 2 or 3 */

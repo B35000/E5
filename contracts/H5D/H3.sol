@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 /* TokensHelperFunctions */
@@ -170,77 +188,77 @@ library H3 {
             require( v2/* exchange */[ 3 /* source_tokens */ ].length != 0 );
             /* ensure id passed is a token exchange */
 
-            if(v2/* exchange */[1][17/* <17>minimum_transactions_for_first_buy */] != 0){
-                require(p2/* metas */[2/* user_last_transaction_number */] >= v2/* exchange */[1][17/* <17>minimum_transactions_for_first_buy */]);
-            }
-            /* ensure sender has made required amount of transactions for first swap action */
-
-            if(v2/* exchange */[1][18/* <18>minimum_entered_contracts_for_first_buy */] != 0){
-                require(p2/* metas */[3/* user_last_entered_contracts_number */] >= v2/* exchange */[1][18/* <18>minimum_entered_contracts_for_first_buy */]);
-            }
-            /* ensure sender has entered required amount of contracts for first swap action */
-
             uint256 v3/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][t] : p2/* metas */[ 0 /* sender_account */ ];
             /* initialise a sender variable from the sender account array if exists or the sender of the transaction itelf */
-            
-            mapping(uint256 => uint256) storage v4/* pointer */ = p4/* self */.int_int_int[ p1/* data */[ 1 /* exchanges */ ][t] ][v3/* sender */];
-            /* initialize a storage pointer variable that points to the senders data in the exchange including the last time they swapped, the last block they swapped and the number of transactions they had made during their last swap */
-
-            require( v4/* pointer */[ 0 /* last_swap_block */ ] != block.number );
-            /* ensure first time swapping in current block and sender is not interacting multiple times with a given exchange in one transaction */
-
-            if ( v2/* exchange */[1][ 3 /* minimum_blocks_between_swap */ ] != 0 ) {
-               /* if a required number of blocks between swaps exists */ 
-                
-                if ( v4/* pointer */[ 0 /* last_swap_block */ ] != 0 ) {
-                    /* the value would be non-zero if the sender has swapped tokens in the exchange before */
-                    
-                    require( block.number - v4/* pointer */[ 0 /* last_swap_block */ ] >= v2/* exchange */[1][ 3 /* minimum_blocks_between_swap */ ] );
-                    /* ensure sender has waited required number of blocks for this new swap action */
-                }
-            }
-            v4/* pointer */[ 0 /* last_swap_block */ ] = block.number;
-            /* record and update the current block as the last block the sender has swapped in the exchange */
-
-            if ( v2/* exchange */[1][ 4 /* minimum_time_between_swap */ ] != 0 ) {
-                /* the value would be non-zero if a required amount of time between swaps exists */
-                
-                if ( v4/* pointer */[ 1 /* last_swap_timestamp */ ] != 0 ) {
-                    /* if the sender has swapped tokens in the exchange before */
-                    
-                    require( block.timestamp - v4/* pointer */[ 1 /* last_swap_timestamp */ ] >= v2/* exchange */[1][ 4 /* minimum_time_between_swap */ ] );
-                    /* ensure minimum amount of time required has passed from last swap action */
-                }
-                v4/* pointer */[ 1 /* last_swap_timestamp */ ] = block.timestamp;
-                /* record and update the current time as the last time the sender has swapped in the exchange */
-            }  
-
-            if ( v2/* exchange */[1][ 2 /* minimum_transactions_between_swap */ ] != 0 ) {
-                /* the value would be non-zero if a required number of transactions between swaps exists */
-                
-                if ( v4/* pointer */[ 2 /* last_transaction_number */ ] != 0 ) {
-                    /* if the sender has swapped in the exchange before, the value would be non-zero */
-                    
-                    require( p2/* metas */[ 2 /* user_last_transaction_number */ ] - v4/* pointer */[ 2 /* last_transaction_number */ ] >= v2/* exchange */[1][ 2 /* minimum_transactions_between_swap */ ] );
-                    /* ensure minimum amount of transactions required have been made from last swap action */
-                }
-                v4/* pointer */[ 2 /* last_transaction_number */ ] = p2/* metas */[ 2 /* user_last_transaction_number */ ];
-                /* record and update the senders number of transactions made with e */
-            }
-            
-
-            if ( v2/* exchange */[1][ 13 /* <13>minimum_entered_contracts_between_swap */ ] != 0 ) {
-                
-                if ( v4/* pointer */[ 3 /* user_last_entered_contracts_number */ ] != 0 ) {
-                    
-                    require( p2/* metas */[ 3 /* user_last_entered_contracts_number */ ] - v4/* pointer */[ 3 /* user_last_entered_contracts_number */ ] >= v2/* exchange */[1][ 13 /* <13>minimum_entered_contracts_between_swap */ ] );
-                }
-                v4/* pointer */[ 3 /* user_last_entered_contracts_number */ ] = p2/* metas */[ 3 /* user_last_entered_contracts_number */ ];
-            }
-            /* ensure minimum amount of contracts required have been entered from last swap action */
 
             if (!p3/* authority_mint */) {
                 /* if were performing an ordinary mint or dump */
+                
+                if(v2/* exchange */[1][17/* <17>minimum_transactions_for_first_buy */] != 0){
+                    require(p2/* metas */[2/* user_last_transaction_number */] >= v2/* exchange */[1][17/* <17>minimum_transactions_for_first_buy */]);
+                }
+                /* ensure sender has made required amount of transactions for first swap action */
+
+                if(v2/* exchange */[1][18/* <18>minimum_entered_contracts_for_first_buy */] != 0){
+                    require(p2/* metas */[3/* user_last_entered_contracts_number */] >= v2/* exchange */[1][18/* <18>minimum_entered_contracts_for_first_buy */]);
+                }
+                /* ensure sender has entered required amount of contracts for first swap action */
+                
+                mapping(uint256 => uint256) storage v4/* pointer */ = p4/* self */.int_int_int[ p1/* data */[ 1 /* exchanges */ ][t] ][v3/* sender */];
+                /* initialize a storage pointer variable that points to the senders data in the exchange including the last time they swapped, the last block they swapped and the number of transactions they had made during their last swap */
+
+                require( v4/* pointer */[ 0 /* last_swap_block */ ] != block.number );
+                /* ensure first time swapping in current block and sender is not interacting multiple times with a given exchange in one transaction */
+
+                if ( v2/* exchange */[1][ 3 /* minimum_blocks_between_swap */ ] != 0 ) {
+                /* if a required number of blocks between swaps exists */ 
+                    
+                    if ( v4/* pointer */[ 0 /* last_swap_block */ ] != 0 ) {
+                        /* the value would be non-zero if the sender has swapped tokens in the exchange before */
+                        
+                        require( block.number - v4/* pointer */[ 0 /* last_swap_block */ ] >= v2/* exchange */[1][ 3 /* minimum_blocks_between_swap */ ] );
+                        /* ensure sender has waited required number of blocks for this new swap action */
+                    }
+                }
+                v4/* pointer */[ 0 /* last_swap_block */ ] = block.number;
+                /* record and update the current block as the last block the sender has swapped in the exchange */
+
+                if ( v2/* exchange */[1][ 4 /* minimum_time_between_swap */ ] != 0 ) {
+                    /* the value would be non-zero if a required amount of time between swaps exists */
+                    
+                    if ( v4/* pointer */[ 1 /* last_swap_timestamp */ ] != 0 ) {
+                        /* if the sender has swapped tokens in the exchange before */
+                        
+                        require( block.timestamp - v4/* pointer */[ 1 /* last_swap_timestamp */ ] >= v2/* exchange */[1][ 4 /* minimum_time_between_swap */ ] );
+                        /* ensure minimum amount of time required has passed from last swap action */
+                    }
+                    v4/* pointer */[ 1 /* last_swap_timestamp */ ] = block.timestamp;
+                    /* record and update the current time as the last time the sender has swapped in the exchange */
+                }  
+
+                if ( v2/* exchange */[1][ 2 /* minimum_transactions_between_swap */ ] != 0 ) {
+                    /* the value would be non-zero if a required number of transactions between swaps exists */
+                    
+                    if ( v4/* pointer */[ 2 /* last_transaction_number */ ] != 0 ) {
+                        /* if the sender has swapped in the exchange before, the value would be non-zero */
+                        
+                        require( p2/* metas */[ 2 /* user_last_transaction_number */ ] - v4/* pointer */[ 2 /* last_transaction_number */ ] >= v2/* exchange */[1][ 2 /* minimum_transactions_between_swap */ ] );
+                        /* ensure minimum amount of transactions required have been made from last swap action */
+                    }
+                    v4/* pointer */[ 2 /* last_transaction_number */ ] = p2/* metas */[ 2 /* user_last_transaction_number */ ];
+                    /* record and update the senders number of transactions made with e */
+                }
+                
+
+                if ( v2/* exchange */[1][ 13 /* <13>minimum_entered_contracts_between_swap */ ] != 0 ) {
+                    
+                    if ( v4/* pointer */[ 3 /* user_last_entered_contracts_number */ ] != 0 ) {
+                        
+                        require( p2/* metas */[ 3 /* user_last_entered_contracts_number */ ] - v4/* pointer */[ 3 /* user_last_entered_contracts_number */ ] >= v2/* exchange */[1][ 13 /* <13>minimum_entered_contracts_between_swap */ ] );
+                    }
+                    v4/* pointer */[ 3 /* user_last_entered_contracts_number */ ] = p2/* metas */[ 3 /* user_last_entered_contracts_number */ ];
+                }
+                /* ensure minimum amount of contracts required have been entered from last swap action */
                 
                 if ( p1/* data */[ 0 /* actions */ ][t] == 0 /* buy? */ ) {
                     /* if were performing a mint action */
@@ -264,7 +282,7 @@ library H3 {
                 /* can only authmint as buy action */
             }
         }
-    }//-----RETEST_OK-----
+    }//-----CHANGED-----
 
     /* calculate_share_of_total */
     function f7(uint256 p1, uint256 p2) private pure returns (uint256) {
@@ -449,7 +467,8 @@ library H3 {
                     
                 }
 
-                v2/* exchange */[2][ 3 /* <3>parent_tokens_balance */ ] -= p1/* data */[2][r]; /* target_amounts */
+                // v2/* exchange */[2][ 3 /* <3>parent_tokens_balance */ ] -= p1/* data */[2][r]; /* target_amounts */
+                v2/* exchange */[2][ 3 /* <3>parent_tokens_balance */ ] -= p2/* tokens_to_receive */[r];
                 /* adjust the parent token balance. its reduced since by selling, the exchange would send tokens from its account in another exchange */
             } else {
                 /* its a buy or mint action */
@@ -474,7 +493,7 @@ library H3 {
                 /* adjust the parent tokens balance. its increased since by buying, the exchange would receive tokens from the buyer in its account in other exchanges */
             }
         }
-    }//-----RETEST_OK-----
+    }//-----CHANGED-----
 
 
 
@@ -485,10 +504,10 @@ library H3 {
         uint256[] calldata p1/* accounts */, 
         NumData storage p2/* self */,
         uint256[] calldata p3/* exchanges */
-    ) external view returns (uint256[3][] memory v1/* data */){
-        /* scans the int_int_int datastorage object for an accounts last_swap_block, last_swap_time and user_last_entered_contracts_number */
+    ) external view returns (uint256[4][] memory v1/* data */){
+        /* scans the int_int_int datastorage object for an accounts last_swap_block, last_swap_time, last_transaction_number and user_last_entered_contracts_number */
 
-        v1/* data */ = new uint256[3][](p1.length);
+        v1/* data */ = new uint256[4][](p1.length);
         /* initialize the return variable as a new array whose length being the number of targets specified in the arguments */
 
         for (uint256 t = 0; t < p1/* accounts */.length; t++) {
@@ -497,10 +516,15 @@ library H3 {
             mapping(uint256 => uint256) storage v2/* pointer */ = p2/* self */.int_int_int[p3/* exchanges */[t]][p1/* accounts */[t]];
             /* initialize a storage pointer variable that points to the accounts data in the targeted exchange including the last time they swapped, the last block they swapped and the number of transactions they had made during their last swap */
 
-            v1/* data */[t] = [v2/* pointer */[ 0 /* last_swap_block */ ], v2/* pointer */[ 1 /* last_swap_timestamp */ ], v2/* pointer */[ 2 /* last_transaction_number */ ]];
+            v1/* data */[t] = [
+                v2/* pointer */[ 0 /* last_swap_block */ ], 
+                v2/* pointer */[ 1 /* last_swap_timestamp */ ], 
+                v2/* pointer */[ 2 /* last_transaction_number */ ], 
+                v2/* pointer */[ 3 /* user_last_entered_contracts_number */ ]
+            ];
             /* set the data in the return data array */
         }
-    }//-----TEST_OK-----
+    }//-----CHANGED-----
 
 
     /* run_exchange_transfer_checkers */

@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 /* ContractsHelperFunctions */
@@ -122,7 +140,7 @@ library G3 {
         /* ensures the new object type is a contract object */
 
         if(p2/* absolute_proposal_expiry_duration_limit */ == 0){
-            p2/* absolute_proposal_expiry_duration_limit */ = 600; /* 10min */
+            // p2/* absolute_proposal_expiry_duration_limit */ = 600; /* 10min */
         }
 
         require( 
@@ -761,8 +779,6 @@ library G3 {
 
             uint256 v3/* target_contract_authority */ = p2/* self */.num[ p1/* targets */[t] ][1][ 5 /* <5>target_contract_authority  */ ];
             /* get the contract authority of the target proposal */
-
-
 
             v2[0/* bounty_data */][t] = p2/* self */.num[ v3/* target_contract_authority */ ][1][ 1 /* <1>default_vote_bounty_split_proportion (denominator -> 10**18) */ ];
             /* set the bounty split propotion value specified by the proposals contract authority */

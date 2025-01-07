@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 import "../E5D/E52.sol"; /* import "../E5D/E52.sol"; */
@@ -20,7 +38,7 @@ contract H52 {
     event e5/* Awward */( uint256 indexed p1/* awward_sender */, uint256 indexed p2/* awward_receiver */, uint256 indexed p3/* awward_context */, string p4/* metadata */, uint256 p5/* timestamp */, uint256 p6/* block_number */);
     /* event emitted when an awward is sent from a sender to a targeted recipient with a context */
 
-    event e6/* StackDepthSwap */( uint256 indexed p1/* exchange */, uint256 indexed p2/* action */, uint256 p3/* receiver */, uint256 p4/* depth_val */, uint256 p5/* amount */, uint256 indexed p6/* sender */, uint256 p7/* timestamp */, uint256 p8/* blocknumber */);
+    event power/* StackDepthSwap */( uint256 indexed p1/* exchange */, uint256 indexed p2/* action */, uint256 p3/* receiver */, uint256 p4/* depth_val */, uint256 p5/* amount */, uint256 indexed p6/* sender */, uint256 p7/* timestamp */, uint256 p8/* blocknumber */);
     /* event emitted when a token depth swap takes place */
 
 
@@ -220,7 +238,7 @@ contract H52 {
                 /* reset the sender variable as the value in the data array */
             }
 
-            emit e6/* StackDepthSwap */( p1/* data */[ 0 /* exchanges */ ][t], p1/* data */[ 1 /* action */ ][t], v2/* target_recipient */, p1/* data */[ 2 /* depth */ ][t], v3/* amount */, v4/* sender */, block.timestamp, block.number );
+            emit power/* StackDepthSwap */( p1/* data */[ 0 /* exchanges */ ][t], p1/* data */[ 1 /* action */ ][t], v2/* target_recipient */, p1/* data */[ 2 /* depth */ ][t], v3/* amount */, v4/* sender */, block.timestamp, block.number );
             /* emit the stack depth action event */
         }
     }
@@ -494,7 +512,11 @@ contract H52 {
         uint256 p5/* unfroozen_or_froozen */,
         uint256 p6/* action */
     ) external view returns(uint256[][] memory v1/* data */) {
-        /* returns the balances of specified list of accounts at specified exchanges */
+        /* returns the balances of specified list of accounts at specified exchanges at specified depths 1(unfroozen), 2(froozen) */
+        /*
+            action 0: p1 = exchanges and p2 = accounts, 
+            action 1: p1 = accounts and p2 = exchanges 
+        */
         return H32./* balance_of_multiple_accounts */f270(p1/* exchanges */, p2/* accounts */, gv4/* num_data */, p4/* depths */, p5/* unfroozen_or_froozen */, p6/* action */);
     }
 

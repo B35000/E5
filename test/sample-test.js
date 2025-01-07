@@ -1,3 +1,21 @@
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 const { expect } = require("chai");
 const hre = require("hardhat");
 
@@ -27783,6 +27801,7 @@ describe("E5's", function () {
         [108], [23]/* new_items */
       ]
     ];
+    console.log("e3");
     await expect(e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
 
 
@@ -27796,20 +27815,22 @@ describe("E5's", function () {
         [108], [23]/* new_items */
       ]
     ];
+    console.log("e4");
     await expect(e5.connect(addr2).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
 
 
     //bad array pos
-    var vv = [
-      [
-        [20000, 11, 0],
-        [1003], [23],/* targets */
-        [/* bad! */4],/* target_array_pos */
-        [3],/* target_array_items */
-        [108], [23]/* new_items */
-      ]
-    ];
-    await expect(e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
+    // var vv = [
+    //   [
+    //     [20000, 11, 0],
+    //     [1003], [23],/* targets */
+    //     [/* bad! */4],/* target_array_pos */
+    //     [3],/* target_array_items */
+    //     [108], [23]/* new_items */
+    //   ]
+    // ];
+    // console.log("e5");
+    // await expect(e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
 
     /* bad target array item */
     var vv = [
@@ -27821,6 +27842,7 @@ describe("E5's", function () {
         [108], [23]/* new_items */
       ]
     ];
+    console.log("e6");
     await expect(e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
 
 
@@ -27834,6 +27856,7 @@ describe("E5's", function () {
         [1000], [23]/* new_items */
       ]
     ];
+    console.log("e7");
     await expect(e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.be.reverted;
 
 
@@ -27847,9 +27870,22 @@ describe("E5's", function () {
         [1005, 69000], [23, 23]/* new_items */
       ]
     ];
-    console.log("-----------e-----------");
+    console.log("e8");
     await e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 });
     console.log("l3: "/* Data */ + await f5.f73(1003));
+
+
+    var vv = [
+      [
+        [20000, 11, 0],
+        [1003, 1003], [23, 23],/* targets */
+        [2, 3],/* target_array_pos */
+        [2, 2],/* target_array_items */
+        [1005, 69000], [23, 23]/* new_items */
+      ]
+    ];
+    console.log("e9");
+    await expect(e5.connect(addr1).e(v5/* t_limits */, [], vv, [], { gasLimit: 4_300_000, value: 35 })).to.emit(f5, "e3"/* ModifySubscription */);
 
     /* 
 
@@ -28194,7 +28230,7 @@ describe("E5's", function () {
     /* 126000: 35hrs 3024000: 35dys */
     var v2/* boot_data */ = [
       [ /* spend */
-        [0, 0, 0, 5], [bgN(35, 6), bgN(35, 6), 0, 0, 0/* 4 */, bgN(53, 16), bgN(90, 16), bgN(5, 16)/* 7 */, 3, 2, 2, 0, 2/* 12 */, 0, bgN(3, 16), 1, bgN(53, 9), 0, 0], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]
+        [0, 0, 0, 5], [bgN(35, 6), bgN(36, 6), 0, 0, 0/* 4 */, bgN(53, 16), bgN(90, 16), bgN(5, 16)/* 7 */, 3, 2, 2, 0, 2/* 12 */, 0, bgN(3, 16), 1, bgN(53, 9), 0, 0], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]
       ],
       [ /* end */
         [0, 0, 0, 3],
@@ -28304,7 +28340,7 @@ describe("E5's", function () {
     console.log("l7: "/* account_entry_expiry_time */ + await g52.f266([1003], [[1002]], 3));
     // console.log("l8: "/* Entered Contracts */ + await e5.f167([[1002, 1, 4], [1006, 1, 4]], [], 3));
     // console.log("l9: "/* Transaction Count */ + await e5.f167([[1002, 1, 3], [1006, 1, 3]], [], 3));
-    console.log("l8, l9: "/* AccountTransactionData */ + await e5.f279([1002]));
+    console.log("l8, l9: "/* AccountTransactionData */ + await e5.f287([1002]));
     // console.log("l10: "/* proposal consensus(y,w,n,auto_w) */ + await g52./* get_vote_data */f167([[1004, 1, 3], [1004, 1, 2], [1004, 1, 4], [1004, 1, 7]]));
     console.log("l10: "/* proposal consensus(y,w,n,auto_w) */ + await g52./* get_total_consensus_data */f266([1004], [], 0));
 
@@ -28509,17 +28545,17 @@ describe("E5's", function () {
       [/* create proposal */
         [10000, 0, 0, 0, 0/* 4 */, 0, 0, 0, 0, 32, 0],
         [0], [23],
-        [1, (parseInt(tt)+35_000), 0/* 2 */, bgN(2, 16), 0, 1003, 0/* 6 */, 0, 0, 0], [23, 23, 23, 23, 23, 23, 23, 23, 23, 35],
+        [1, (parseInt(tt)+35_000), 0/* 2 */, bgN(2, 16), 0, 2, 0/* 6 */, 0, 0, 5], [23, 23, 23, 23, 23, 23, 23, 23, 23, 23],
         [3, 5], [23, 23],
         [3_000_000, 3_000_000], [23, 23],
         [1], [23],/* 4 - reconfig_array_pos */
-        [0], [23],/* reconfig_array_item_pos */
+        [11], [23],/* reconfig_array_item_pos */
         [bgN(45, 12)], [23],/* reconfig_array_new_item */
         [0], [23],
         [0], [23],
         [0], [23],
         [0, 0], [23, 23]
-      ],
+      ],//1019
       [/* vote proposal */
         [30000, 4, 0],
         [1], [35],/* proposal ids */
@@ -28554,7 +28590,7 @@ describe("E5's", function () {
     console.log("t: " + tt);
     console.log("-----------e-----------");
 
-    //submit reconfig subscription consensus
+    //submit reconfig token consensus
     var vv = [
       [
         [30000, 5, 0, 0, 0],
@@ -31624,17 +31660,29 @@ describe("E5's", function () {
         [1_000_000]/* amounts */, [0],/* action */
         []/* lower_bounds */, []/* upper_bounds */
       ],
+      // [/* depth_swap */
+      //   [30000,16,0],
+      //   target_exchanges, 
+      //   target_exchange_types,/* target exchange ids */
+
+      //   target_receivers,
+      //   target_receiver_types,
+
+      //   actions,/* action */ 
+      //   depths,/* depth */
+      //   amounts/* amount */
+      // ],
       [/* depth_swap */
         [30000,16,0],
-        target_exchanges, 
-        target_exchange_types,/* target exchange ids */
+        [0, 0], 
+        [35, 35],/* target exchange ids */
 
-        target_receivers,
-        target_receiver_types,
+        [0, 0],
+        [53, 53],
 
-        actions,/* action */ 
-        depths,/* depth */
-        amounts/* amount */
+        [2, 0],/* action */ 
+        [1, 1],/* depth */
+        [5, 0]/* amount */
       ],
       [/* modify_token_as_authority */
         [20000, 3, 0],
@@ -31642,7 +31690,14 @@ describe("E5's", function () {
         [1],/* target_array_pos */
         [9],/* target_array_items */
         [0], [23]/* new_items */
-      ]
+      ],
+      [/* ✔️send tokens to another account */
+        [30000, 1, 0],
+        [0], [35],/* exchanges */
+        [0], [23],/* receivers */
+        [bgN(1, 23).toString().toLocaleString('fullwide', {useGrouping:false})],/* amounts */
+        [0]/* depths */
+      ],
     ];
 
     
@@ -31656,8 +31711,8 @@ describe("E5's", function () {
     var v6/* gas_cons */ = await e5./* get_gas_consumed */f5300g();
     console.log("My new End balance: "/* End balance */ + nWC(await h52./* balance_of */f140([3], [1002], [0], 1)));
     console.log("estimated gas consumed: "/* GasEst */+nWC(v6/* gas_cons */));
-    // console.log(depth_amounts+ " token depths in total");
-    console.log("" + await h52./* balance_of */f140(exchanges, accounts, depths.reverse(), 1));
+    // console.log("" + await h52./* balance_of */f140(exchanges, accounts, depths.reverse(), 1));
+    console.log("" + await h52./* balance_of */f140([1004], [1002], [0], 1));
 
   }).timeout(10000000000);;
 
@@ -34233,26 +34288,26 @@ describe("E5's", function () {
     ];
 
     var action_templates = [
-      [/* buy end/spend */
+      [/* ✔️buy end/spend */
         [30000, 8, 0],
         [3, 5], [23, 23],/* exchanges */
         [1002, 1002], [23, 23],/* receivers */
         [17_000_000, 35_000_000]/* amounts */, [0, 0],/* action */
         []/* lower_bounds */, []/* upper_bounds */
       ],
-      [/* send tokens to another account */
+      [/* ✔️send tokens to another account */
         [30000, 1, 0],
         [5], [23],/* exchanges */
         [0], [23],/* receivers */
         [100_000],/* amounts */
         [0]/* depths */
       ],
-      [/* enter a contract */
+      [/* ✔️enter a contract */
         [30000, 3, 0],
         [1003], [23],/* contract ids */
         [1683081300]/* expiry time (seconds) */
       ],
-      [/* vote proposal */
+      [/* ✔️vote proposal */
         [30000, 4, 0],
         [1004], [23],/* proposal ids */
         [1],/* votes */
@@ -34260,7 +34315,7 @@ describe("E5's", function () {
       ],
       /* action used to vote on a given proposal sent to a contract. three types of votes can be cast, a yes(1), wait(2) or no(3) */
 
-      [/* auth modify subscription */
+      [/* ✔️auth modify subscription */
         [20000, 11, 0],
         [1003], [23],/* targets */
         [1],/* target_array_pos */
@@ -34269,7 +34324,7 @@ describe("E5's", function () {
       ],
       /* action used to modify a subscriptions data as a moderator. the targets are subscription ids and the following three arrays are the data to be modified. by default, only the subscriptions authority can modify a given subscription and certain values are restricted from modifying based on the type of subscription in focus. for instance the time_unit setting cant be modified after creation if your dealing with a cancellable subscription */
 
-      [/* auth modify token exchange */
+      [/* ✔️auth modify token exchange */
         [20000, 3, 0],
         [1003], [23],/* targets */
         [1],/* target_array */
@@ -34278,7 +34333,7 @@ describe("E5's", function () {
       ],
       /* action used to modify a tokens data as a moderator. the targets are exchange ids and the following three arrays are the data to be modified. by default, only the exchanges authority can modify a given exchange and only the exchange's configuration can be modified. to have full control over the exchange and set details like the tokens exchange ratios and buying price, fully_custom setting should be turned on while creating the exchange(its not something you can change after creating the token)*/
 
-      [/* auth modify contract */
+      [/* ✔️auth modify contract */
         [20000, 15, 0],
         [1003], [23],/* targets */
         [1],/* target_array_pos */
@@ -34296,7 +34351,7 @@ describe("E5's", function () {
       ],
       /* action used to modify a proposals data as the author. the targets are proposal ids and the following three arrays indicates the data to be modified. you cant modify a proposal thats already expired and it has to be modified before an expiry time set by the contract authority its targeting(check out the proposal_modify_expiry_duration_limit value in contracts) */
 
-      [/* auth freeze tokens [1-freeze_tokens , 0-unfreeze_tokens] */
+      [/* ✔️auth freeze tokens [1-freeze_tokens , 0-unfreeze_tokens] */
         [30000, 6, 0],
         [1003], [23],/* target_exchanges */
         [1002], [23],/* target_account_ids */
@@ -34306,7 +34361,7 @@ describe("E5's", function () {
       ],
       /* action used to freeze tokens in specific targeted accounts. for each targeted account, a target exchange is passed and a targetes amount and depth is also passed. two actions can occur, freezing(1) and unfreezing(0). to freeze the balance of a particular account, i should be the exchanges authority. meaning you cant freeze someones spend for instance.  */
 
-      [/* submit consensus request */
+      [/* ✔️submit consensus request */
         [30000, 5, 0/* payer_account_data_start */, 0/* payer_account_data_end */, 0/* vote_proposal_bounty_data_start */, 0/* vote_proposal_bounty_data_end */, 0],
         [1004, 1009], [23, 23],/* targets */
         /* payer_account_data */
@@ -34320,20 +34375,20 @@ describe("E5's", function () {
       ],
       /* action used to submit proposals after receiving consensus. the targets passed are proposal ids and do not necessarily have to be of the same contract. also you should know that the proposals passed are not processed in the order of their appearance(you should check out the bottom of function f200 in G5). if you prefer a specific order of processing your proposals(for instance all the collect subscription proposals first, before the spend proposals), just use multiple stacks(two or more of these👆 2d arrays in that case). in the event youre submitting collect subscription proposal, the payer account data is included since to collect subscriptions, you need account ids for the accounts that paid for the subscription. in the event youre submitting a vote proposal, the vote proposal bounty data is passed, since when voting I collect bounty(in this case the contract that received the vote proposal would be receiving the bounty) */
 
-      [/* extend enter contract */
+      [/* ✔️extend enter contract */
         [30000, 14, 0],
         [1003], [23],/* contract ids */
         [tt+100_000]/* expiry time (seconds) */
       ],
       /* action used for extending stay in a given contract. when you enter a contract, you specify a time after which you cant participate in consensus activity. when this time has almost reached, you can use this action to reset that time to a future time, that way you can keep participating in consensus activity. by default, you can only extend stay in a contract when that time has almost reached, unless you turn on the can_extend_enter_contract_at_any_time setting in the contract. so for instance if i can only extend stay in my contract by four hours, i can only extend my stay when im at most four hours away from my expiry time. but if that can_extend_enter_contract_at_any_time setting is turned on, i can extend at any time(even immediately after entering the contract)*/
 
-      [/* exit contract */
+      [/* ✔️exit contract */
         [30000, 11, 0],
         [1003], [23]/* contract ids */
       ],
       /* action used for exiting a contract. exiting basically means you no longer wish to participate in consensus activities in a particular contract. to exit a contract, specify its id as the target. you can argue that this action doesnt need to be carried out since when entering a contract, a specific expiry time is specified, a time after which you cant participate in the consensus. so this action is useful if you had entered a contract indefinitely. oh and you cant exit the main contract(because its special, like you. yeah. you. one in a million, all 8 thousand of you) */
 
-      [/* archive proposal/contract */
+      [/* ✔️archive proposal/contract */
         [30000, 15, 0],
         [1004, 1005], [23, 23],/* proposal/contract ids */
         /* for target 1004 */
@@ -34345,14 +34400,14 @@ describe("E5's", function () {
       ],
       /* action used for archiving, or deleting the data stored for a particular set of contracts or proposals. this is useful for keeping the blockchain small and optimized, only storing data thats in use. to archive a contract, the contract_expiry_time has to be specified while creating the contract, and by defualt all proposals can be archived, since they all wont always be in use. this feature is useful if youre looking to score gas refunds(its this thing when you delete data during a transaction, you pay for less gas since youre making the chain smaller).aside from the targeted proposals or contracts(they can be passed together as targets), account ids can be passed to delete the accounts that are recorded as voters or participants(voters if your archiving a proposal and participants if your archiving a contract) and exchanges to loot, which are the exchanges which the contract or proposal targets had balances(for instance if my contract had 1000END, id specify exchange 3 to recover those funds)*/
 
-      [/* pay subscription */
+      [/* ✔️pay subscription */
         [30000, 2, 0],
         [1003, 1004], [23, 23],/* target subscription ids */
         [5, 10]/* subscription buy amounts */
       ],
       /* action used for making subscription payments to specified subscriptions. works for both cancellable and non-cancellable subscription objects. the buy amounts are specified number of time units, not necessarily amounts of tokens. so for instance 5 means im paying for 5x53 minutes or 265 minutes for my subscription. the '53' in this case is the default time unit thats used in all subscriptions but you can specify your own value when creating the subscription object */
 
-      [/* collect subscription */
+      [/* ✔️collect subscription */
         [30000, 13, 0],
         [1003, 1004], [23, 23],/* target subscription ids */
         /* for target 1003 */
@@ -34362,7 +34417,7 @@ describe("E5's", function () {
       ],
       /* action used for collecting subscription payments from specified accounts. this action is only available for cancellable subscriptions. for each target, a list of accounts is specified and to perform this action, the sender must be the authority of the subscription*/
 
-      [/* cancel subscription */
+      [/* ✔️cancel subscription */
         [30000, 12, 0],
         [1004], [23],/* target subscription ids */
         [3]/* subscription sell amounts */
@@ -34384,7 +34439,7 @@ describe("E5's", function () {
       ],
       /* action used for sending awward tokens to specified target accounts. for each targeted receiver, a context(which could be the id of a post for instance) and a list of exchange ids, amounts and depths is specified. sending an awward is just sending tokens to a specified account, as a reaction to post or channel activity(this is instead of doing stuff like likes and upvotes)*/
 
-      [/* auth mint token */
+      [/* ✔️auth mint token */
         [30000, 9, 0],
         [1003], [23],/* exchanges */
         [1002], [23],/* receivers */
@@ -34393,7 +34448,7 @@ describe("E5's", function () {
       ],
       /* action used for minting a given token as an authority. usually, all the limits specified by the exchange are not enforced while performing this action. also, the fee for buying the token isnt charged by the exchange while performing this auth mint action. to perform this action, sender must be the authority of the exchange. */
 
-      [/* exchange transfer */
+      [/* ✔️exchange transfer */
         [30000, 17, 0],
         [1003], [23],/* exchange ids */
         [0], [53],/* receivers */
@@ -34412,7 +34467,7 @@ describe("E5's", function () {
       ],
       /* action used for minting as an authority and swapping between multiple depth values. three types of actions can be passed into this action, depth_auth_mint(action 2) which basically credits a specified accounts balance with a specified amount at a specified depth, swap_up(action 1) which is swapping from a lower depth value to a higher depth value(its like swapping a hundred cents for a dollar), and swap_down(action 0) which is swapping from a higher depth value to a lower depth value(like swapping a dollar for a hundred cents). to use this action, the unlocked_supply setting in the exchange should be turned on during creation of the exchange and the sender should be the authority of the exchange */
 
-      [/* force exit account */
+      [/* ✔️force exit account */
         [30000, 18, 0],
         [1003], [23],/* contract ids */
         [1002]/* target account */
@@ -34451,7 +34506,7 @@ describe("E5's", function () {
       [/* block account */
         [20000, 17, 0],
         [1003], [23],/* target objects */
-        [1002], [23],/* target moderator account ids */
+        [1002], [23],/* target account ids */
         [tt+35_000]/* expiry_time */
       ],
       /* action used for blocking access to a given targeted object. when an account is blocked from a token exchange for instance, they are unable to add data, buy or sell the token from the exchange itself. an expiry time is set while blocking an account, a time before which access is restricted and after which a blocked account regains access */
@@ -34636,6 +34691,10 @@ describe("E5's", function () {
     await e5.connect(addr1).e(v5/* t_limits */, aa, vals, ss, { gasLimit: 5_100_000, value: bgN(35_000_000, 9) });
     /* send the transaction to e for recording the gas figures */
 
+    var account_exchange_data = await h5./* scan_account_exchange_data */f241([1002],[5])
+    console.log('-------------------------------e----------------------')
+    console.log(account_exchange_data)
+
     var gas_cons = await e5./* get_gas_consumed */f5300g();
     /* fetches the consumed amount of gas */
 
@@ -34652,7 +34711,6 @@ describe("E5's", function () {
   
   /* ?????? ????????? */
   xit("?????? ?????????", async () => {
-    /* applaud god damn it! THAT WAS PURE PORNOGRAPHY */
     
   });
 
@@ -35981,4 +36039,4 @@ describe("E5's", function () {
 
 */
 
-//288
+//289

@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 import "./E3.sol"; /* import "./E5Data/E5HelperFunctions.sol"; */
@@ -495,7 +513,7 @@ contract E52 {
         uint256 p1/* modify_target_obj_id */,
         uint256 p2/* target_contract_authority */
     ) external view {
-        /* function that records metadata for a new proposal object created */
+        /* function that checks the target type and contract authority adata for a new proposal object created */
 
         uint256 v1/* target_type */ = f135/* read_id_type */(p1/* modify_target_obj_id */);
         /* reads and records the id type for the target object specified */
@@ -701,7 +719,7 @@ contract E52 {
     /* get_interactible_checker_settings | get_auth_privelages_setting */
     function f254(uint256[] memory p1/* targets */, uint256 p2/* action */) 
     external view returns (bool[] memory){
-        /* returns the interactible setting or auth_privelages setting for each target specified. For each target, true means interactible setting has been enabled and specified accounts can interact with the target. */
+        /* returns the interactible setting or auth_privelages setting for each target specified. For each target, true means interactible setting has been enabled and specified accounts can interact with the target. In the case of get_auth_privelage_setting, true means auth privelages have been disabled. */
         /* 0 - get_interactible_checker_settings, 1 - get_auth_privelages_setting */
 
         return E34./* get_interactible_checker_settings | get_auth_privelages_setting */f254(p1/* targets */, gv4/* num_data */, p2/* action */);

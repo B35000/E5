@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 /* E5HelperFunctions3 */
@@ -7,6 +25,7 @@ library E33 {
     struct NumData {
         mapping(uint256 => uint256) pending_withdrawals;
         mapping(uint256 => mapping(address => uint256)) add_int;
+        mapping(uint256 => mapping(uint256 => address)) int_add;
         mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) num;
         mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) int_int_int;
         mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) num_str_metas;
@@ -160,6 +179,9 @@ library E33 {
 
             p2/* self */.add_int[ 10 /* accounts_obj_id */ ][msg.sender] = p3/* new_id */; 
             //sender does not have an account, create one for them to record last transaction block and time
+
+            p2/* self */.int_add[ 10 /* accounts_obj_id */ ][p3/* new_id */] = msg.sender;
+            //record their address in the corresponding account id set
         }
         v1/* user_account_id */ = v6/* accounts_add_int */[msg.sender];
         /* set the return value as the senders account */
@@ -502,67 +524,63 @@ library E33 {
                 if ( p2/* actions */[t] == 0 && /* buy? */ p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ] >= 1 ) {
                     /* if the action is a buy action and were in a new block */
 
-                    if ( v2/* exchange */[2][ 5 /* <5>active_mint_block */ ] < p3/* block_number */ ) {
-                        /* if were in a new block */
+                    if ( v2/* exchange */[2][ 4 /* <4>total_minted_for_current_block */ ] > v2/* exchange */[1][ 1 /* <1>max_block_buyable_amount */ ] ) {
+                        /* if limit has been exceeded, reduce [2]<6>active_block_limit_reduction_proportion value by  [1]<6>block_limit_reduction_proportion */
 
-                        if ( v2/* exchange */[2][ 4 /* <4>total_minted_for_current_block */ ] > v2/* exchange */[1][ 1 /* <1>max_block_buyable_amount */ ] ) {
-                            /* if limit has been exceeded, reduce [2]<6>active_block_limit_reduction_proportion value by  [1]<6>block_limit_reduction_proportion */
+                        uint256 v3/* block_limit_sensitivity */ = v2/* exchange */[1][ 12 /* <12>block_limit_sensitivity */ ];
+                        /* initialize a variable that contains the block limit sensitivity */
 
-                            uint256 v3/* block_limit_sensitivity */ = v2/* exchange */[1][ 12 /* <12>block_limit_sensitivity */ ];
-                            /* initialize a variable that contains the block limit sensitivity */
+                        if (v3/* block_limit_sensitivity */ == 0) {
+                            v3/* block_limit_sensitivity */ = 1;
+                        }
+                        /* if the sensitivity value is undefined, set it to one */
 
-                            if (v3/* block_limit_sensitivity */ == 0) {
-                                v3/* block_limit_sensitivity */ = 1;
-                            }
-                            /* if the sensitivity value is undefined, set it to one */
+                        uint256 v4/* factor */ = f11/* calculate_factor */( v2/* exchange */[1][ 5 /* <5>internal_block_halfing_proportion */ ], v2/* exchange */[2][ 4 /* <4>total_minted_for_current_block */ ], v2/* exchange */[1][ 1 /* <1>max_block_buyable_amount */ ] );
+                        /* calculate the factor value used to calculate the new proportion and mint limit */
 
-                            uint256 v4/* factor */ = f11/* calculate_factor */( v2/* exchange */[1][ 5 /* <5>internal_block_halfing_proportion */ ], v2/* exchange */[2][ 4 /* <4>total_minted_for_current_block */ ], v2/* exchange */[1][ 1 /* <1>max_block_buyable_amount */ ] );
-                            /* calculate the factor value used to calculate the new proportion and mint limit */
+                        if(v4/* factor */ != 0){
+                            /* if the factor derived is non-zero */
 
-                            if(v4/* factor */ != 0){
-                                /* if the factor derived is non-zero */
+                            uint256 v5/* new_proportion */ = f5/* calculate_share_of_total */( v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion */ ], f3/* compound */( v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ], v4/* factor */ * v3/* block_limit_sensitivity */ ) );
+                            /* calculate the new proportion as a compounded share of the active block limit reduction value(<6>active_block_limit_reduction_proportion) */
 
-                                uint256 v5/* new_proportion */ = f5/* calculate_share_of_total */( v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion */ ], f3/* compound */( v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ], v4/* factor */ * v3/* block_limit_sensitivity */ ) );
-                                /* calculate the new proportion as a compounded share of the active block limit reduction value(<6>active_block_limit_reduction_proportion) */
+                            v1/* new_ratios */[t] = v5/* new_proportion */  == 0 ? 1 : v5/* new_proportion */ ;
+                            /* if the calculated value is zero, set it to one instead */
+                        }
 
-                                v1/* new_ratios */[t] = v5/* new_proportion */  == 0 ? 1 : v5/* new_proportion */ ;
-                                /* if the calculated value is zero, set it to one instead */
-                            }
+                        if ( p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ] > 1 ) {
+                            /* limit was exceeded in a block before the previous block */
 
-                            if ( p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ] > 1 ) {
-                                /* limit was exceeded in a block before the previous block */
+                            uint256 v6/* numerator */ = v1/* new_ratios */[t] * (10**18); /* (denominator -> 10**18) */
+                            /* initialize a numerator variable thats the product of the new active reduction proportion value(<6>active_block_limit_reduction_proportion) and 10**18 */
 
-                                uint256 v6/* numerator */ = v1/* new_ratios */[t] * (10**18); /* (denominator -> 10**18) */
-                                /* initialize a numerator variable thats the product of the new active reduction proportion value(<6>active_block_limit_reduction_proportion) and 10**18 */
+                            uint256 v7/* power */ = (p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ]) - 1;
+                            /* initialize a power variable thats the difference between the current block number and the last block number that the exchange was involved in a mint action less one */
 
-                                uint256 v7/* power */ = (p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ]) - 1;
-                                /* initialize a power variable thats the difference between the current block number and the last block number that the exchange was involved in a mint action less one */
+                            v1/* new_ratios */[t] = f14/* calculate_new_increased_active_block_limit_reduction_proportion */( v6/* numerator */, v7/* power */, v2/* exchange */[1][ 8 /* <8>block_reset_limit */ ], v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ] );
+                            /* recalculate the new increased active block limit since the value has to be pushed up for the blocks that no minting took place */
+                        }
+                    } else {
+                        /* limit has not been exceeded, so increase [2]<6>active_block_limit_reduction_proportion
+                            value by [1]<6>block_limit_reduction_proportion, if value is less than 100%, 
+                        */
+                        if ( v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion */ ] < 10**18 /* (100%) */ ) {
+                            /* if the value is less than 100% */
 
-                                v1/* new_ratios */[t] = f14/* calculate_new_increased_active_block_limit_reduction_proportion */( v6/* numerator */, v7/* power */, v2/* exchange */[1][ 8 /* <8>block_reset_limit */ ], v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ] );
-                                /* recalculate the new increased active block limit since the value has to be pushed up for the blocks that no minting took place */
-                            }
-                        } else {
-                            /* limit has not been exceeded, so increase [2]<6>active_block_limit_reduction_proportion
-                                value by [1]<6>block_limit_reduction_proportion, if value is less than 100%, 
-                            */
-                            if ( v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion */ ] < 10**18 /* (100%) */ ) {
-                                /* if the value is less than 100% */
+                            uint256 v8/* numerator */ = v2/* exchange */[2][ 6/* <6>active_block_limit_reduction_proportion */] * (10**18); /* (denominator -> 10**18) */
+                            /* initialize a numerator value as the product of the active block limit value and 10**18 */
 
-                                uint256 v8/* numerator */ = v2/* exchange */[2][ 6/* <6>active_block_limit_reduction_proportion */] * (10**18); /* (denominator -> 10**18) */
-                                /* initialize a numerator value as the product of the active block limit value and 10**18 */
+                            uint256 v9/* power */ = p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ];
+                            /* initialize a power variable thats the difference between the current block number and the last block number that the exchange was involved in a mint action  */
 
-                                uint256 v9/* power */ = p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ];
-                                /* initialize a power variable thats the difference between the current block number and the last block number that the exchange was involved in a mint action  */
-
-                                v1/* new_ratios */[t] = f14/* calculate_new_increased_active_block_limit_reduction_proportion */( v8/* numerator */, v9/* power */, v2/* exchange */[1][ 8 /* <8>block_reset_limit */ ], v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ] );
-                                /* recalculate the new increased active block limit since the value has to be pushed up for the blocks that no minting took place */
-                            }
+                            v1/* new_ratios */[t] = f14/* calculate_new_increased_active_block_limit_reduction_proportion */( v8/* numerator */, v9/* power */, v2/* exchange */[1][ 8 /* <8>block_reset_limit */ ], v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ] );
+                            /* recalculate the new increased active block limit since the value has to be pushed up for the blocks that no minting took place */
                         }
                     }
                 }
             }
         }
-    }//-----TEST_OK-----
+    }//-----CHANGED-----
 
     /* calculate_new_increased_active_block_limit_reduction_proportion */
     function f14(

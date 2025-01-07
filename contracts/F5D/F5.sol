@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 import "../E5D/E52.sol"; /* import "./E52.sol"; */
@@ -22,7 +40,7 @@ contract F5 {
     event e2/* CancelSubscription */( uint256 indexed p1/* subscription_id */, uint256 indexed p2/* sender_acc_id */, uint256 p3/* time_units_canceled */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
     /* event emitted when a subscription is cancelled */
 
-    event e3/* ModifySubscription */( uint256 indexed p1/* subscription */, uint256 p2/* sender_account */, uint256 p3/* config_item_array */, uint256 p4/* config_item_pos */, uint256 p5/* new_config_item */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );
+    event e5/* ModifySubscription */( uint256 indexed p1/* subscription */, uint256 p2/* sender_account */, uint256 p3/* config_item_array */, uint256 p4/* config_item_pos */, uint256 p5/* new_config_item */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );
     /* event emitted when a subscription is modified */
 
     event e4/* CollectSubscription */( uint256 indexed p1/* subscription_id */, uint256 indexed p2/* sender_acc_id */, uint256 p3/* total_time_units_collected */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
@@ -318,7 +336,7 @@ contract F5 {
             uint256 v1/* sender */ = p1/* data */[ 4 /* authority */ ].length != 0 ? p1/* data */[ 4 /* authority */ ][t] : p2/* sender_account */;
             /* initialize a sender variable as either the value in the array containing the authority data if exists or the sender of the transaction */
 
-            emit e3/* ModifySubscription */( p1/* data */[ 0 /* targets */ ][t], v1/* sender */, p1/* data */[ 1 /* target_array_pos */ ][t], p1/* data */[ 2 /* target_array_items */ ][t], p1/* data */[ 3 /* new_items */ ][t], block.timestamp, block.number);
+            emit e5/* ModifySubscription */( p1/* data */[ 0 /* targets */ ][t], v1/* sender */, p1/* data */[ 1 /* target_array_pos */ ][t], p1/* data */[ 2 /* target_array_items */ ][t], p1/* data */[ 3 /* new_items */ ][t], block.timestamp, block.number);
             /* emit a modify subscription action */
         }
     }

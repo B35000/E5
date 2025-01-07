@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 import "./G5.sol"; 
@@ -29,7 +47,7 @@ contract G52 {
     event e3/* SubmitProposal */( uint256 indexed p1/* proposal_id */, uint256 indexed p2/* contract_id */, uint256 p3/* timestamp */, uint256 p4/* block_number */ );
     /* event emitted when a sender submits a proposal after consensus */
 
-    event e6/* ArchiveProposal */( uint256 indexed p1/* proposal_id */, uint256 indexed p2/* sender_acc */, uint256 p3/* timestamp */, uint256 p4/* block_number */ );
+    event archive/* ArchiveProposal */( uint256 indexed p1/* proposal_id */, uint256 indexed p2/* sender_acc */, uint256 p3/* timestamp */, uint256 p4/* block_number */ );
     /* event emitted when a sender archives a proposal after expirty */
 
 
@@ -339,7 +357,7 @@ contract G52 {
         for (uint256 t = 0; t < p1/* targets */.length; t++) {
             /* for each target in the specified targets being archived */
 
-            emit e6/* ArchiveProposal */(p1/* targets */[t], p3/* sender_account_id */, block.timestamp, block.number);
+            emit archive/* ArchiveProposal */(p1/* targets */[t], p3/* sender_account_id */, block.timestamp, block.number);
             /* emit an archive event */
         }
 
@@ -483,7 +501,7 @@ contract G52 {
     // ------------------------VIEW_FUNCTIONS-------------------------------
     /* get_total_consensus_data(0) | contract_voter_count_data(2) | account_entry_expiry_time(3) | entry_time_to_expiry(4) | total_consensus_data_as_percentages(5) */
     function f266(
-        uint256[] memory p1/* consensus_targets */, 
+        uint256[] memory p1/* targets */, 
         uint256[][] memory p2/* voter_accounts */, 
         uint256 p3/* action */
     ) external view returns(uint256[][] memory v1/* data */){

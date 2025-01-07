@@ -1,4 +1,22 @@
 //SPDX-License-Identifier: Unlicense
+// Copyright (c) 2022 Bry Onyoni
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+// SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
 import "./G52.sol"; /* import "./ContractsData2.sol"; */
@@ -21,10 +39,10 @@ import "../F5D/F32.sol"; /* import "./SubscriptionHelperFunctions2.sol"; */
 
 /* ContractsData */
 contract G5 {
-    event e1/* MakeProposal */( uint256 indexed p1/* contract_id */, uint256 p2/* proposal_id */, uint256 indexed p3/* consensus_type */, uint256 indexed p4/* proposer_account_id */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
+    event e1/* MakeProposal */( uint256 indexed p1/* contract_id */, uint256 indexed p2/* consensus_type */, uint256 indexed p3/* proposer_account_id */, uint256 p4/* proposal_id */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
     /* event emitted when a new proposal is created */
 
-    event e2/* ModifyObject */( uint256 indexed p1/* contract_or_proposal_id */, uint256 indexed p2/* modifier */, uint256 p3/* config_array_pos */, uint256 p4/* config_item_pos */, uint256 p5/* new_config_item */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );
+    event e2/* ModifyObject */( uint256 indexed p1/* contract_or_proposal_id */, uint256 indexed p2/* modifier_sender_account */, uint256 p3/* config_array_pos */, uint256 p4/* config_item_pos */, uint256 p5/* new_config_item */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );
     /* event emitted when a contract or proposal is modified */
 
 
