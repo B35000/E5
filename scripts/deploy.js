@@ -52,7 +52,6 @@ async function main() {
   // const booter = new ethers.Wallet(booter_private_key, provider);
   
   const [booter] = await ethers.getSigners();
-  var base_nonce = 13
 
   /* ------------------------------------------- DEPLOY LIBRARIES ------------------------------------ */
   const E3 = await hre.ethers.getContractFactory("E3");
@@ -236,23 +235,25 @@ async function main() {
   
 
   /* ---------------------------------- BOOT E5 ------------------------------------- */
-  /* 190800:53hrs, 126000: 35hrs, 3024000: 35dys, 64800: 18hrs, 604800:7days */
+  /* 190800:53hrs, 126000: 35hrs, 3024000: 35dys, 64800: 18hrs, 604800:7days, 540:9min */
   var v1/* boot_addresses */ = [e5.address, e52.address, f5.address, g5.address, g52.address, h5.address, h52.address];
   var mint_limit = 3_500_000
-  var block_limit = 3_600_000
-  var maturiry_limit = 350_000_000
-  var default_proposal_expiry_duration_limit = (604800)
+  var block_limit = mint_limit + (mint_limit / 50)
+  var maturiry_limit = mint_limit * 1000
+  var default_end_minimum_contract_amount = mint_limit/100
+  var default_spend_minimum_contract_amount = mint_limit/1000
+  var default_proposal_expiry_duration_limit = (604800)/* 7days */
   var v2/* boot_data */ = [
     [ /* spend */
-      [0, 0, 0, 5], [mint_limit, block_limit, 3, 0, 190800/* 4 */, bgN(53, 16), bgN(90, 16), bgN(2, 16)/* 7 */, 2, 2, 2/* 10 */, 0, 2/* 12 */, 1, 0, 1, maturiry_limit, 1, 0], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]
+      [0, 0, 0, 5], [mint_limit, block_limit, 3, 0, 190800/* 4 */, bgN(53, 16), bgN(90, 16), bgN(5, 16)/* 7 */, 1, 2, 2/* 10 */, 0, 3/* 12 */, 1, 0, 1, maturiry_limit, 1, 0], [bgN(1, 72), bgN(1, 72), 0/* 2 */, 0, 0, 0, bgN(100, 16)], [0], [0]
     ],
     [ /* end */
       [0, 0, 0, 3],
-      [mint_limit, 0, 0, 0, 0, 0, 0, bgN(2, 16)/* 7 */, 0, 2, 0, mint_limit/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0], 
+      [mint_limit, 0, 0, 0, 540/* 4 */, 0, 0, bgN(3, 16)/* 7 */, 0, 2, 0, mint_limit/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0], 
       [bgN(1, 72), bgN(1, 72), bgN(1, 70)/* 2 */, 0, 0, 0, 0], [0], [bgN(1, 9)]
     ],
     [ /* main contract */
-      [0], [0, bgN(5, 16), 0, 350/* 3 */, 3500, default_proposal_expiry_duration_limit, 0, 0/* 7 */, 0, 350, 3500, bgN(530, 9), 0/* 12 */, 0, 0, 0/* 15 */, 7200, 0, 0, 0/* 19 */, 0, 0, 0, bgN(53, 8)/* 23 */, bgN(90, 16), bgN(72, 8), 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      [0], [0, bgN(5, 16), 0, default_end_minimum_contract_amount/* 3 */, default_end_minimum_contract_amount, default_proposal_expiry_duration_limit, 0, 0/* 7 */, 0, default_spend_minimum_contract_amount, default_spend_minimum_contract_amount, bgN(530, 35), 0/* 12 */, 0, 0, 0/* 15 */, 7200, 0, 0, 0/* 19 */, 0, 0, 0, bgN(53, 8)/* 23 */, bgN(90, 16), bgN(72, 8), 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     ]
     //<12>contract_block_invocation_limit - 1
     //<13>contract_time_invocation_limit - 650
@@ -264,8 +265,14 @@ async function main() {
   var tt = parseInt(await e5./*get_time*/f147(2/* get_time */));
   var block = parseInt(await e5./* get_block */f147(3/* get_block */));
   console.log(`E5 timestamp: ${tt}`);
+  console.log(`E5 block: ${block}`);
   console.log(`E5 address: ${e5.address}`);
-  console.log(`E5 block: ${block}`)
+  console.log(`E52 address: ${e52.address}`);
+  console.log(`F5 address: ${f5.address}`);
+  console.log(`G5 address: ${g5.address}`);
+  console.log(`G52 address: ${g52.address}`);
+  console.log(`H5 address: ${h5.address}`);
+  console.log(`H52 address: ${h52.address}`);
 
   /* 
     npx hardhat run --network {network_name} scripts/deploy.js
@@ -386,7 +393,7 @@ async function main() {
 async function sub2(){
   const provider = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545/')
 
-  const senderPrivateKey = '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d';
+  const senderPrivateKey = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
   const wallet = new ethers.Wallet(senderPrivateKey, provider);
   // const recipientAddress = '0x322b1F1F4bEa43030B2efd9BeB55eca986f57efB';//bry
   // const recipientAddress = '0xA16fa4F1f00899B0Ac3Aeb9271eb1a4759482dB6'//jayson

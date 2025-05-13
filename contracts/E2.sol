@@ -111,66 +111,66 @@ contract E2 {
     //---------------------------for_H32_library---------------------------------------
 
 
-    function set_preset_data(uint256[][] calldata preset_data) public {
-        for ( uint256 r = 0; r < preset_data.length; r++ ) {
-            if(preset_data[r][0] == 1){
-                num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
-            }
-            else if(preset_data[r][0] == 2){
-                num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = preset_data[r][4];
+    // function set_preset_data(uint256[][] calldata preset_data) public {
+    //     for ( uint256 r = 0; r < preset_data.length; r++ ) {
+    //         if(preset_data[r][0] == 1){
+    //             num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
+    //         }
+    //         else if(preset_data[r][0] == 2){
+    //             num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = preset_data[r][4];
 
-                if(preset_data[r].length > 5){
-                    if(preset_data[r][5] == 1){
-                        num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = block.number;
-                    }
-                    else if(preset_data[r][5] == 2){
-                        num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = block.timestamp;
-                    }
-                    if(preset_data[r].length > 6){
-                        if(preset_data[r][6] == 5){
-                            num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] += preset_data[r][7];
-                        }else{
-                            //3
-                            num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] -= preset_data[r][7];
-                        }
-                    }
-                }
-            }
-            else if(preset_data[r][0] == 3){
-                num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
-            }
-        }
-    }
+    //             if(preset_data[r].length > 5){
+    //                 if(preset_data[r][5] == 1){
+    //                     num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = block.number;
+    //                 }
+    //                 else if(preset_data[r][5] == 2){
+    //                     num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = block.timestamp;
+    //                 }
+    //                 if(preset_data[r].length > 6){
+    //                     if(preset_data[r][6] == 5){
+    //                         num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] += preset_data[r][7];
+    //                     }else{
+    //                         //3
+    //                         num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] -= preset_data[r][7];
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         else if(preset_data[r][0] == 3){
+    //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
+    //         }
+    //     }
+    // }
 
-    function delete_preset_data(uint256[][] calldata preset_data) public {
-        for ( uint256 r = 0; r < preset_data.length; r++ ) {
-            if(preset_data[r][0] == 1){
-                num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
-            }
-            else if(preset_data[r][0] == 2){
-                num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = 0;
-            }
-            else if(preset_data[r][0] == 3){
-                num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
-            }
-        }
-    }
+    // function delete_preset_data(uint256[][] calldata preset_data) public {
+    //     for ( uint256 r = 0; r < preset_data.length; r++ ) {
+    //         if(preset_data[r][0] == 1){
+    //             num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
+    //         }
+    //         else if(preset_data[r][0] == 2){
+    //             num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]] = 0;
+    //         }
+    //         else if(preset_data[r][0] == 3){
+    //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
+    //         }
+    //     }
+    // }
 
-    function read_preset_data(uint256[][] calldata preset_data) 
-    public view returns(uint256[] memory return_data) {
-        return_data = new uint256[](preset_data.length);
-        for ( uint256 r = 0; r < preset_data.length; r++ ) {
-            if(preset_data[r][0] == 1){
-                return_data[r] = num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
-            }
-            else if(preset_data[r][0] == 2){
-                return_data[r] = num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]];
-            }
-            else if(preset_data[r][0] == 3){
-                return_data[r] = num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
-            }
-        }
-    }
+    // function read_preset_data(uint256[][] calldata preset_data) 
+    // public view returns(uint256[] memory return_data) {
+    //     return_data = new uint256[](preset_data.length);
+    //     for ( uint256 r = 0; r < preset_data.length; r++ ) {
+    //         if(preset_data[r][0] == 1){
+    //             return_data[r] = num_data.num[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
+    //         }
+    //         else if(preset_data[r][0] == 2){
+    //             return_data[r] = num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]];
+    //         }
+    //         else if(preset_data[r][0] == 3){
+    //             return_data[r] = num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
+    //         }
+    //     }
+    // }
 
 
 
@@ -1290,10 +1290,10 @@ contract E2 {
     // }
 
     /* modify_subscription */
-    F3.NumData private num_data;
-    function f104( uint256[][5] memory p1/* data */, uint256 p2/* sender_account */ ) public {
-        F3.f104(p1/* data */, p2/* sender_account */, num_data);
-    }
+    // F3.NumData private num_data;
+    // function f104( uint256[][5] memory p1/* data */, uint256 p2/* sender_account */ ) public {
+    //     F3.f104(p1/* data */, p2/* sender_account */, num_data);
+    // }
 
     // F3.NumData private num_data;
     // function f103(uint256 p1/* new_obj_id */, uint256[][] memory p2/* new_obj_id_num_data */) external {
@@ -2410,7 +2410,7 @@ contract E2 {
     //     address[][] calldata p5/* _adds */,
     //     string[][][] calldata p6/* _strs */
     // ) public pure returns (uint256[] memory v1/* return_data */) {
-    //     E3.TD/* TransactionData */ memory v2/* tx_data */ = E3.TD/* TransactionData */( p3/* user_acc_id */, false/* can_sender_vote_in_main_contract */, p1/* temp_transaction_data_group */[0], p4/* _ints */[0], p5/* _adds */[0], p6/* _strs */[0], 0, /* t */ 0, /* new_obj_id */ 0 /* msg.value */, [ 0/* transaction_count */, uint256(0)/* entered_contracts */ ], false );
+    //     E3.TD/* TransactionData */ memory v2/* tx_data */ = E3.TD/* TransactionData */( p3/* user_acc_id */, false/* can_sender_vote_in_main_contract */, p1/* temp_transaction_data_group */[0], p4/* _ints */[0], p5/* _adds */[0], p6/* _strs */[0], 0, /* t */ 0, /* new_obj_id */ 0 /* msg.value */, [ 0/* transaction_count */, uint256(0)/* entered_contracts */ ], false , p1/* temp_transaction_data_group */[0]);
 
     //     (uint256[][5] memory v3/* data */, uint256[][6] memory v4/* data2 */) = E3.f22/* run_transfers_setup */(v2/* tx_data */, p2/* target_id_data */);
 

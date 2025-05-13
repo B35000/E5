@@ -823,6 +823,7 @@ contract E5 {
         21(album_sale)
         22(nitro node registry)
         23(nitro node storage sale)
+        24(dialer admin registry)
 
         Entity Template Object Ids
         17(job object), 

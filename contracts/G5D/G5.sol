@@ -39,7 +39,7 @@ import "../F5D/F32.sol"; /* import "./SubscriptionHelperFunctions2.sol"; */
 
 /* ContractsData */
 contract G5 {
-    event e1/* MakeProposal */( uint256 indexed p1/* contract_id */, uint256 indexed p2/* consensus_type */, uint256 indexed p3/* proposer_account_id */, uint256 p4/* proposal_id */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
+    event e1/* MakeProposal */( uint256 indexed p1/* contract_id */, uint256 indexed p2/* proposal_object_id */, uint256 indexed p3/* consensus_type */, uint256 p4/* sender_account_id */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
     /* event emitted when a new proposal is created */
 
     event e2/* ModifyObject */( uint256 indexed p1/* contract_or_proposal_id */, uint256 indexed p2/* modifier_sender_account */, uint256 p3/* config_array_pos */, uint256 p4/* config_item_pos */, uint256 p5/* new_config_item */, uint256 p6/* timestamp */, uint256 p7/* block_number */ );

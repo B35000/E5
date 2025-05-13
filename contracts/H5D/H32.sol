@@ -91,6 +91,13 @@ library H32 {
                 
                 require(p4/* num */[r][1/* exchange_config */][9/* <9>exchange_authority */] == v1/* sender */ && p4/* num */[r][0][0/* unlocked_supply */] == 1);
                 /* require the sender to be the authority controlling the exchange and the supply is unlocked */
+
+                if(p1/* data */[ 5 /* senders */ ].length != 0){
+                    /* if the senders array has been defined... */
+                    
+                    require(p3/* sender_acc_id */ == 0);
+                    /* ensure that the sender_account_id is zero, meaning function has been invoked from the contract class while submitting a proposal. */
+                }
                 
                 v3/* exchange_receiver_balances */[p1/* data */[ 2 /* depths */ ][r]] += p1/* data */[ 3 /* depth_amounts */ ][r];
                 /* increase their balance at the targeted depth by 1 end */

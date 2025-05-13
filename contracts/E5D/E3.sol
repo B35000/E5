@@ -304,8 +304,8 @@ library E3 {
     }//-----RETEST_OK-----
 
     /* run_transfers_setup */
-    function f22( TD/* TransactionData */ calldata p1/* tx_data */, uint256[][5] memory p2/* target_id_data */ ) 
-    private pure returns (uint256[][5] memory v1/* data */, uint256[][6] memory v2/* data2 */) {
+    function f22( TD/* TransactionData */ calldata p1/* tx_data */, uint256[][5] memory p2/* target_id_data */ )
+    public pure returns (uint256[][5] memory v1/* data */, uint256[][6] memory v2/* data2 */) {
         /* initializes the data whose actions involves transfering tokens */
 
         uint256 v3/* action */ = p1/* tx_data */.sv4/* vals */[0][ 1 /* action */ ];
@@ -359,6 +359,10 @@ library E3 {
                 p2/* target_id_data */[ 2 /* e */ ]/* senders(unused) */
             ];
             /* set the data in the return object */
+            if(p1/* tx_data */.sv4/* vals */.length > 8/* senders */){
+                /* if a senders array has been defined, we set it as well. This was added after the tests to enable stack_depth_swap actions for other accounts by other accounts. */
+                v2/* data2 */[5] = p1/* tx_data */.sv4/* vals */[ 8 /* senders */ ];
+            }
         }
         else if(v3/* action */ == 17/* <17>exchange_transfer */){
             /* if the action is an exchange transfer action */
