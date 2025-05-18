@@ -305,7 +305,7 @@ library E3 {
 
     /* run_transfers_setup */
     function f22( TD/* TransactionData */ calldata p1/* tx_data */, uint256[][5] memory p2/* target_id_data */ )
-    public pure returns (uint256[][5] memory v1/* data */, uint256[][6] memory v2/* data2 */) {
+    private pure returns (uint256[][5] memory v1/* data */, uint256[][6] memory v2/* data2 */) {
         /* initializes the data whose actions involves transfering tokens */
 
         uint256 v3/* action */ = p1/* tx_data */.sv4/* vals */[0][ 1 /* action */ ];

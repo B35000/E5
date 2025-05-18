@@ -354,6 +354,12 @@ library H32 {
         else {
             /* the action is a buy action */
 
+            if(p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ] != 0 && p6/* exchange_data */[0][ 3 /* exchange_type */ ] == 5 /* type_uncapped_supply */){
+                /* if the maximum_mint_token_supply has been specified for a uncapped token. */
+                
+                require(p6/* exchange_data */[2/* exchange_config_data */][ 2 /* <2>token_exchange_liquidity/total_supply  */ ] + p2/* tokens_to_receive */[p5/* r */] < p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ]);
+                /* ensure sender isnt minting more token than have been required by the exchange author */
+            }
 
             v2/* int_int_pointer */[p1/* data */[3/* receivers */][p5/* r */]][v3/* exchange_default_depth */] += p2/* tokens_to_receive */[p5/* r */];
             /* increase the balance of the sender since their buying tokens */

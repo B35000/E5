@@ -1065,7 +1065,7 @@ contract E5 {
         NEW TOKEN EXCHANGE
         0[<0>unlocked_supply, <1>unlocked_liquidity, <2>fully_custom, <3>token_type]
 
-        1[<0>default_exchange_amount_buy_limit, <1>block_limit, <2>minimum_transactions_between_swap, <3>minimum_blocks_between_swap, <4>minimum_time_between_swap, <5>internal_block_halfing_proportion (denominator -> 10**18), <6>block_limit_reduction_proportion (denominator -> 10**18), <7>trust_fee_proportion (denominator -> 10**18), <8>block_reset_limit, <9>exchange_authority, <10>trust_fee_target, <11>default_exchange_amount_sell_limit, <12>block_limit_sensitivity, <13>minimum_entered_contracts_between_swap, <14>default_authority_mint_limit (denominator -> 10**18), <15>block_halfing_type(0 if fixed, 1 if spread), <16>maturity_limit, <17>minimum_transactions_for_first_buy, <18>minimum_entered_contracts_for_first_buy]
+        1[<0>default_exchange_amount_buy_limit, <1>block_limit, <2>minimum_transactions_between_swap, <3>minimum_blocks_between_swap, <4>minimum_time_between_swap, <5>internal_block_halfing_proportion (denominator -> 10**18), <6>block_limit_reduction_proportion (denominator -> 10**18), <7>trust_fee_proportion (denominator -> 10**18), <8>block_reset_limit, <9>exchange_authority, <10>trust_fee_target, <11>default_exchange_amount_sell_limit, <12>block_limit_sensitivity, <13>minimum_entered_contracts_between_swap, <14>default_authority_mint_limit (denominator -> 10**18), <15>block_halfing_type(0 if fixed, 1 if spread), <16>maturity_limit, <17>minimum_transactions_for_first_buy, <18>minimum_entered_contracts_for_first_buy, <19>maximum_mint_token_supply]
 
         2[<0>token_exchange_ratio_x, <1>token_exchange_ratio_y, <2>token_exchange_liquidity/total_supply, <3>parent_tokens_balance, <4>current_block_mint_total, <5>active_mint_block, <6>active_block_limit_reduction_proportion (denominator -> 10**18), <7>default_depth]
 
@@ -1138,6 +1138,8 @@ contract E5 {
         <17>minimum_transactions_for_first_buy: The minimum number of transactions sender has to make to buy/sell a token for the first time.
 
         <18>minimum_entered_contracts_for_first_buy: The minimum number of contracts sender should have entered before first buy.
+
+        <19>maximum_mint_token_supply: The maximum number of tokens that can go into supply for a given uncapped spend token.
 
         ----------e---------
 

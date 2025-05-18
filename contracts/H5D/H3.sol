@@ -234,7 +234,7 @@ library H3 {
                     }
                     v4/* pointer */[ 1 /* last_swap_timestamp */ ] = block.timestamp;
                     /* record and update the current time as the last time the sender has swapped in the exchange */
-                }  
+                }
 
                 if ( v2/* exchange */[1][ 2 /* minimum_transactions_between_swap */ ] != 0 ) {
                     /* the value would be non-zero if a required number of transactions between swaps exists */
@@ -282,7 +282,7 @@ library H3 {
                 /* can only authmint as buy action */
             }
         }
-    }//-----CHANGED-----
+    }//-----TEST_OK-----
 
     /* calculate_share_of_total */
     function f7(uint256 p1, uint256 p2) private pure returns (uint256) {
@@ -411,7 +411,7 @@ library H3 {
         uint256 v2/* source_tokens_count */ = p2/* self */.num_str_metas[p1/* _id */][ 1 /* id_data */ ][3/* source_tokens_count */];
         /* initialize a variable that contains the number of tokens used for buying the target token */
         
-        uint256[6] memory v3/* data */ = [ 4, 19, 8, v2/* source_tokens_count */, v2/* source_tokens_count */ , v2/* source_tokens_count */ ];
+        uint256[6] memory v3/* data */ = [ 4, 20, 8, v2/* source_tokens_count */, v2/* source_tokens_count */ , v2/* source_tokens_count */ ];
         /* initialise a data array containing the variable length of each array, in the two dimentional array that contains the exchange's data */
 
         for ( uint256 s = 0; s < 6; /* data_len */ s++ ) {
