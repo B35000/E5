@@ -17405,7 +17405,7 @@ describe("E3's", function () {
           [1000, 10000, 0, 0/* 3 */, 0, 1, bgN(100, 16), 0], [5], [1000] 
         ]
     ]
-    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */)).to.not.be.reverted;
+    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */, false)).to.not.be.reverted;
 
     var val = await e.read_preset_data(presets);
     var exp_vals = [901];
@@ -17424,7 +17424,7 @@ describe("E3's", function () {
     await e.set_preset_data(presets);
     var v1/* data */ = [[1, 1, 1], [34588, 829992, 287838], [100, 200, 400], [], []];
     var v2/* tokens_to_receive */ = [10, 20, 30];
-    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */)).to.not.be.reverted;
+    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */, false)).to.not.be.reverted;
 
     var val = await e.read_preset_data(presets);
     var exp_vals = [900, 800, 600];
@@ -17441,7 +17441,7 @@ describe("E3's", function () {
     await e.set_preset_data(presets);
     var v1/* data */ = [[0], [34588], [100], [40002], []];
     var v2/* tokens_to_receive */ = [1030];
-    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */)).to.not.be.reverted;
+    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */, false)).to.not.be.reverted;
 
     var val = await e.read_preset_data(presets);
     var exp_vals = [2030];
@@ -17460,7 +17460,7 @@ describe("E3's", function () {
     await e.set_preset_data(presets);
     var v1/* data */ = [[0, 0, 0], [34588, 829992, 287838], [100, 200, 400], [40003, 40003, 40003], []];
     var v2/* tokens_to_receive */ = [100, 200, 3030];
-    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40003, v3/* exchanges */)).to.not.be.reverted;
+    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40003, v3/* exchanges */, false)).to.not.be.reverted;
 
     var val = await e.read_preset_data(presets);
     var exp_vals = [1100, 1200, 4030];
@@ -17477,7 +17477,7 @@ describe("E3's", function () {
     await e.set_preset_data(presets);
     var v1/* data */ = [[1, 1], [34588, 34588/* bad! */], [100, 1000], [], []];
     var v2/* tokens_to_receive */ = [10];
-    expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */)).to.not.be.reverted;
+    expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */, false)).to.not.be.reverted;
     await e.delete_preset_data(presets);
 
 
@@ -17496,7 +17496,7 @@ describe("E3's", function () {
           [1000, 0, 0, 0/* 3 */, 0, 0, 0, bgN(5, 16)/* 7 */, 0, 2, 2, 1000/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0, 100000000/* 19 */],
           [1000, 10000, 0, 0/* 3 */, 0, 1, bgN(100, 16), 0], [5], [1000] ],
     ]
-    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */)).to.not.be.reverted;
+    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */, false)).to.not.be.reverted;
 
     var val = await e.read_preset_data(presets);
     var exp_vals = [2030];
@@ -17520,7 +17520,30 @@ describe("E3's", function () {
           [1000, 0, 0, 0/* 3 */, 0, 0, 0, bgN(5, 16)/* 7 */, 0, 2, 2, 1000/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0, 1000/* 19 */],
           [1000, 10000, 1000, 0/* 3 */, 0, 1, bgN(100, 16), 0], [5], [1000] ],
     ]
-    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */)).to.be.reverted;
+    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */, false)).to.be.reverted;
+    await e.delete_preset_data(presets);
+
+
+
+    //action buy, <19>maximum_mint_token_supply set and exceeded but auth mint
+    console.log("106i");
+    var presets = [
+      [2, 34588, 1, 40002, 0, 1000]
+    ];
+    await e.set_preset_data(presets);
+    var v1/* data */ = [[0], [34588], [100], [40002], []];
+    var v2/* tokens_to_receive */ = [1030];
+    var v3/* exchanges */ = [
+        [ 
+          [0, 0, 0, 5],
+          [1000, 0, 0, 0/* 3 */, 0, 0, 0, bgN(5, 16)/* 7 */, 0, 2, 2, 1000/* 11 */, 0, 0, 0, 0/* 15 */, 0, 0, 0, 1000/* 19 */],
+          [1000, 10000, 1000, 0/* 3 */, 0, 1, bgN(100, 16), 0], [5], [1000] ],
+    ]
+    await expect(e.f129(v1/* data */, v2/* tokens_to_receive */, 40002, v3/* exchanges */, true)).to.not.be.reverted;
+
+    var val = await e.read_preset_data(presets);
+    var exp_vals = [2030];
+    for (let j = 0; j < exp_vals.length; j++) { expect(await val[j]).to.equal(exp_vals[j]); }
     await e.delete_preset_data(presets);
   });
 
@@ -35947,14 +35970,14 @@ describe("E5's", function () {
 
 /*
  ???@BPC E5 % yarn hardhat size-contracts 
-  ·-----------------------|----------------------------|----------------·
+   ·-----------------------|----------------------------|----------------·
  |  Solc version: 0.8.4  ·  Optimizer enabled: false  ·  Runs: 1       │
  ························|····························|·················
  |  Contract Name        ·  Size (KiB)                ·  Change (KiB)  │
  ························|····························|·················
- |  E2                   ·                     1.880  ·       -11.062  │
- ························|····························|·················
  |  F33                  ·                     5.358  ·         0.000  │
+ ························|····························|·················
+ |  E2                   ·                    14.772  ·       +12.893  │
  ························|····························|·················
  |  F5                   ·                    19.932  ·         0.000  │
  ························|····························|·················
@@ -35968,11 +35991,11 @@ describe("E5's", function () {
  ························|····························|·················
  |  H3                   ·                    22.290  ·         0.000  │
  ························|····························|·················
- |  H32                  ·                    22.776  ·        +0.646  │
- ························|····························|·················
  |  E3                   ·                    22.810  ·         0.000  │
  ························|····························|·················
  |  G32                  ·                    22.921  ·         0.000  │
+ ························|····························|·················
+ |  H32                  ·                    23.056  ·        +0.279  │
  ························|····························|·················
  |  F32                  ·                    23.220  ·         0.000  │
  ························|····························|·················

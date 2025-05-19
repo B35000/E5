@@ -193,12 +193,12 @@ library H32 {
                         /* run a transfer to or from the target exchange, to if its a buy action and from if its a sell action */
                     }
                 }
-                f128/* update_balance */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p6/* self */, t, p4/* exchange_nums */[t]);
+                f128/* update_balance */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p6/* self */, t, p4/* exchange_nums */[t], p5/* authority_mint */);
                 /* update the balance for the sender of the mint action, debiting if they are selling and crediting if they are buying */
             }
         }else{
             /* its an authmint action, therefore no need for running transfer to the exchange object for the buy action */
-            f129/* update_balances */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p6/* self */, p4/* exchange_nums */);
+            f129/* update_balances */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p6/* self */, p4/* exchange_nums */, p5/* authority_mint */);
             /* update the balance for the sender, crediting since tokens are being minted */
         }
         
@@ -315,12 +315,13 @@ library H32 {
         uint256[] calldata p2/* tokens_to_receive */,
         uint256 p3/* sender_account */,
         NumData storage p4/* self */,
-        uint256[][][] calldata p5/* exchange_nums */
+        uint256[][][] calldata p5/* exchange_nums */,
+        bool p6/* authority_mint */
     ) private {
         /* initalizes and runs the update balance function for updating the recipients balance after the exchange transfers */
         for ( uint256 r = 0; r < p1/* data */[1].length; /* exchanges */ r++ ) {
             
-            f128/* update_balance */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p4/* self */, r, p5/* exchange_nums */[r]);
+            f128/* update_balance */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p4/* self */, r, p5/* exchange_nums */[r], p6/* authority_mint */);
             /* updates the balance for the targeted recipient for the mint or dump action */
         }
     }//-----RETEST_OK-----
@@ -332,7 +333,8 @@ library H32 {
         uint256 p3/* sender_account */,
         NumData storage p4/* self */,
         uint256 p5/* r */,
-        uint256[][] calldata p6/* exchange_data */
+        uint256[][] calldata p6/* exchange_data */,
+        bool p7/* authority_mint */
     ) private {
         /* updates the balance for the recipient for the mint or dump action */
         
@@ -354,7 +356,7 @@ library H32 {
         else {
             /* the action is a buy action */
 
-            if(p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ] != 0 && p6/* exchange_data */[0][ 3 /* exchange_type */ ] == 5 /* type_uncapped_supply */){
+            if(p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ] != 0 && p6/* exchange_data */[0][ 3 /* exchange_type */ ] == 5 /* type_uncapped_supply */ && !p7/* authority_mint */){
                 /* if the maximum_mint_token_supply has been specified for a uncapped token. */
                 
                 require(p6/* exchange_data */[2/* exchange_config_data */][ 2 /* <2>token_exchange_liquidity/total_supply  */ ] + p2/* tokens_to_receive */[p5/* r */] < p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ]);
