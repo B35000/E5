@@ -5,27 +5,7 @@ This is the official repository for the E5 smart contracts that run on the Ether
 ## Setup.
 
 This project uses [Hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#quick-start), [chai](https://www.chaijs.com/guide/installation/), npx([npm](com)) and [node](https://nodejs.org/en). If you havent already, please install them by following the instructions specified in their respective websites; then run `npm install` once done to install all the specified dependencies in the package.json file.
-Once you have the project downloaded and unzipped, youll need to set up a `.env` file with specified private keys if you wish to deploy your own E5 on a blockchain of your choice. Currently, my `.env` looks something like this:
-
-```
-ETC_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-ONE_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-CELO_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-FLR_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-XDAI_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-FUSE_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-GLMR_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-MOVR_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-SYS_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-MATIC_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-BNB_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-XDC_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-TT_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-NRG_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-VIC_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-EVMOS_PRIVATE_KEY = 0x00000000000000000000000000000000...0000000
-... and other keys for other chains
-```
+Once you have the project downloaded and unzipped, youll need to set up a `.env` file with specified private keys if you wish to deploy your own E5 on a blockchain of your choice.
 
 These keys are used in the hardhat.config.js file for deploying E5 smart contracts to a selected Blochchain. You can run a local node on your computer by running `npx hardhat node` which would start up a local EVM instance on `http://127.0.0.1:8545`
 
