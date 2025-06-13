@@ -36,7 +36,7 @@ import "../F5D/F32.sol"; /* import "./SubscriptionHelperFunctions2.sol"; */
 import "../H5D/H5.sol"; /* import "../TokensData/TokensData.sol"; */
 import "../H5D/H52.sol"; /* import "../TokensData/TokensData2.sol"; */
 
-/* ContractsData2 */
+
 contract G52 {
     event e1/* RecordProposalVote */( uint256 indexed p1/* contract_id */, uint256 indexed p2/* consensus_id */, uint256 indexed p3/* voter_account_id */, uint256 p4/* vote */, uint256 p5/* timestamp */, uint256 p6/* block_number */);
     /* event emitted when a proposal is voted on by the sender */

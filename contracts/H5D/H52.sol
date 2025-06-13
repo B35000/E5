@@ -24,7 +24,7 @@ import "../E5D/E3.sol"; /* import "../E5Data/E5HelperFunctions.sol"; */
 import "./H32.sol"; /* import "./TokensHelperFunctions2.sol"; */
 import "./H5.sol"; /* import "./TokensData.sol"; */
 
-/* TokensData2 */
+
 contract H52 {
     event e1/* Transfer */( uint256 indexed p1/* exchange */, uint256 indexed p2/* sender */, uint256 indexed p3/* receiver */, uint256 p4/* amount */, uint256 p7/* depth */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
     /* event emitted when a transfer action takes place */

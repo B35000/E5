@@ -37,7 +37,7 @@ import "../F5D/F5.sol"; /* import "../SubscriptionData/SubscriptionData.sol"; */
 import "../F5D/F32.sol"; /* import "./SubscriptionHelperFunctions2.sol"; */
 // import "../F5D/F33.sol"; /* import "./SubscriptionHelperFunctions3.sol"; */
 
-/* ContractsData */
+
 contract G5 {
     event e1/* MakeProposal */( uint256 indexed p1/* contract_id */, uint256 indexed p2/* proposal_object_id */, uint256 indexed p3/* consensus_type */, uint256 p4/* sender_account_id */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
     /* event emitted when a new proposal is created */

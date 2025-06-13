@@ -32,7 +32,6 @@ import "../G5D/G52.sol"; /* import "./ContractsData/ContractsData2.sol"; */
 import "../H5D/H5.sol"; /* import "./TokensData/TokensData.sol"; */
 import "../H5D/H52.sol"; /* import "./TokensData/TokensData2.sol"; */
 
-/* SubscriptionData */
 contract F5 {
     event e1/* PaySubscription */( uint256 indexed p1/* subscription_id */, uint256 indexed p2/* sender_acc_id */, uint256 p3/* time_units_paid_for */, uint256 p4/* block_number */, uint256 p5/* timestamp */ );
     /* event emitted when a subscription is paid for */
