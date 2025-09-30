@@ -25,6 +25,7 @@ import "./F33.sol"; /* import "./SubscriptionHelperFunctions3.sol"; */
 
 import "../E5D/E3.sol"; /* import "../E5Data/E5HelperFunctions.sol"; */
 import "../E5D/E32.sol"; /* import "../E5Data/E5HelperFunctions2.sol"; */
+import "../E5D/E33.sol"; /* import "../E5Data/E5HelperFunctions3.sol"; */
 
 import "../G5D/G5.sol"; /* import "./ContractsData/ContractsData.sol"; */
 import "../G5D/G52.sol"; /* import "./ContractsData/ContractsData2.sol"; */
@@ -427,6 +428,39 @@ contract F5 {
     external view returns (uint256[][] memory v1/* data */) {
         return F3.f235/* get_subscription_collectible_time_value */(p1/* _ids */, gv4/* num_data */, p2/* accounts */);
     }//-----TEST_OK-----
+
+
+    /* calculate_contract_minimum_end_or_spend */
+    function f286(
+        uint256 p1/* default_minimum_end_amount */,
+        uint256 p2/* default_minimum_spend_amount */,
+        uint256 p3/* gas_anchor_price */,
+        uint256 p4/* first_exchange_used */,
+        uint256 p5/* transaction_gas_price */,
+        uint256 rp/* reduction_proportion */
+    ) external pure returns(uint256){
+        /* calculates the minimum end or spend that can be used for contract creation when defining entry fee amounts */
+
+        uint256 v1/* _type */ = 1;
+        /* default to type 1 which is the spend exchange */
+
+        if ( p4/* first_exchange_used */ == 3 /* end_exchange_obj_id */ ) {
+            /* if the first exchange is the end exchange */
+            
+            v1/* _type */ = 2;
+            /* set the value to type 2 which is the end exchange */
+        }
+
+        return E33.f8/* calculate_min_end_or_spend */([
+            v1/* _type */,
+            p1/* default_minimum_end_amount */,
+            p5/* transaction_gas_price */,
+            p3/* gas_anchor_price */,
+            p2/* default_minimum_spend_amount */,
+            rp,
+            p4/* first_exchange_used */
+        ]);
+    }
 
 
     //

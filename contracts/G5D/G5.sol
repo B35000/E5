@@ -341,7 +341,7 @@ contract G5 {
             uint256[] memory e = new uint256[](0);
             /* initialize an array with lenght zero */
 
-            (uint256[][5] memory v5/* data2 */,) = G33.f60/* get_consensus_mint_dump_data */( p1/* targets */, v1/* target_nums */, v3/* consensus_type_data */, 3 /* authmint */ );
+            (uint256[][6] memory v5/* data2 */,) = G33.f60/* get_consensus_mint_dump_data */( p1/* targets */, v1/* target_nums */, v3/* consensus_type_data */, 3 /* authmint */ );
             /* initialize a variable that holds the mint data */
 
             gv6/* tokensData */.f180/* execute_buy_or_sell_tokens */( v5/* data2 */, [uint256(0), 0, 0, 0], true, [e, e] );
@@ -358,10 +358,10 @@ contract G5 {
             /* call the freeze/unfreeze action in the H52 contract */
         }
 
-        if ( v3/* consensus_type_data */[ 5 /* swap_tokens */ ] != 0 ) {
+        if ( v3/* consensus_type_data */[ 5 /* swap_tokens(buy_sell_tokens) */ ] != 0 ) {
             /* if the consensus actions contains an authmint action */
 
-            (uint256[][5] memory v7/* data2 */, uint256[][2] memory v8/* buy_sell_limits */) = G33.f60/* get_consensus_mint_dump_data */( p1/* targets */, v1/* target_nums */, v3/* consensus_type_data */, 5 /* swap_tokens */ );
+            (uint256[][6] memory v7/* data2 */, uint256[][2] memory v8/* buy_sell_limits */) = G33.f60/* get_consensus_mint_dump_data */( p1/* targets */, v1/* target_nums */, v3/* consensus_type_data */, 5 /* swap_tokens */ );
             /* initialize a variable that holds the mint data */
 
             gv6/* tokensData */.f180/* execute_buy_or_sell_tokens */( v7/* data2 */, [uint256(0), 0, 0, 0], false, v8/* buy_sell_limits */ );

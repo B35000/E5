@@ -230,9 +230,9 @@ library G33 {
         uint256[][][] calldata p2/* target_nums */,
         uint256[21] calldata p3,/* consensus_type_data */
         uint256 p4/* action */
-    ) external pure returns (uint256[][5] memory v1/* data */, uint256[][2] memory v3/* buy_sell_limits */) {
+    ) external pure returns (uint256[][6] memory v1/* data */, uint256[][2] memory v3/* buy_sell_limits */) {
         /* calculates, sets and returns the authmint actions from a consensus object */
-        /* data[0] actions ,  data[1] exchanges , data[2] target_amounts  ,  data[3] receivers , data[4] sender_accounts*/
+        /* data[0] actions ,  data[1] exchanges , data[2] target_amounts  ,  data[3] receivers , data[4] sender_accounts , data[5] depths */
         
         (v1/* data */, v3/* buy_sell_limits */) = f56/* get_mint_exchanges_count */(p3/* consensus_type_data */[ p4/* action */ ], p4/* action */);
         /* initializes the return variable from the return data of the get_mint_exchanges_count function */
@@ -261,6 +261,9 @@ library G33 {
                     v1/* data */[ 4 /* sender_accounts */ ][v2/* transfer_count */] = p2/* target_nums */[t][1][ 5 /* target_contract_authority */ ];
                     /* set the sender of the mint as the contract authority of the proposal */
 
+                    v1/* data */[ 5 /* depths */ ][v2/* transfer_count */] = p2/* target_nums */[t][ 11 /* buy_depths */ ][e];
+                    /* set the depth of the auth mint if tx is a buy non-fungible */
+
                     if(p4/* action */ == 5/* 5-swap_tokens */){
                         /* if the action is to swap tokens, or buy and sell tokens */
                         
@@ -279,17 +282,18 @@ library G33 {
                 }
             }
         }
-    }//-----RETEST_OK-----
+    }//-----CHANGED-----
 
     /* get_mint_exchanges_count */
     function f56(
         uint256 p1,/* size */
         uint256 p2/* action */
-    ) private pure returns (uint256[][5] memory v1/* data */, uint256[][2] memory v2/* buy_sell_limits */) {
+    ) private pure returns (uint256[][6] memory v1/* data */, uint256[][2] memory v2/* buy_sell_limits */) {
         /* calculates and returns a two dimentional array of objects whose size is derived from the size(number of mint actions) */
         /* data[0] = exchange_ids , data[1] = amounts , data[2] = senders , data[3] = receivers */
         
         v1/* data */ = [
+            new uint256[](p1/* size */),
             new uint256[](p1/* size */),
             new uint256[](p1/* size */),
             new uint256[](p1/* size */),

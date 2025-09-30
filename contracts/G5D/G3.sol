@@ -690,7 +690,7 @@ library G3 {
         uint256 p1/* id */, 
         NumData storage p2/* self */,
         bool p3/* full_read */
-    ) private view returns (uint256[10] memory v1/* l_data */) {
+    ) private view returns (uint256[12] memory v1/* l_data */) {
         /* returns the data length of each array in the object being read */
         
         uint256 v3/* source_tokens_count */ = p2/* self */.num_str_metas[p1/* id */][ 1 /* num_data */ ][2/* source_tokens_count */];
@@ -699,7 +699,20 @@ library G3 {
         uint256 v2/* reconfig_data_or_exchanges_count */ = p2/* self */.num_str_metas[p1/* id */][ 1 /* num_data */ ][4/* reconfig_data_or_exchanges_count */];
         /* gets the reconfig data or exchange count value used by proposal objects */
 
-        v1/* l_data */ = [ 1, 16, v3/* source_tokens_count */, v3/* source_tokens_count */, v2/* reconfig_data_or_exchanges_count */, v2/* reconfig_data_or_exchanges_count */, v2/* reconfig_data_or_exchanges_count */, v2/* reconfig_data_or_exchanges_count */, v2/* reconfig_data_or_exchanges_count */, v2/* reconfig_data_or_exchanges_count */];
+        v1/* l_data */ = [ 
+            1, 
+            16, 
+            v3/* source_tokens_count */, 
+            v3/* source_tokens_count */,
+            v2/* reconfig_data_or_exchanges_count */, 
+            v2/* reconfig_data_or_exchanges_count */, 
+            v2/* reconfig_data_or_exchanges_count */, 
+            v2/* reconfig_data_or_exchanges_count */, 
+            v2/* reconfig_data_or_exchanges_count */, 
+            v2/* reconfig_data_or_exchanges_count */, 
+            v3/* source_tokens_count */,
+            v2/* reconfig_data_or_exchanges_count */
+        ];
         /* initializes return array value with the specified values corresponding to each of the object's (thats being read) array's length */
 
         if(p2/* self */.num[p1/* id */][0][0] == 30/* contract_obj */){
@@ -707,7 +720,20 @@ library G3 {
 
             uint256 v4/* optional_data_count */ = p3/* full_read */ ? 21 : 0;
 
-            v1/* l_data */ = [ 1, 41, v3/* source_tokens_count */, v3/* source_tokens_count */, v3/* source_tokens_count */, v4/* optional_data_count */, v4/* optional_data_count */, v4/* optional_data_count */, v4/* optional_data_count */, v4/* optional_data_count */];
+            v1/* l_data */ = [ 
+                1,
+                41,
+                v3/* source_tokens_count */, 
+                v3/* source_tokens_count */, 
+                v3/* source_tokens_count */, 
+                v4/* optional_data_count */, 
+                v4/* optional_data_count */, 
+                v4/* optional_data_count */, 
+                v4/* optional_data_count */, 
+                v4/* optional_data_count */, 
+                v4/* optional_data_count */, 
+                v4/* optional_data_count */
+            ];
             /* reinitializes return array value as a contract array */
         }
 
@@ -721,16 +747,16 @@ library G3 {
     ) public view returns (uint256[][] memory v1/* id_data */) {
         /* reads the id for a specific contract or consensus object */
 
-        uint256[10] memory v2/* read_data */ = f76/* get_read_data_lengths */(p1/* id */, p2/* self */, p3/* full_read */);
+        uint256[12] memory v2/* read_data */ = f76/* get_read_data_lengths */(p1/* id */, p2/* self */, p3/* full_read */);
         /* gets the length of each array used in reading the data from storage */
 
-        v1/* id_data */ = new uint256[][]( 10 /* data_len */ );
-        /* intialize a new two dimentional size is 11 */
+        v1/* id_data */ = new uint256[][]( 12 /* data_len */ );
+        /* intialize a new two dimentional size is 12 */
         
         mapping(uint256 => mapping(uint256 => uint256)) storage v3/* id_nums */ = p2/* self */.num[p1/* id */];
         /* initialize a storage mapping that points to the object being referenced */
 
-        for ( uint256 s = 0; s < 10; /* data_len */ s++ ) {
+        for ( uint256 s = 0; s < 12; /* data_len */ s++ ) {
             /* for each array thats being read */
 
             uint256 v4/* items_len */ = v2/* read_data */[s];
@@ -749,7 +775,7 @@ library G3 {
                 /* read and record the data in the array */
             }
         }
-    }//-----RETEST_OK-----
+    }//-----CHANGED-----
 
     
     

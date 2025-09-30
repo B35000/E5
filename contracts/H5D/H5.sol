@@ -21,13 +21,15 @@ pragma solidity 0.8.4;
 
 import "./H52.sol"; /* import "./TokensData2.sol"; */
 import "./H3.sol"; /* import "./TokensHelperFunctions.sol"; */
-import "./H32.sol"; /* import "./TokensHelperFunctions.sol"; */
+// import "./H32.sol"; /* import "./TokensHelperFunctions.sol"; */
 
 import "../E5D/E52.sol"; /* import "../E5D/E52.sol"; */
 import "../E5D/E3.sol"; /* import "../E5Data/E5HelperFunctions.sol"; */
 import "../E5D/E32.sol"; /* import "../E5Data/E5HelperFunctions2.sol"; */
 import "../E5D/E33.sol"; /* import "../E5Data/E5HelperFunctions3.sol"; */
-import "../E5D/E34.sol"; /* import "../E5Data/E5HelperFunctions4.sol"; */
+// import "../E5D/E34.sol"; /* import "../E5Data/E5HelperFunctions4.sol"; */
+
+import "../F5D/F33.sol"; /* import "../F5Data/F5HelperFunctions3.sol"; */
 
 
 contract H5 {
@@ -154,7 +156,7 @@ contract H5 {
             if( v2/* action */ == 9 /* auth_mint */ || v2/* action */ == 8 /* <8>buy_tokens/sell_tokens */){
                 /* if the action is an auth mint or buy/sell tokens */
 
-                (uint256[][5] memory v5/* data2 */, uint256[4] memory v6/* user_data */, uint256[][2] memory v7/* bounds */) = E3.f28/* get_mint_tokens_data */(p1/* tx_data */, v2/* action */); 
+                (uint256[][6] memory v5/* data2 */, uint256[4] memory v6/* user_data */, uint256[][2] memory v7/* bounds */) = E3.f28/* get_mint_tokens_data */(p1/* tx_data */, v2/* action */);
                 /* get the data used for performing a mint action */
 
                 if( v2/* action */ == 9 /* auth_mint */){
@@ -241,10 +243,37 @@ contract H5 {
     ) public f155(msg.sender) {
         /* used to run transfers from an exchange account to the exchange's authority's account */
 
-        uint256[][5] memory v1/* data */ = H3.f231/* run_exchange_transfer_checkers */(p1/* data */, p2/* initiator_account */, gv4/* num_data */);
+        H3.f83/* ensure_type_exchange */(p1/* data */[0/* exchanges */], gv4/* num_data */);
+        /* ensure the supplied ids are the correct type */
+
+        for (uint256 t = 0; t < p1/* data */[0/* exchanges */].length; t++) {
+            /* for each exchange that has been targeted */
+
+            uint256 v2/* initiator */ = p2/* initiator_account */ == 0 ? p1/* data */[4/* initiator_accounts */][t]: p2/* initiator_account */;
+            /* initialize a new variable that holds the account that initiated the exchange transfer action */
+
+
+            uint256 v3/* exchange_authority */ = gv4/* num_data */.num[ p1/* data */[0/* exchanges */][t] ][1/* exchange_config */][9 /* <9>exchange_authority */];
+            /* get the specific exchange's authority were handling */
+
+            uint256 v4/* unlocked_liquidity */ = gv4/* num_data */.num[ p1/* data */[0/* exchanges */][t] ][0][1 /* <1>unlocked_liquidity */];
+
+            require(v3/* exchange_authority */ == v2/* initiator */ && v4/* unlocked_liquidity */ == 1);
+            /* ensure the initiator to be the exchange authority of the exchange and the exchange's unlocked liquidity is turned on */
+        }
+
+        uint256[][5] memory v5/* data */  = [
+            p1/* data */[5/* token_targets */], 
+            p1/* data */[2/* amounts */], 
+            p1/* data */[0/* exchanges */], 
+            p1/* data */[1/* receivers */], 
+            p1/* data */[3/* depths */]
+        ];
+
+        // uint256[][5] memory v1/* data */ = H3.f231/* run_exchange_transfer_checkers */(p1/* data */, p2/* initiator_account */, gv4/* num_data */);
         /* calls the run exchange transfer checkers for transfering tokens from exchange's account to specified recipients */
 
-        gv5/* tokensData2 */.f184/* execute_multi_transfer */(v1/* data */, 0, 0, false, false, 1);
+        gv5/* tokensData2 */.f184/* execute_multi_transfer */(v5/* data */, 0, 0, false, false, 1);
         /* call the multi-transfer function to transfer the specified amount of tokens from the targeted exchanges to the targeted recipients */
     }
 
@@ -253,7 +282,7 @@ contract H5 {
     // ------------------------~~~AUTH~~~-------------------------------
     /* execute_buy_or_sell_tokens */
     function f180(
-        uint256[][5] memory p1/* data */,
+        uint256[][6] memory p1/* data */,
         uint256[4] memory p2/* metas */,
         bool p3/* authority_mint */,
         uint256[][2] memory p4/* buy_sell_limits */
@@ -269,20 +298,25 @@ contract H5 {
         uint256[][][] memory v2/* exchange_nums */ = H3.f123/* run_exchange_checkers */(p1/* data */, p2/* metas */, p3/* authority_mint */, gv4/* num_data */);
         /* get the exchange data for each target specified */
 
+        uint256[] memory v7/* <15>temp_non_fungible_depth_token_transaction_class_array */ = new uint256[](v2.length);
+
         if (!p3/* authority_mint */) {
             /* if its an ordinary mint or dump action */
 
-            uint256[] memory v3/* updated_reduction_proportion_ratio_data */ = E33.f40/* calculate_reduction_proportion_ratios */(v2/* exchange_nums */, p1/* data */[0/* actions */], block.number);
+            (uint256[] memory v3/* updated_reduction_proportion_ratio_data */, uint256[] memory v8/* <15>temp_non_fungible_depth_token_transaction_class_array */) = F33.f40/* calculate_reduction_proportion_ratios */(v2/* exchange_nums */, p1/* data */[0/* actions */], block.number);
             /* update the proportions used for calculating the active mint limits */
+
+            v7/* <15>temp_non_fungible_depth_token_transaction_class_array */ = v8/* <15>temp_non_fungible_depth_token_transaction_class_array */;
             
             v2/* exchange_nums */ = H3.f124/* update_reduction_proportion_ratios */( p1/* data */, v2/* exchange_nums */, gv4/* num_data */, v3/* updated_reduction_proportion_ratio_data */ );
             /* updates the new proportions used for calculating the active mint limit */
+
         }
 
         ( uint256[] memory v4/* tokens_to_receive */, uint256[2] memory v5/* external_amount_data */, uint256 v6/* new_msg_value */ ) = E32.f39/* calculate_tokens_to_receive */( p1/* data */, v2/* exchange_nums */, p2/* metas */[ 1 /* msg_value */ ], p3/* authority_mint */, p4/* buy_sell_limits */ );
         /* calculates the tokens the receiver is set to receive for each target exchange */
 
-        f181/* update_exchange_ratios */( p1/* data */, v4/* tokens_to_receive */, p2/* metas */[ 0 /* sender_account */ ]);
+        f181/* update_exchange_ratios */( p1/* data */, v4/* tokens_to_receive */, p2/* metas */[ 0 /* sender_account */ ], v7/* <15>temp_non_fungible_depth_token_transaction_class_array */);
         /* updates the exchange ratio data */
 
         if (!p3/* authority_mint */) {
@@ -309,7 +343,7 @@ contract H5 {
 
     /* update_total_minted_for_current_block */
     function f149(
-        uint256[][5] memory p1/* data */,
+        uint256[][6] memory p1/* data */,
         uint256[] memory p2/* tokens_to_receive */
     ) private {
         /* updates the total minted in the current block for uncapped tokens like spend */
@@ -349,9 +383,10 @@ contract H5 {
 
     /* update_exchange_ratios */
     function f181(
-        uint256[][5] memory p1/* data */,
+        uint256[][6] memory p1/* data */,
         uint256[] memory p2/* tokens_to_receive */,
-        uint256 p3/* sender_account */
+        uint256 p3/* sender_account */,
+        uint256[] memory p4/* temp_non_fungible_depth_token_transaction_class_array */
     ) private {
         /* updates the exchange ratio data for each exchange targeted */
 
@@ -366,6 +401,16 @@ contract H5 {
 
             uint256 v2/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][r] : p3/* sender_account */;
             /* get the sender of the swap action from the sender accounts array or the sender of the transaction */
+
+            if(p4/* temp_non_fungible_depth_token_transaction_class_array */[r] != 0){
+                mapping(uint256 => uint256) storage v3/* exchanges_num_metas */ = gv4/* num_data */.num_metas[ p1/* data */[1][r] /* exchanges */ ];
+                if ( p1/* data */[0/* actions */][r] == 1 /* sell? */ ) {
+                    v3/* exchanges_num_metas */[p4/* temp_non_fungible_depth_token_transaction_class_array */[r]] -= p1/* data */[2][r]; /* target_amounts */
+                }else{
+                    v3/* exchanges_num_metas */[p4/* temp_non_fungible_depth_token_transaction_class_array */[r]] += p2/* tokens_to_receive */[r];
+                }
+            }
+            
 
             emit e1/* UpdateExchangeRatios */( 
                 p1/* data */[1][r], /* exchanges */ 
@@ -402,57 +447,75 @@ contract H5 {
     function f86(uint256[] memory p1/* _ids */) 
     public view returns (uint256[][][] memory) {
         /* reads a set of exchange data from specified ids */
-        return H3.f86/* read_ids */(p1/* _ids */, gv4/* num_data */);
+        return H3.f86/* read_ids */(p1/* _ids */, gv4/* num_data */, p1/* _ids */);
     }
 
     /* read_id */
     function f85(uint256 p1/* _id */) 
     public view returns (uint256[][] memory) {
         /* reads an exchanges data from its id */
-        return H3.f85/* read_id */(p1/* _id */, gv4/* num_data */);
+        return H3.f85/* read_id */(p1/* _id */, gv4/* num_data */, p1/* _id */);
     }
 
 
 
     /* scan_account_exchange_data */
-    function f241(uint256[] memory p1/* accounts */, uint256[] memory p2/* exchanges */) 
-    external view returns (uint256[4][] memory) {
+    function f241(uint256[] memory p1/* accounts */, uint256[] memory p3/* exchanges */) 
+    external view returns (uint256[4][] memory v1/* data */) {
         /* scans the int_int_int datastorage object for an accounts last_swap_block, last_swap_time, last_transaction_number and user_last_entered_contracts_number */
-        return H3./* scan_account_exchange_data */f241(p1, gv4/* num_data */, p2);
+        // return H3./* scan_account_exchange_data */f241(p1, gv4/* num_data */, p2);
+
+        v1/* data */ = new uint256[4][](p1.length);
+        /* initialize the return variable as a new array whose length being the number of targets specified in the arguments */
+
+        for (uint256 t = 0; t < p1/* accounts */.length; t++) {
+            /* for each target specified */
+
+            mapping(uint256 => uint256) storage v2/* pointer */ = gv4/* num_data */.int_int_int[p3/* exchanges */[t]][p1/* accounts */[t]];
+            /* initialize a storage pointer variable that points to the accounts data in the targeted exchange including the last time they swapped, the last block they swapped and the number of transactions they had made during their last swap */
+
+            v1/* data */[t] = [
+                v2/* pointer */[ 0 /* last_swap_block */ ], 
+                v2/* pointer */[ 1 /* last_swap_timestamp */ ], 
+                v2/* pointer */[ 2 /* last_transaction_number */ ], 
+                v2/* pointer */[ 3 /* user_last_entered_contracts_number */ ]
+            ];
+            /* set the data in the return data array */
+        }
     }
 
     /* calculate_price_of_tokens */
-    function f245(
-        uint256[] memory p1/* exchanges */,
-        uint256[][] memory p2/* amounts */,
-        uint256[] memory p3/* actions */
-    ) external view returns (uint256[][] memory v1/* price_data */){
-        /* calculates the tokens to be received when buying or selling a set of tokens */
+    // function f245(
+    //     uint256[] memory p1/* exchanges */,
+    //     uint256[][] memory p2/* amounts */,
+    //     uint256[] memory p3/* actions */
+    // ) external view returns (uint256[][] memory v1/* price_data */){
+    //     /* calculates the tokens to be received when buying or selling a set of tokens */
 
-        uint256[][][] memory v2/* exchange_nums */ = f86/* read_ids */(p1/* exchanges */);
-        /* initialize a variable containing the exchange data for each exchange specified */
+    //     uint256[][][] memory v2/* exchange_nums */ = f86/* read_ids */(p1/* exchanges */);
+    //     /* initialize a variable containing the exchange data for each exchange specified */
         
-        v1/* price_data */ = E34.f245/* calculate_price_of_tokens */(p1/* exchanges */, p2/* amounts */, p3/* actions */, v2/* exchange_nums */);
-        /* set the result price data from the calculate price of tokens function from E32 helper library  in the return value */
-    }
+    //     v1/* price_data */ = E34.f245/* calculate_price_of_tokens */(p1/* exchanges */, p2/* amounts */, p3/* actions */, v2/* exchange_nums */);
+    //     /* set the result price data from the calculate price of tokens function from E32 helper library  in the return value */
+    // }
 
     /* calculate_token_mint_limits */
-    function f247( uint256[] memory p1/* exchanges */ ) 
-    external view returns (uint256[] memory v1/* mint_limits */){
-        /* calculates and returns the tokens set to be received when a mint action is sent at this specific time */
+    // function f247( uint256[] memory p1/* exchanges */ ) 
+    // external view returns (uint256[] memory v1/* mint_limits */){
+    //     /* calculates and returns the tokens set to be received when a mint action is sent at this specific time */
 
-        uint256[][][] memory v2/* exchange_nums */ = f86/* read_ids */(p1/* exchanges */);
-        /* initialize a variable containing the exchange data for each exchange specified */
+    //     uint256[][][] memory v2/* exchange_nums */ = f86/* read_ids */(p1/* exchanges */);
+    //     /* initialize a variable containing the exchange data for each exchange specified */
 
-        uint256[][5] memory v3/* mock_data */ = H32.f248/* set_up_mock_data */(p1/* exchanges */, v2/* exchange_nums */);
+    //     uint256[][5] memory v3/* mock_data */ = H32.f248/* set_up_mock_data */(p1/* exchanges */, v2/* exchange_nums */);
 
-        uint256[] memory v4/* updated_reduction_proportion_ratio_data */ = E33.f40/* calculate_reduction_proportion_ratios */(v2/* exchange_nums */, v3/* data */[0/* actions */], block.number);
-        /* update the proportions used for calculating the active mint limits in the exchange num data */
+    //     uint256[] memory v4/* updated_reduction_proportion_ratio_data */ = E33.f40/* calculate_reduction_proportion_ratios */(v2/* exchange_nums */, v3/* data */[0/* actions */], block.number);
+    //     /* update the proportions used for calculating the active mint limits in the exchange num data */
 
-        v2/* exchange_nums */ = E32.f249/* update_mock_reduction_proportion_ratios */(v3/* mock_data */, v2/* exchange_nums */,v4/* updated_reduction_proportion_ratio_data */);
+    //     v2/* exchange_nums */ = E32.f249/* update_mock_reduction_proportion_ratios */(v3/* mock_data */, v2/* exchange_nums */,v4/* updated_reduction_proportion_ratio_data */);
 
-        v1/* mint_limits */ = E32.f250/* calculate_mock_tokens_to_receive */(v3/* mock_data */, v2/* exchange_nums */);
-    }
+    //     v1/* mint_limits */ = E32.f250/* calculate_mock_tokens_to_receive */(v3/* mock_data */, v2/* exchange_nums */);
+    // }
 
     /* get_spend_exchange_reduction_proportion */
     function f258() public view returns(uint256){
@@ -460,37 +523,37 @@ contract H5 {
     }
 
     /* calculate_contract_minimum_end_or_spend */
-    function f286(
-        uint256 p1/* default_minimum_end_amount */,
-        uint256 p2/* default_minimum_spend_amount */,
-        uint256 p3/* gas_anchor_price */,
-        uint256 p4/* first_exchange_used */,
-        uint256 p5/* transaction_gas_price */
-    ) external view returns(uint256){
-        /* calculates the minimum end or spend that can be used for contract creation when defining entry fee amounts */
-        uint256 rp = f258();
-        /* get the get_spend_exchange_reduction_proportion */
+    // function f286(
+    //     uint256 p1/* default_minimum_end_amount */,
+    //     uint256 p2/* default_minimum_spend_amount */,
+    //     uint256 p3/* gas_anchor_price */,
+    //     uint256 p4/* first_exchange_used */,
+    //     uint256 p5/* transaction_gas_price */
+    // ) external view returns(uint256){
+    //     /* calculates the minimum end or spend that can be used for contract creation when defining entry fee amounts */
+    //     uint256 rp = f258();
+    //     /* get the get_spend_exchange_reduction_proportion */
 
-        uint256 v1/* _type */ = 1;
-        /* default to type 1 which is the spend exchange */
+    //     uint256 v1/* _type */ = 1;
+    //     /* default to type 1 which is the spend exchange */
 
-        if ( p4/* first_exchange_used */ == 3 /* end_exchange_obj_id */ ) {
-            /* if the first exchange is the end exchange */
+    //     if ( p4/* first_exchange_used */ == 3 /* end_exchange_obj_id */ ) {
+    //         /* if the first exchange is the end exchange */
             
-            v1/* _type */ = 2;
-            /* set the value to type 2 which is the end exchange */
-        }
+    //         v1/* _type */ = 2;
+    //         /* set the value to type 2 which is the end exchange */
+    //     }
 
-        return E33.f8/* calculate_min_end_or_spend */([
-            v1/* _type */,
-            p1/* default_minimum_end_amount */,
-            p5/* transaction_gas_price */,
-            p3/* gas_anchor_price */,
-            p2/* default_minimum_spend_amount */,
-            rp,
-            p4/* first_exchange_used */
-        ]);
-    }
+    //     return E33.f8/* calculate_min_end_or_spend */([
+    //         v1/* _type */,
+    //         p1/* default_minimum_end_amount */,
+    //         p5/* transaction_gas_price */,
+    //         p3/* gas_anchor_price */,
+    //         p2/* default_minimum_spend_amount */,
+    //         rp,
+    //         p4/* first_exchange_used */
+    //     ]);
+    // }
 
 
     //

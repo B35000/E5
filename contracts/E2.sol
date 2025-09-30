@@ -74,7 +74,7 @@ contract E2 {
     //             }
     //         }
     //         else if(preset_data[r][0] == 3){
-    //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
+    //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ] = preset_data[r][4];
     //         }
     //     }
     // }
@@ -88,7 +88,7 @@ contract E2 {
     //             num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]][ preset_data[r][4]] = 0;
     //         }
     //         else if(preset_data[r][0] == 3){
-    //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
+    //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ] = 0;
     //         }
     //     }
     // }
@@ -104,7 +104,7 @@ contract E2 {
     //             return_data[r] = num_data.int_int_int[ preset_data[r][1] ][preset_data[r][2]][ preset_data[r][3]][ preset_data[r][4]];
     //         }
     //         else if(preset_data[r][0] == 3){
-    //             return_data[r] = num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
+    //             return_data[r] = num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ];
     //         }
     //     }
     // }
@@ -139,6 +139,9 @@ contract E2 {
     //         else if(preset_data[r][0] == 3){
     //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = preset_data[r][4];
     //         }
+    //         else if(preset_data[r][0] == 4){
+    //             num_data.num_metas[ preset_data[r][1] ][ preset_data[r][2] ] = preset_data[r][3];
+    //         }
     //     }
     // }
 
@@ -152,6 +155,9 @@ contract E2 {
     //         }
     //         else if(preset_data[r][0] == 3){
     //             num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ] = 0;
+    //         }
+    //         else if(preset_data[r][0] == 4){
+    //             num_data.num_metas[ preset_data[r][1] ][ preset_data[r][2] ] = 0;
     //         }
     //     }
     // }
@@ -168,6 +174,9 @@ contract E2 {
     //         }
     //         else if(preset_data[r][0] == 3){
     //             return_data[r] = num_data.num_str_metas[ preset_data[r][1] ][ preset_data[r][2] ][ preset_data[r][3] ];
+    //         }
+    //         else if(preset_data[r][0] == 4){
+    //             return_data[r] = num_data.num_metas[ preset_data[r][1] ][ preset_data[r][2] ];
     //         }
     //     }
     // }
@@ -896,7 +905,7 @@ contract E2 {
 
     /* update_balances */
     // H32.NumData private num_data;
-    // function f129(uint256[][5] calldata p1/* data */, uint256[] memory p2/* tokens_to_receive */, uint256 p3/* sender_account */, uint256[][][] calldata p4/* exchange_nums */, bool p5/* authority_mint */) public {
+    // function f129(uint256[][6] calldata p1/* data */, uint256[] memory p2/* tokens_to_receive */, uint256 p3/* sender_account */, uint256[][][] calldata p4/* exchange_nums */, bool p5/* authority_mint */) public {
     //     H32.f129(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, num_data, p4/* exchange_nums */, p5/* authority_mint */);
     // }
 
@@ -914,7 +923,7 @@ contract E2 {
 
     /* update_exchange_ratios */
     // H3.NumData private num_data;
-    // function f125( uint256[][5] memory p1/* data */, uint256[] memory p2/* tokens_to_receive */ ) external {
+    // function f125( uint256[][6] memory p1/* data */, uint256[] memory p2/* tokens_to_receive */ ) external {
     //     H3.f125(p1/* data */, p2/* tokens_to_receive */, num_data);
     // }
 
@@ -939,14 +948,14 @@ contract E2 {
     //     }
     // }
 
-    /* run_exchange_checkers */
+    // /* run_exchange_checkers */
     // H3.NumData private num_data;
-    // function f123(uint256[][5] memory p1/* data */, uint256[4] calldata p2/* metas */, bool p3/* authority_mint */, uint256[][] calldata p4/* preset_data */) external {
+    // function f123(uint256[][6] memory p1/* data */, uint256[4] calldata p2/* metas */, bool p3/* authority_mint */, uint256[][] calldata p4/* preset_data */) external {
     //     set_preset_data(p4/* preset_data */);
     //     uint256[][][] memory v1/* exchange_data */ = H3.f123(p1/* data */, p2/* metas */, p3/* authority_mint */, num_data);
     // }
 
-    /* get_block_number */
+    // /* get_block_number */
     // function f1232() external view returns (uint256){
     //     return block.number;
     // }
@@ -1526,8 +1535,9 @@ contract E2 {
 
     /* read_ids/read_id */
     // H3.NumData private num_data;
-    // function f86(uint256[] calldata p1/* id_data */) external view returns (uint256[] memory v1/* return_data */){
-    //     uint256[][][] memory v2/* ints */ = H3.f86(p1/* id_data */, num_data);
+    // function f86(uint256[] calldata p1/* id_data */, uint256[] calldata p2/* id_depth_data */) 
+    // external view returns (uint256[] memory v1/* return_data */){
+    //     uint256[][][] memory v2/* ints */ = H3.f86(p1/* id_data */, num_data, p2/* id_depth_data */);
     //     v1/* return_data */ = new uint256[](101);
     //     uint256 v3/* pos */ = 0;
 
@@ -1779,7 +1789,7 @@ contract E2 {
     // }
 
     // /* run_multiple_exchange_config_checkers */
-    // function f64( uint256[][][] memory p1/* exchange_nums */ ) external pure {
+    // function f64( uint256[][][] memory p1/* exchange_nums */ ) external {
     //     H32.f64(p1/* exchange_nums */);
     // }
 
@@ -1826,16 +1836,16 @@ contract E2 {
     // function f60f61(
     //     uint256[] calldata p1/* targets */,
     //     uint256[][][] calldata p2/* target_nums */,
-    //     uint256[7] memory p3,/* consensus_type_data */
+    //     uint256[21] memory p3,/* consensus_type_data */
     //     uint256 p4/* action */
     // ) public pure returns (uint256[] memory v1/* return_data */) {
-    //     (uint256[][5] memory v2/* data */, uint256[][2] memory v5/* buy_sell_limits */) = G33.f60(p1/* targets */, p2/* target_nums */, p3/* consensus_type_data */, p4/* action */);
+    //     (uint256[][6] memory v2/* data */, uint256[][2] memory v5/* buy_sell_limits */) = G33.f60(p1/* targets */, p2/* target_nums */, p3/* consensus_type_data */, p4/* action */);
     //     uint256[][6] memory v3/* data2 */ = G33.f61(p2/* target_nums */, p3/* consensus_type_data */);
 
-    //     v1/* return_data */ = new uint256[](100);
+    //     v1/* return_data */ = new uint256[](300);
     //     uint256 v4/* pos */ = 0;
         
-    //     for (uint256 t = 0; t < 5; t++) {
+    //     for (uint256 t = 0; t < 6; t++) {
     //         for (uint256 e = 0; e < v2/* data */[t].length; e++) {
     //             v1/* return_data */[v4/* pos */] = v2/* data */[t][e];
     //             v4/* pos */++;
@@ -2077,8 +2087,19 @@ contract E2 {
     //     uint256[][][] calldata p1/* exchanges */,
     //     uint256[] calldata p2/* actions */,
     //     uint256 p3/* block_number */
-    // ) public pure returns (uint256[] memory v1/* new_ratios */) {
-    //     v1/* new_ratios */ = E33.f40(p1/* exchanges */, p2/* actions */, p3/* block_number */);
+    // ) public pure returns (uint256[] memory v1/* return_data */) {
+    //     (uint256[] memory v3/* new_ratios */, uint256[] memory v2/* temp_non_fungible_depth_token_transaction_class_array */) = F33.f40(p1/* exchanges */, p2/* actions */, p3/* block_number */);
+
+    //     v1/* return_data */ = new uint256[](100);
+    //     uint256 v5/* pos */ = 0;
+    //     for (uint256 r = 0; r < v3/* new_ratios */.length; r++) {
+    //         v1/* return_data */[v5/* pos */] = v3/* new_ratios */[r];
+    //         v5/* pos */++;
+    //     }
+    //     for (uint256 r = 0; r < v2/* temp_non_fungible_depth_token_transaction_class_array */.length; r++) {
+    //         v1/* return_data */[v5/* pos */] = v2/* temp_non_fungible_depth_token_transaction_class_array */[r];
+    //         v5/* pos */++;
+    //     }
     // }
 
     /* calculate_tokens_to_receive */
@@ -2305,14 +2326,14 @@ contract E2 {
     //     address[] calldata p4/* _adds */,
     //     string[][] calldata p5/* _strs */,
     //     uint256 p6/* action */
-    // ) public pure returns (uint256[] memory v1/* return_data */) {
-    //     E3.TD/* TransactionData */ memory v2/* tx_data */ = E3.TD/* TransactionData */( p2/* user_acc_id */, false/* can_sender_vote_in_main_contract */, p1/* temp_transaction_data_group */[0], p3/* _ints */[0], p4/* _adds */, p5/* _strs */, 0, /* t */ 0, /* new_obj_id */ 500 /* msg.value */, [ 3/* transaction_count */, uint256(5)/* entered_contracts */ ], false );
+    // ) public view returns (uint256[] memory v1/* return_data */) {
+    //     E3.TD/* TransactionData */ memory v2/* tx_data */ = E3.TD/* TransactionData */( p2/* user_acc_id */, false/* can_sender_vote_in_main_contract */, p1/* temp_transaction_data_group */[0], p3/* _ints */[0], p4/* _adds */, p5/* _strs */, 0, /* t */ 0, /* new_obj_id */ 500 /* msg.value */, [ 3/* transaction_count */, uint256(5)/* entered_contracts */ ], false, p1/* temp_transaction_data_group */[0] );
 
-    //     (uint256[][5] memory v3/* data2 */, uint256[4] memory v4/* data */, uint256[][2] memory v5/* bounds_data */) = E3.f28/* get_mint_tokens_data */(v2/* tx_data */, p6/* action */ );
+    //     (uint256[][6] memory v3/* data2 */, uint256[4] memory v4/* data */, uint256[][2] memory v5/* bounds_data */) = E3.f28/* get_mint_tokens_data */(v2/* tx_data */, p6/* action */ );
 
     //     v1/* return_data */ = new uint256[](100);
     //     uint256 v6/* pos */ = 0;
-    //     for (uint256 t = 0; t < 5; t++) {
+    //     for (uint256 t = 0; t < 6; t++) {
     //         for (uint256 r = 0; r < v3/* data2 */[t].length; r++) {
     //             v1/* return_data */[v6/* pos */] = v3/* data2 */[t][r];
     //             v6/* pos */++;

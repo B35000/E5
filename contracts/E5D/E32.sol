@@ -363,7 +363,7 @@ library E32 {
 
     /* calculate_tokens_to_receive */
     function f39(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[][][] calldata p2/* exchange_nums */,
         uint256 p3/* msg_value */,
         bool p4/* authority_mint */,
@@ -400,7 +400,7 @@ library E32 {
 
     /* calculate_active_mintable_amounts */
     function f34(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[][][] calldata p2/* exchange_nums */
     ) private pure returns (uint256[] memory v1/* active_mintable_amounts */) {
         /* it gets the mintable amounts using the supplied amount for buying and the exchange's active_block_limit_reduction_proportion value */
@@ -428,7 +428,7 @@ library E32 {
 
     /* calculate_tokens_setup */
     function f37(
-        uint256[][5] calldata p1/* ex_data */,
+        uint256[][6] calldata p1/* ex_data */,
         uint256[][][] calldata p2/* exchange_nums */,
         uint256 p3/* msg_value */,
         uint256[] memory p4/* active_mintable_amounts */
@@ -462,7 +462,7 @@ library E32 {
     /* calculate_final_tokens_to_receive */
     function f38(
         uint256[][4] memory p1/* tokens_to_receive_data */,
-        uint256[][5] calldata p2/* data */,
+        uint256[][6] calldata p2/* data */,
         uint256[][][] calldata p3/* exchange_nums */,
         bool p4/* authority_mint */,
         uint256[] memory p5/* active_mintable_amounts */
@@ -684,7 +684,7 @@ library E32 {
     /* check_for_external_amounts */
     function f33(
         uint256[][][] calldata p1/* exchange_nums */,
-        uint256[][5] calldata p2/* data */,
+        uint256[][6] calldata p2/* data */,
         uint256[] memory p3/* tokens_to_receive */
     ) private pure returns (uint256[2] memory v1/* external_amount_data */) {
         /* checks for any amount of ether thats set to be credited in the senders withdraw balance */
@@ -727,39 +727,41 @@ library E32 {
 
 
 
+
+
     
 
 
-    /* update_mock_reduction_proportion_ratios */
-    function f249(
-        uint256[][5] calldata p1/* data */,
-        uint256[][][] memory p2/* exchange_nums */,
-        uint256[] calldata p3/* new_ratios */
-    ) external pure returns (uint256[][][] memory v1/* updated_exchange_nums */) {
-        /* updates the ratios and values used in calculating how much spend you can mint */
+    // /* update_mock_reduction_proportion_ratios */
+    // function f249(
+    //     uint256[][6] calldata p1/* data */,
+    //     uint256[][][] memory p2/* exchange_nums */,
+    //     uint256[] calldata p3/* new_ratios */
+    // ) external pure returns (uint256[][][] memory v1/* updated_exchange_nums */) {
+    //     /* updates the ratios and values used in calculating how much spend you can mint */
 
-        v1/* updated_exchange_nums */ = p2/* exchange_nums */;
+    //     v1/* updated_exchange_nums */ = p2/* exchange_nums */;
         
-        for ( uint256 t = 0; t < p1/* data */[1/* exchanges */].length;  t++ ) {
-            /* for each targeted exchange in the swap action */
+    //     for ( uint256 t = 0; t < p1/* data */[1/* exchanges */].length;  t++ ) {
+    //         /* for each targeted exchange in the swap action */
             
-            if (p2/* exchange_nums */[t][0][ 3 /* exchange_type */ ] == 5/* type_uncapped_supply */ && p2/* exchange_nums */[t][1][ 1 /* block_limit */ ] != 0 ) {
-                /* if the exchange type is a uncapped exchange and its block limit is defined */
+    //         if (p2/* exchange_nums */[t][0][ 3 /* exchange_type */ ] == 5/* type_uncapped_supply */ && p2/* exchange_nums */[t][1][ 1 /* block_limit */ ] != 0 ) {
+    //             /* if the exchange type is a uncapped exchange and its block limit is defined */
 
-                v1/* updated_exchange_nums */[t][2][ 6 /* <6>active_block_limit_reduction_proportion */ ] = p3/* new_ratios */[t];
-                /* set the new active block limit proportion value in the exchange object in the return value */
-            }
-        }
-    }//-----TEST_OK-----
+    //             v1/* updated_exchange_nums */[t][2][ 6 /* <6>active_block_limit_reduction_proportion */ ] = p3/* new_ratios */[t];
+    //             /* set the new active block limit proportion value in the exchange object in the return value */
+    //         }
+    //     }
+    // }//-----TEST_OK-----
 
-    /* calculate_mock_tokens_to_receive */
-    function f250(
-        uint256[][5] calldata p1/* data */,
-        uint256[][][] calldata p2/* exchange_nums */
-    ) external pure returns (uint256[] memory v1/* tokens_to_receive */){
+    // /* calculate_mock_tokens_to_receive */
+    // function f250(
+    //     uint256[][6] calldata p1/* data */,
+    //     uint256[][][] calldata p2/* exchange_nums */
+    // ) external pure returns (uint256[] memory v1/* tokens_to_receive */){
         
-        (v1/* tokens_to_receive */,,) = f39/* calculate_tokens_to_receive */( p1/* data */, p2/* exchange_nums */, 0, false, [new uint256[](0), new uint256[](0)] );
-    }//-----TEST_OK-----
+    //     (v1/* tokens_to_receive */,,) = f39/* calculate_tokens_to_receive */( p1/* data */, p2/* exchange_nums */, 0, false, [new uint256[](0), new uint256[](0)] );
+    // }//-----TEST_OK-----
 
 
 

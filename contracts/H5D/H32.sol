@@ -19,12 +19,14 @@
 // IN THE SOFTWARE.
 pragma solidity 0.8.4;
 
+// import "hardhat/console.sol";
+
 /* E5HelperFunctions */
 library H32 {
     struct NumData {
         mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) num;
         mapping(uint256 => mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256)))) int_int_int;
-        mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) num_str_metas;
+        mapping(uint256 => mapping(uint256 => uint256)) num_str_metas;
     }
 
     /* ensure_type_exchange */
@@ -64,6 +66,9 @@ library H32 {
 
             mapping(uint256 => uint256) storage v3/* exchange_receiver_balances */ = p2/* self */.int_int_int[ p1/* data */[ 0 /* target_exchanges */ ][r] ][ 1 /* data */ ][p1/* data */[ 4 /* target_recipient */ ][r]];
             /* initialize a storage mapping that points to the targeted receiver's account */
+
+            require(p4/* num */[r][0][4/* <4>non-fungible */] == 0);
+            /* require exchange to be fungible */
             
             if(p1/* data */[ 1 /* action */ ][r] == 0/* swap_down */){
                 /* were moving downwards, towards depth zero */
@@ -164,7 +169,7 @@ library H32 {
 
     /* run_exchange_transfers */
     function f131(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[] calldata p2/* tokens_to_receive */,
         uint256 p3/* sender_account */,
         uint256[][][] calldata p4/* exchange_nums */,
@@ -206,7 +211,7 @@ library H32 {
 
     /* run_exchange_transfer_setters */
     function f90(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[] calldata p2/* tokens_to_receive */,
         uint256[][][] calldata p3/* exchange_nums */,
         uint256 p4,/* sender_account */
@@ -289,6 +294,12 @@ library H32 {
         uint256 v2/* parent_exchange */ = p3/* self */.int_int_int[p2/* exchange_id */][ 0 /* control */ ][0/* control_data */][ 5 /* parent_exchange */ ];
         /* get the parent exchange value from the exchange control data */
 
+        uint256 v3/* num_str_metas_pointer */ = p3/* self */.num_str_metas[p2/* exchange_id */][p1/* amount_sender_acc_receiver_acc */[ 3 /* depth */ ]];
+        /* initialize a storage object pointing to the exchanges depth metadata */
+
+        require(v3/* num_str_metas_pointer */ >= block.timestamp);
+        /* require that the non-fungible token can be transferred if it complies with it's specified limit during purchasing */
+
         require(p1/* amount_sender_acc_receiver_acc */[ 0 /* amount */ ] <= 10**72);
         /* ensure the amount being transfered is not more than 1 end to avoid overflows */
 
@@ -309,9 +320,13 @@ library H32 {
     }//-----RETEST_OK-----
 
 
+
+
+
+
     /* update_balances */
     function f129(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[] calldata p2/* tokens_to_receive */,
         uint256 p3/* sender_account */,
         NumData storage p4/* self */,
@@ -328,7 +343,7 @@ library H32 {
 
     /* update_balance */
     function f128(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[] calldata p2/* tokens_to_receive */,
         uint256 p3/* sender_account */,
         NumData storage p4/* self */,
@@ -347,24 +362,53 @@ library H32 {
         uint256 v3/*exchange_default_depth*/ = p6/* exchange_data */[2/* exchange_config_data */][7/* default_depth */];
         /* initalize a variable that holds the exchanges default depth */
 
+        uint256 v4/* num_str_metas_pointer */ = p4/* self */.num_str_metas[p1/* data */[1][p5/* r */] /* exchanges */ ][ v3/*exchange_default_depth*/ ];
+
         if ( p1/* data */[0/* actions */][p5/* r */] == 1 /* sell? */ ) {
             /* if the action is a sell action or dump action */
             
             v2/* int_int_pointer */[v1/* sender */][v3/* exchange_default_depth */] -= p1/* data */[2][p5/* r */]; /* target_amounts */
             /* deduct the balance of the sender since their selling their tokens */
+
+            if(p6/* exchange_data */[2][ 13 /* <13>temp_non_fungible_depth_token_transaction_end_time  */ ] != 0){
+                /* its an non-fungible token*/
+
+                require(v4/* num_str_metas_pointer */ != 0);
+                /* ensure the depth has been consumed */
+                
+                p4/* self */.num_str_metas[p1/* data */[1][p5/* r */] /* exchanges */ ][ v3/*exchange_default_depth*/ ] = 0;
+                /* revert the time after which the token can no longer be transferred back to its default */
+            }
         }
         else {
             /* the action is a buy action */
 
             if(p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ] != 0 && p6/* exchange_data */[0][ 3 /* exchange_type */ ] == 5 /* type_uncapped_supply */ && !p7/* authority_mint */){
                 /* if the maximum_mint_token_supply has been specified for a uncapped token. */
+
+                uint256 v5/* total_supply */ = p6/* exchange_data */[2][ 13 /* <13>temp_non_fungible_depth_token_transaction_end_time  */ ] != 0 ? p6/* exchange_data */[2][ 17 /* <17>temp_non_fungible_depth_token_class_total_supply  */ ] : p6/* exchange_data */[2][ 2 /* <2>token_exchange_liquidity/total_supply  */ ];
                 
-                require(p6/* exchange_data */[2/* exchange_config_data */][ 2 /* <2>token_exchange_liquidity/total_supply  */ ] + p2/* tokens_to_receive */[p5/* r */] < p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ]);
+                require(v5/* total_supply */ + p2/* tokens_to_receive */[p5/* r */] <= p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ]);
                 /* ensure sender isnt minting more token than have been required by the exchange author */
             }
 
             v2/* int_int_pointer */[p1/* data */[3/* receivers */][p5/* r */]][v3/* exchange_default_depth */] += p2/* tokens_to_receive */[p5/* r */];
             /* increase the balance of the sender since their buying tokens */
+
+            if(p6/* exchange_data */[2][ 13 /* <13>temp_non_fungible_depth_token_transaction_end_time  */ ] != 0){
+                /* its an non-fungible token*/
+                // console.log("num_str_metas_pointer:", v4/* num_str_metas_pointer */);
+
+                require(v4/* num_str_metas_pointer */ == 0 && p2/* tokens_to_receive */[p5/* r */] == 1);
+                /* ensure the depth has not been consumed and sender is minting 1 token */
+
+                p4/* self */.num_str_metas[p1/* data */[1][p5/* r */] /* exchanges */ ][ v3/*exchange_default_depth*/ ] = p6/* exchange_data */[2][ 13 /* <13>temp_non_fungible_depth_token_transaction_end_time  */ ];
+                /* record the time after which the non-fungible token can no longer be transferred */
+            }
+            else{
+                p4/* self */.num_str_metas[p1/* data */[1][p5/* r */] /* exchanges */ ][ v3/*exchange_default_depth*/ ] = 10**72;
+                /* record the default time since its a fungible token */
+            }
         }
     }//-----RETEST_OK-----
 
@@ -466,20 +510,20 @@ library H32 {
 
 
     /* set_up_mock_data */
-    function f248( uint256[] calldata p1/* exchanges */, uint256[][][] calldata p2/* exchange_nums */ ) 
-    external pure returns(uint256[][5] memory v1/* data */){
+    // function f248( uint256[] calldata p1/* exchanges */, uint256[][][] calldata p2/* exchange_nums */ ) 
+    // external pure returns(uint256[][5] memory v1/* data */){
         
-        v1/* data */ = [new uint256[](p1.length), p1/* exchanges */, new uint256[](p1.length), new uint256[](p1.length), new uint256[](p1.length)];
-        /* initialize the return 2D array with arrays with the specified number of targets as their sizes */
+    //     v1/* data */ = [new uint256[](p1.length), p1/* exchanges */, new uint256[](p1.length), new uint256[](p1.length), new uint256[](p1.length)];
+    //     /* initialize the return 2D array with arrays with the specified number of targets as their sizes */
 
-        for ( uint256 t = 0; t < p1/* exchanges */.length; t++ ) {
-            /* for each exchange targeted */
+    //     for ( uint256 t = 0; t < p1/* exchanges */.length; t++ ) {
+    //         /* for each exchange targeted */
 
-            v1/* data */[2/* target_amounts */][t] = p2/* exchange_nums */[t][1/* exchange_config */][0/* 0>default_exchange_amount_buy_limit */];
-            /* set the mint limit specified in the exchange config as the mock amount */
+    //         v1/* data */[2/* target_amounts */][t] = p2/* exchange_nums */[t][1/* exchange_config */][0/* 0>default_exchange_amount_buy_limit */];
+    //         /* set the mint limit specified in the exchange config as the mock amount */
 
-        }
-    }//-----TEST_OK-----
+    //     }
+    // }//-----TEST_OK-----
 
 
     function run() external pure returns (uint256){

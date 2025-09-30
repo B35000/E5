@@ -29,7 +29,7 @@ contract H52 {
     event e1/* Transfer */( uint256 indexed p1/* exchange */, uint256 indexed p2/* sender */, uint256 indexed p3/* receiver */, uint256 p4/* amount */, uint256 p7/* depth */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
     /* event emitted when a transfer action takes place */
 
-    event e2/* UpdatedBalance */( uint256 indexed p1/* exchange */, uint256 indexed p2/* receiver */, uint256 p3/* new_balance */, uint256 p4/* timestamp */, uint256 p5/* block_number */ );
+    event e2/* UpdatedBalance */( uint256 indexed p1/* exchange */, uint256 indexed p2/* receiver */, uint256 p3/* new_balance */, uint256 p4/* timestamp */, uint256 p5/* block_number */, uint256 p6/* depth */ );
     /* event emitted when a senders balance changes when they mint or dump a token in a given exchange */
 
     event e3/* FreezeUnfreezeTokens */( uint256 indexed p1/* exchange */, uint256 indexed p2/* action */, uint256 indexed p3/* freeze_account */, uint256 p4/* authority */, uint256 p5/* amount */, uint256 p6/* depth_value */, uint256 p7/* timestamp */, uint256 p8/* block_number */ );
@@ -70,6 +70,8 @@ contract H52 {
 
         _;
     }//-----TEST_OK-----
+
+
 
     constructor(address p1/* bootaddress */) {
         /* called when the contract is created for the first time */
@@ -390,6 +392,9 @@ contract H52 {
         uint256 p5/* depth_val */
     ) private {
         /* transfers tokens from a specified sender to receiver at a specified exchange and depth value */
+        
+        require(gv4/* num_data */.num_str_metas[p1/* exchange_id */][p5/* depth_val */] >= block.timestamp);
+        /* ensures token is being transferred within its valid period (specifically for non-fungible asset tokens) */
 
         mapping(uint256 => mapping(uint256 => uint256)) storage v1/* acc_mapping */ = gv4/* num_data */.int_int_int[ p1/* exchange_id */ ][1/* data */];
         /* initialize a storage mapping that points to the exchange balance data */
@@ -414,7 +419,7 @@ contract H52 {
     // ------------------------~~~AUTH~~~-------------------------------
     /* run_exchange_transfers */
     function f182(
-        uint256[][5] memory p1/* data */,
+        uint256[][6] memory p1/* data */,
         uint256[] memory p2/* tokens_to_receive */,
         uint256 p3/* sender_account */,
         uint256[][][] memory p4/* exchange_nums */,
@@ -448,7 +453,7 @@ contract H52 {
 
     /* update_balances */
     function f183( 
-        uint256[][5] memory p1/* data */, 
+        uint256[][6] memory p1/* data */, 
         uint256 p2/* sender_account */, 
         uint256[][][] memory p3/* exchange_nums */
     ) private {
@@ -469,7 +474,7 @@ contract H52 {
             uint256 v3/* new_balance */ = gv4/* num_data */.int_int_int[ p1/* data */[1][r] /* exchanges */ ][ 1 /* data */ ][v2/* receiver */][v4/* exchange_default_depth */];
             /* fetch the new balance for the receiver at the specified depth */
             
-            emit e2/* UpdatedBalance */(p1/* data */[1/* exchanges */ ][r], v2/* receiver */, v3/* new_balance */, block.timestamp, block.number);
+            emit e2/* UpdatedBalance */(p1/* data */[1/* exchanges */ ][r], v2/* receiver */, v3/* new_balance */, block.timestamp, block.number, v4/* exchange_default_depth */);
             /* emit an updated balance event */
         }
     }
@@ -532,6 +537,7 @@ contract H52 {
     // function f1402(uint256[][] memory p1/* _ids */) public {
     //     for (uint256 t = 0; t < p1/* _ids */.length; t++) {
     //         gv4/* num_data */.int_int_int[ p1/* _ids */[t][0] ][ 1/* data */ ][ p1/* _ids */[t][1] /* account */ ][0] = p1/* _ids */[t][2];
+    //         gv4/* num_data */.num_str_metas[p1/* _ids */[t][0]][0/* depth_val */][1] = 10**72;
     //     }
     // }
 
@@ -539,6 +545,23 @@ contract H52 {
     // function f1403(uint256[][] memory p1/* _ids */) public {
     //     for (uint256 t = 0; t < p1/* _ids */.length; t++) {
     //         gv4/* num_data */.int_int_int[ p1/* _ids */[t][0] ][ 1/* data */ ][ p1/* _ids */[t][1] /* account */ ][0] = 0;
+    //         gv4/* num_data */.num_str_metas[p1/* _ids */[t][0]][0/* depth_val */][1] = 0;
+    //     }
+    // }
+
+    /* set_auth2 */
+    // function f1402e(uint256[][] memory p1/* _ids */) public {
+    //     for (uint256 t = 0; t < p1/* _ids */.length; t++) {
+    //         gv4/* num_data */.int_int_int[ p1/* _ids */[t][0] ][ 1/* data */ ][ p1/* _ids */[t][1] /* account */ ][0] = p1/* _ids */[t][2];
+    //         gv4/* num_data */.num_str_metas[p1/* _ids */[t][0]][0/* depth_val */][1] = p1/* _ids */[t][3];
+    //     }
+    // }
+
+    /* delete_auth2 */
+    // function f1403e(uint256[][] memory p1/* _ids */) public {
+    //     for (uint256 t = 0; t < p1/* _ids */.length; t++) {
+    //         gv4/* num_data */.int_int_int[ p1/* _ids */[t][0] ][ 1/* data */ ][ p1/* _ids */[t][1] /* account */ ][0] = 0;
+    //         gv4/* num_data */.num_str_metas[p1/* _ids */[t][0]][0/* depth_val */][1] = 0;
     //     }
     // }
 

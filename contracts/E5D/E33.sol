@@ -491,6 +491,7 @@ library E33 {
 
 
 
+
     //
     //
     //
@@ -498,147 +499,147 @@ library E33 {
     //
     //
     // ------------------------TOKEN-FUNCTIONS-------------------------------
-    /* calculate_reduction_proportion_ratios */
-    function f40(
-        uint256[][][] calldata p1/* exchanges */,
-        uint256[] calldata p2/* actions */,
-        uint256 p3/* block_number */
-    ) external pure returns (uint256[] memory v1/* new_ratios */) {
-        /* calculates the new proportion value used in calculating the mint limit */
+    // /* calculate_reduction_proportion_ratios */
+    // function f40(
+    //     uint256[][][] calldata p1/* exchanges */,
+    //     uint256[] calldata p2/* actions */,
+    //     uint256 p3/* block_number */
+    // ) external pure returns (uint256[] memory v1/* new_ratios */) {
+    //     /* calculates the new proportion value used in calculating the mint limit */
 
-        v1/* new_ratios */ = new uint256[](p1.length);
-        /* initialize a new array to hold the new values */
+    //     v1/* new_ratios */ = new uint256[](p1.length);
+    //     /* initialize a new array to hold the new values */
 
-        for (uint256 t = 0; t < p1/* exchanges */.length; t++) {
-            /* for each exchange in the targeted exchanges specified by the sender */
+    //     for (uint256 t = 0; t < p1/* exchanges */.length; t++) {
+    //         /* for each exchange in the targeted exchanges specified by the sender */
 
-            uint256[][] memory v2/* exchange */ = p1/* exchanges */[t];
-            /* get the exchanges data and store it in memory */
+    //         uint256[][] memory v2/* exchange */ = p1/* exchanges */[t];
+    //         /* get the exchanges data and store it in memory */
 
-            v1/* new_ratios */[t] = v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion*/ ];
-            /* set the default new ratio as the current one  */
+    //         v1/* new_ratios */[t] = v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion*/ ];
+    //         /* set the default new ratio as the current one  */
 
-            if ( v2/* exchange */[0][3/* exchange_type */] == 5 && /* type_uncapped_supply */ v2/* exchange */[1][1/* block_limit */] != 0 ) {
-                /* if the exchange type is a uncapped token and its block limit is specified */
+    //         if ( v2/* exchange */[0][3/* exchange_type */] == 5 && /* type_uncapped_supply */ v2/* exchange */[1][1/* block_limit */] != 0 ) {
+    //             /* if the exchange type is a uncapped token and its block limit is specified */
 
-                if ( p2/* actions */[t] == 0 && /* buy? */ p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ] >= 1 ) {
-                    /* if the action is a buy action and were in a new block */
+    //             if ( p2/* actions */[t] == 0 && /* buy? */ p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ] >= 1 ) {
+    //                 /* if the action is a buy action and were in a new block */
 
-                    if ( v2/* exchange */[2][ 4 /* <4>total_minted_for_current_block */ ] > v2/* exchange */[1][ 1 /* <1>max_block_buyable_amount */ ] ) {
-                        /* if limit has been exceeded, reduce [2]<6>active_block_limit_reduction_proportion value by  [1]<6>block_limit_reduction_proportion */
+    //                 if ( v2/* exchange */[2][ 4 /* <4>total_minted_for_current_block */ ] > v2/* exchange */[1][ 1 /* <1>max_block_buyable_amount */ ] ) {
+    //                     /* if limit has been exceeded, reduce [2]<6>active_block_limit_reduction_proportion value by  [1]<6>block_limit_reduction_proportion */
 
-                        uint256 v3/* block_limit_sensitivity */ = v2/* exchange */[1][ 12 /* <12>block_limit_sensitivity */ ];
-                        /* initialize a variable that contains the block limit sensitivity */
+    //                     uint256 v3/* block_limit_sensitivity */ = v2/* exchange */[1][ 12 /* <12>block_limit_sensitivity */ ];
+    //                     /* initialize a variable that contains the block limit sensitivity */
 
-                        if (v3/* block_limit_sensitivity */ == 0) {
-                            v3/* block_limit_sensitivity */ = 1;
-                        }
-                        /* if the sensitivity value is undefined, set it to one */
+    //                     if (v3/* block_limit_sensitivity */ == 0) {
+    //                         v3/* block_limit_sensitivity */ = 1;
+    //                     }
+    //                     /* if the sensitivity value is undefined, set it to one */
 
-                        uint256 v4/* factor */ = f11/* calculate_factor */( v2/* exchange */[1][ 5 /* <5>internal_block_halfing_proportion */ ], v2/* exchange */[2][ 4 /* <4>total_minted_for_current_block */ ], v2/* exchange */[1][ 1 /* <1>max_block_buyable_amount */ ] );
-                        /* calculate the factor value used to calculate the new proportion and mint limit */
+    //                     uint256 v4/* factor */ = f11/* calculate_factor */( v2/* exchange */[1][ 5 /* <5>internal_block_halfing_proportion */ ], v2/* exchange */[2][ 4 /* <4>total_minted_for_current_block */ ], v2/* exchange */[1][ 1 /* <1>max_block_buyable_amount */ ] );
+    //                     /* calculate the factor value used to calculate the new proportion and mint limit */
 
-                        if(v4/* factor */ != 0){
-                            /* if the factor derived is non-zero */
+    //                     if(v4/* factor */ != 0){
+    //                         /* if the factor derived is non-zero */
 
-                            uint256 v5/* new_proportion */ = f5/* calculate_share_of_total */( v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion */ ], f3/* compound */( v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ], v4/* factor */ * v3/* block_limit_sensitivity */ ) );
-                            /* calculate the new proportion as a compounded share of the active block limit reduction value(<6>active_block_limit_reduction_proportion) */
+    //                         uint256 v5/* new_proportion */ = f5/* calculate_share_of_total */( v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion */ ], f3/* compound */( v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ], v4/* factor */ * v3/* block_limit_sensitivity */ ) );
+    //                         /* calculate the new proportion as a compounded share of the active block limit reduction value(<6>active_block_limit_reduction_proportion) */
 
-                            v1/* new_ratios */[t] = v5/* new_proportion */  == 0 ? 1 : v5/* new_proportion */ ;
-                            /* if the calculated value is zero, set it to one instead */
-                        }
+    //                         v1/* new_ratios */[t] = v5/* new_proportion */  == 0 ? 1 : v5/* new_proportion */ ;
+    //                         /* if the calculated value is zero, set it to one instead */
+    //                     }
 
-                        if ( p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ] > 1 ) {
-                            /* limit was exceeded in a block before the previous block */
+    //                     if ( p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ] > 1 ) {
+    //                         /* limit was exceeded in a block before the previous block */
 
-                            uint256 v6/* numerator */ = v1/* new_ratios */[t] * (10**18); /* (denominator -> 10**18) */
-                            /* initialize a numerator variable thats the product of the new active reduction proportion value(<6>active_block_limit_reduction_proportion) and 10**18 */
+    //                         uint256 v6/* numerator */ = v1/* new_ratios */[t] * (10**18); /* (denominator -> 10**18) */
+    //                         /* initialize a numerator variable thats the product of the new active reduction proportion value(<6>active_block_limit_reduction_proportion) and 10**18 */
 
-                            uint256 v7/* power */ = (p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ]) - 1;
-                            /* initialize a power variable thats the difference between the current block number and the last block number that the exchange was involved in a mint action less one */
+    //                         uint256 v7/* power */ = (p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ]) - 1;
+    //                         /* initialize a power variable thats the difference between the current block number and the last block number that the exchange was involved in a mint action less one */
 
-                            v1/* new_ratios */[t] = f14/* calculate_new_increased_active_block_limit_reduction_proportion */( v6/* numerator */, v7/* power */, v2/* exchange */[1][ 8 /* <8>block_reset_limit */ ], v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ] );
-                            /* recalculate the new increased active block limit since the value has to be pushed up for the blocks that no minting took place */
-                        }
-                    } else {
-                        /* limit has not been exceeded, so increase [2]<6>active_block_limit_reduction_proportion
-                            value by [1]<6>block_limit_reduction_proportion, if value is less than 100%, 
-                        */
-                        if ( v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion */ ] < 10**18 /* (100%) */ ) {
-                            /* if the value is less than 100% */
+    //                         v1/* new_ratios */[t] = f14/* calculate_new_increased_active_block_limit_reduction_proportion */( v6/* numerator */, v7/* power */, v2/* exchange */[1][ 8 /* <8>block_reset_limit */ ], v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ] );
+    //                         /* recalculate the new increased active block limit since the value has to be pushed up for the blocks that no minting took place */
+    //                     }
+    //                 } else {
+    //                     /* limit has not been exceeded, so increase [2]<6>active_block_limit_reduction_proportion
+    //                         value by [1]<6>block_limit_reduction_proportion, if value is less than 100%, 
+    //                     */
+    //                     if ( v2/* exchange */[2][ 6 /* <6>active_block_limit_reduction_proportion */ ] < 10**18 /* (100%) */ ) {
+    //                         /* if the value is less than 100% */
 
-                            uint256 v8/* numerator */ = v2/* exchange */[2][ 6/* <6>active_block_limit_reduction_proportion */] * (10**18); /* (denominator -> 10**18) */
-                            /* initialize a numerator value as the product of the active block limit value and 10**18 */
+    //                         uint256 v8/* numerator */ = v2/* exchange */[2][ 6/* <6>active_block_limit_reduction_proportion */] * (10**18); /* (denominator -> 10**18) */
+    //                         /* initialize a numerator value as the product of the active block limit value and 10**18 */
 
-                            uint256 v9/* power */ = p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ];
-                            /* initialize a power variable thats the difference between the current block number and the last block number that the exchange was involved in a mint action  */
+    //                         uint256 v9/* power */ = p3/* block_number */ - v2/* exchange */[2][ 5 /* <5>active_mint_block */ ];
+    //                         /* initialize a power variable thats the difference between the current block number and the last block number that the exchange was involved in a mint action  */
 
-                            v1/* new_ratios */[t] = f14/* calculate_new_increased_active_block_limit_reduction_proportion */( v8/* numerator */, v9/* power */, v2/* exchange */[1][ 8 /* <8>block_reset_limit */ ], v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ] );
-                            /* recalculate the new increased active block limit since the value has to be pushed up for the blocks that no minting took place */
-                        }
-                    }
-                }
-            }
-        }
-    }//-----CHANGED-----
+    //                         v1/* new_ratios */[t] = f14/* calculate_new_increased_active_block_limit_reduction_proportion */( v8/* numerator */, v9/* power */, v2/* exchange */[1][ 8 /* <8>block_reset_limit */ ], v2/* exchange */[1][ 6 /* <6>block_limit_reduction_proportion */ ] );
+    //                         /* recalculate the new increased active block limit since the value has to be pushed up for the blocks that no minting took place */
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }//-----CHANGED-----
 
-    /* calculate_new_increased_active_block_limit_reduction_proportion */
-    function f14(
-        uint256 p1/* numerator */,
-        uint256 p2/* power */,
-        uint256 p3/* block_reset_limit */,
-        uint256 p4/* block_limit_reduction_proportion */
-    ) private pure returns (uint256) {
-        /* 
-            it: calculates the new active block limit proportion if the block limit was not exceeded in preceding blocks
-            numerator = active_block_limit_reduction_proportion * (10**18)
-            eg. if active_block_limit_reduction_proportion = 81% and power = 2 and block_limit_reduction_proportion = 90%
-                new_limit = 81*100 = 8100
-                then 90% => 0.9^2 = 0.81 => 81%
-                then 8100 ÷ 81 = 100%
-        */
-        if (p2/* power */ > p3/* block_reset_limit */ && p3/* block_reset_limit */ != 0) {
-            /* if a reset limit exists and the power is greater than it */
+    // /* calculate_new_increased_active_block_limit_reduction_proportion */
+    // function f14(
+    //     uint256 p1/* numerator */,
+    //     uint256 p2/* power */,
+    //     uint256 p3/* block_reset_limit */,
+    //     uint256 p4/* block_limit_reduction_proportion */
+    // ) private pure returns (uint256) {
+    //     /* 
+    //         it: calculates the new active block limit proportion if the block limit was not exceeded in preceding blocks
+    //         numerator = active_block_limit_reduction_proportion * (10**18)
+    //         eg. if active_block_limit_reduction_proportion = 81% and power = 2 and block_limit_reduction_proportion = 90%
+    //             new_limit = 81*100 = 8100
+    //             then 90% => 0.9^2 = 0.81 => 81%
+    //             then 8100 ÷ 81 = 100%
+    //     */
+    //     if (p2/* power */ > p3/* block_reset_limit */ && p3/* block_reset_limit */ != 0) {
+    //         /* if a reset limit exists and the power is greater than it */
 
-            p2/* power */ = p3/* block_reset_limit */;
-            /* set the power to be the reset limit */
-        }
-        else if(p2/* power */ >= 35){
-            /* if the power is greater than thirtyfive */
+    //         p2/* power */ = p3/* block_reset_limit */;
+    //         /* set the power to be the reset limit */
+    //     }
+    //     else if(p2/* power */ >= 35){
+    //         /* if the power is greater than thirtyfive */
 
-            p2/* power */ = 35;
-            /* set it to 35 */
-        }
-        uint256 v1/* denominator */ = f3/* compound */(p4/* block_limit_reduction_proportion */, p2/* power */);
-        /* intialize a denominator variable thats the compounded value of the block limit reduction proportion using the power */
+    //         p2/* power */ = 35;
+    //         /* set it to 35 */
+    //     }
+    //     uint256 v1/* denominator */ = f3/* compound */(p4/* block_limit_reduction_proportion */, p2/* power */);
+    //     /* intialize a denominator variable thats the compounded value of the block limit reduction proportion using the power */
 
-        uint256 v2/* new_val */ = p1/* numerator */ / v1/* denominator */;
-        /* then set the return value as the numerator divided by the denominator */
+    //     uint256 v2/* new_val */ = p1/* numerator */ / v1/* denominator */;
+    //     /* then set the return value as the numerator divided by the denominator */
 
-        if ( v2/* new_val */ > 10**18 /* (denominator -> 10**18) */ ) {
-            /* if the value is more than 100% */
-            v2/* new_val */ = 10**18; /* (denominator -> 10**18) */
-            /*  set it to 100% */
-        }
-        return v2/* new_val */;
-    }//-----TEST_OK-----
+    //     if ( v2/* new_val */ > 10**18 /* (denominator -> 10**18) */ ) {
+    //         /* if the value is more than 100% */
+    //         v2/* new_val */ = 10**18; /* (denominator -> 10**18) */
+    //         /*  set it to 100% */
+    //     }
+    //     return v2/* new_val */;
+    // }//-----TEST_OK-----
 
-    /* calculate_factor */
-    function f11(
-        uint256 p1/* reduction_proportion */,
-        uint256 p2/* total_minted_for_current_block */,
-        uint256 p3/* max_block_buyable_amount */
-    ) private pure returns (uint256) {
-        /* if total_minted_for_current_block exceeds max_block_mintable_amount, the amount of spend that can be minted is reduced
-            (100%/50%)*(200,000,000/100,000,000) = 2*2 = 4
-            then the factor_amount = 10,000,000(active_mintable_amount) / 4 = 2,500,000
-        */
-        if(p1/* reduction_proportion */ == 0 || p2/* total_minted_for_current_block */ == 0 || p3/* max_block_buyable_amount */==0){
-            /* if one of the values passed is zero, return zero */
-            return 0;
-        }
-        return ((10**18) / p1/* reduction_proportion */) * ((p2/* total_minted_for_current_block */ == 0 ? 1 /* 1 to avoid exception */ : p2/* total_minted_for_current_block */ ) / p3/* max_block_buyable_amount */);
-    } //-----TEST_OK-----
+    // /* calculate_factor */
+    // function f11(
+    //     uint256 p1/* reduction_proportion */,
+    //     uint256 p2/* total_minted_for_current_block */,
+    //     uint256 p3/* max_block_buyable_amount */
+    // ) private pure returns (uint256) {
+    //     /* if total_minted_for_current_block exceeds max_block_mintable_amount, the amount of spend that can be minted is reduced
+    //         (100%/50%)*(200,000,000/100,000,000) = 2*2 = 4
+    //         then the factor_amount = 10,000,000(active_mintable_amount) / 4 = 2,500,000
+    //     */
+    //     if(p1/* reduction_proportion */ == 0 || p2/* total_minted_for_current_block */ == 0 || p3/* max_block_buyable_amount */==0){
+    //         /* if one of the values passed is zero, return zero */
+    //         return 0;
+    //     }
+    //     return ((10**18) / p1/* reduction_proportion */) * ((p2/* total_minted_for_current_block */ == 0 ? 1 /* 1 to avoid exception */ : p2/* total_minted_for_current_block */ ) / p3/* max_block_buyable_amount */);
+    // } //-----TEST_OK-----
 
 
 
@@ -647,17 +648,22 @@ library E33 {
     function f66(uint256[][] memory p1/* new_obj_id_num */) external view {
         /* contains checkers used to ensure that a created token exchange doesnt break while in use */
         
-        require( p1/* new_obj_id_num */[0][ 3 /* type */ ] == 5 || /* 5-type_uncapped_supply */ 
-        p1/* new_obj_id_num */[0][ 3 /* type */ ] == 3 /* type_capped_supply */ );
+        require(p1/* new_obj_id_num */[0][ 3 /* type */ ] == 5 || /* 5-type_uncapped_supply */ 
+        p1/* new_obj_id_num */[0][ 3 /* type */ ] == 3 /* type_capped_supply */);
         /* ensure correct type is passed */ 
 
-        require( p1/* new_obj_id_num */[0][ 2 /* fully_custom */ ] <= 1 && 
-        p1/* new_obj_id_num */[0][ 1 /* unlocked_liquidity */ ] <= 1 &&
-        p1/* new_obj_id_num */[0][ 0 /* unlocked_supply */ ] <= 1);   
+        require(p1/* new_obj_id_num */[0][ 4 /* <4>non-fungible */ ] <= 1);
+        /* ensure correct fungible setting is passed */
+
+        require( 
+            p1/* new_obj_id_num */[0][ 2 /* fully_custom */ ] <= 1 && 
+            p1/* new_obj_id_num */[0][ 1 /* unlocked_liquidity */ ] <= 1 &&
+            p1/* new_obj_id_num */[0][ 0 /* unlocked_supply */ ] <= 1 &&
+            p1/* new_obj_id_num */[ 3 /* source_tokens */ ].length != 0
+        );   
         /* ensure correct custom and unlocked liquidity/supply value */
-        
-        require( p1/* new_obj_id_num */[ 3 /* source_tokens */ ].length != 0 );
         /* ensure correct lengths */
+                
         
         f65/* run_token_exchange_config_checkers */(p1/* new_obj_id_num */[1], p1/* new_obj_id_num */[0][ 3 /* type */ ]);
         
@@ -669,7 +675,7 @@ library E33 {
         );
         /* ensure the active block limit is a proportion, the exchange ratios and total supply dont exceed 1 end */
         
-        require( 
+        require(
             p1/* new_obj_id_num */[2][ 0 /* token_exchange_ratio_x */ ] != 0 && 
             p1/* new_obj_id_num */[2][ 1 /* token_exchange_ratio_y */ ] != 0 && 
             p1/* new_obj_id_num */[2][ 3 /* parent_tokens_balance */ ] == 0 && 
@@ -677,6 +683,30 @@ library E33 {
             p1/* new_obj_id_num */[2][ 5 /* active_mint_block */ ] <= block.number 
         );
         /* ensure the exchange ratios used are non-zero and the parent token balance and current block mint total are zero and the active mint block is less than or equal to the current block */
+
+        if(p1/* new_obj_id_num */[0][ 4 /* <4>non-fungible */ ] == 1){
+            require(
+                p1/* new_obj_id_num */[0][ 3 /* type */ ] == 5 /* 5-type_uncapped_supply */ && 
+                p1/* new_obj_id_num */[0][ 2 /* <2>fully_custom */ ] == 0 &&
+                p1/* new_obj_id_num */[2][ 0 /* token_exchange_ratio_x */ ] == 1 && 
+
+                p1/* new_obj_id_num */[2][ 8 /* <8>non_fungible_depth_exchange_ratio_y */ ] > p1/* new_obj_id_num */[2][ 9 /* <9>non_fungible_depth_token_purchase_end_time */ ] &&
+
+                p1/* new_obj_id_num */[2][ 9 /* <9>non_fungible_depth_token_purchase_end_time */ ] >= p1/* new_obj_id_num */[2][ 10 /* <10>non_fungible_depth_token_purchase_start_time */ ] &&
+
+                p1/* new_obj_id_num */[2][ 10 /* <10>non_fungible_depth_token_purchase_start_time */ ] > p1/* new_obj_id_num */[2][ 11 /* <11>non_fungible_depth_token_applied_token_supply */ ] &&
+                p1/* new_obj_id_num */[2][ 12/* <12>non_fungible_depth_token_time_multiplier */ ] != 0 &&
+                p1/* new_obj_id_num */[2][ 12/* <12>non_fungible_depth_token_time_multiplier */ ] <= 10**6
+            );
+            /* ensure valid non-fungible token data. Each value should be successivley decrementing and the time multiplier should be less than 1 million time units */
+
+            if(p1/* new_obj_id_num */[2][14/* <14>non_fungible_depth_token_applied_class */] > 0){
+                /* if exchange uses a predefined class system */
+                
+                require(p1/* new_obj_id_num */[2][14/* <14>non_fungible_depth_token_applied_class */] > p1/* new_obj_id_num */[2][16/* <16>non_fungible_depth_token_applied_increment */] * 10);
+            }
+        }
+        /* ensure token type is uncapped and token exchange ratio x is set to 1 if asset is non-fungible. As well as valid non-fungible configuration settings. */
         
         if ( p1/* new_obj_id_num */[0][ 3 /* type */ ] == 3 /* type_capped_supply */ ) {
             /* if the token is type capped */

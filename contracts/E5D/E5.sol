@@ -600,7 +600,7 @@ contract E5 {
             return block.difficulty;
         }
         else{
-            return 0;
+            return gv1/* id */;
         }
     }
 
@@ -618,8 +618,7 @@ contract E5 {
         return gv6/* num_data */.int_add[ 10 /* accounts_obj_id */ ][p1/* account_id */];
     }
 
-
-    /* get_last_transaction_block & last_transaction_time & entered_contracts_count & transaction_count_data */
+    /* get_last_transaction_block & last_transaction_time & entered_contracts_count & transaction_count_data && */
     function f287(uint256[] calldata p1/* accounts */) 
     public view returns (uint256[4][] memory v1/* data */){
         /* gets the basic transaction data for a given set of accounts such as the last time they sent a transaction to e, the number of entered contracts and the total number of transactions theyve made with e */

@@ -26,6 +26,7 @@ library H3 {
         mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) num;
         mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) int_int_int;
         mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) num_str_metas;
+        mapping(uint256 => mapping(uint256 => uint256)) num_metas;
     }
 
     /* boot */
@@ -81,7 +82,7 @@ library H3 {
     function f83(
         uint256[] memory p1/* _ids */, 
         NumData storage p2/* self */
-    ) private view {
+    ) public view {
         /* ensures the specified ids passed are exchanges */
         
         for (uint256 r = 0; r < p1/* _ids */.length; r++) {
@@ -161,7 +162,7 @@ library H3 {
 
     /* run_exchange_checkers */
     function f123(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[4] calldata p2/* metas */,
         bool p3/* authority_mint */,
         NumData storage p4/* self */
@@ -172,7 +173,7 @@ library H3 {
         f83/* ensure_type_exchange */(p1/* data */[1/* exchanges */], p4/* self */);
         /* ensures the supplied exchange ids are of type exchange */
         
-        v1/* exchange_data */ = f86/* read_ids */(p1/* data */[1/* exchanges */], p4/* self */);
+        v1/* exchange_data */ = f86/* read_ids */(p1/* data */[1/* exchanges */], p4/* self */, p1/* data */[5/* depths */]);
         /* read the exchange object and record it in the three dimentional return variable array */
 
         for ( uint256 t = 0; t < p1/* data */[1/* exchanges */].length; t++ ) {
@@ -282,7 +283,7 @@ library H3 {
                 /* can only authmint as buy action */
             }
         }
-    }//-----TEST_OK-----
+    }//-----RETEST_OK-----
 
     /* calculate_share_of_total */
     function f7(uint256 p1, uint256 p2) private pure returns (uint256) {
@@ -306,7 +307,7 @@ library H3 {
 
     /* update_reduction_proportion_ratios */
     function f124(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[][][] calldata p2/* exchange_nums */,
         NumData storage p3/* self */,
         uint256[] calldata p4/* new_ratios */
@@ -383,7 +384,8 @@ library H3 {
     /* read_ids */
     function f86(
         uint256[] memory p1/* _ids */, 
-        NumData storage p2/* self */
+        NumData storage p2/* self */,
+        uint256[] memory p3/* depths */
     ) public view returns (uint256[][][] memory v1/* ints */) {
         /* returns a three dimentional array containing the exchange objects and their data */
         
@@ -393,7 +395,7 @@ library H3 {
         for (uint256 r = 0; r < p1/* _ids */.length; r++) {
             /* for each target specified */
             
-            v1/* ints */[r] = f85/* read_id */(p1/* _ids */[r], p2/* self */);
+            v1/* ints */[r] = f85/* read_id */(p1/* _ids */[r], p2/* self */, p3/* depths */[r]);
             /* set its data in the return object position as the return data from the read id function */
         }
     }//-----TEST_OK-----
@@ -401,7 +403,8 @@ library H3 {
     /* read_id */
     function f85(
         uint256 p1/* _id */, 
-        NumData storage p2/* self */
+        NumData storage p2/* self */,
+        uint256 p3/* depth */
     ) public view returns (uint256[][] memory v1/* id_data */) {
         /* returns a two dimentional array containing the data for a specified exchange item from its id */
         
@@ -411,7 +414,7 @@ library H3 {
         uint256 v2/* source_tokens_count */ = p2/* self */.num_str_metas[p1/* _id */][ 1 /* id_data */ ][3/* source_tokens_count */];
         /* initialize a variable that contains the number of tokens used for buying the target token */
         
-        uint256[6] memory v3/* data */ = [ 4, 20, 8, v2/* source_tokens_count */, v2/* source_tokens_count */ , v2/* source_tokens_count */ ];
+        uint256[6] memory v3/* data */ = [ 5, 20, 18, v2/* source_tokens_count */, v2/* source_tokens_count */ , v2/* source_tokens_count */ ];
         /* initialise a data array containing the variable length of each array, in the two dimentional array that contains the exchange's data */
 
         for ( uint256 s = 0; s < 6; /* data_len */ s++ ) {
@@ -430,11 +433,63 @@ library H3 {
                 /* set the specific item's data in the return vaiable */
             }
         }
+
+        if(v1/* id_data */[0][4/* <4>non-fungible */] > 0 && p1/* _id */ != p3/* depth */ ){
+            /*  72
+                71-54[18 bytes] --> <0>token_exchange_ratio_y, <0>token_exchange_ratio_x should be 1
+                53-45[9 bytes] --> buy sell transaction end time in minutes
+                44-36[9 bytes] --> buy sell transaction start time in minutes
+                35-27[9 bytes] --> maximum supply
+                26-18[9 bytes] --> class
+            */
+            uint256[] memory v7/* token_configuration */ = v1/* id_data */[2];
+            v1/* id_data */[2][7/* <7>default_depth */] = p3/* depth */;
+
+            uint256 v11/* new_exchange_ratio_y */ = p3/* depth */ / v7/* token_configuration */[8/* <8>non_fungible_depth_exchange_ratio_y */]/* 10**54 */;
+
+            v1/* id_data */[2][1/* <1>token_exchange_ratio_y */] = v11/* new_exchange_ratio_y */;
+            v1/* id_data */[1][0/* <0>default_exchange_amount_buy_limit*/] = v11/* new_exchange_ratio_y */;
+
+            uint256 v5/* depth_rem_54 */ = p3/* depth */ % v7/* token_configuration */[8/* <8>non_fungible_depth_exchange_ratio_y */]/* 10**54 */;
+            uint256 v6/* depth_rem_45 */ = v5/* depth_rem_54 */ % v7/* token_configuration */[9/* <9>non_fungible_depth_token_purchase_end_time */]/* 10**45 */;
+            uint256 v8/* purchase_end_time */ = (v5/* depth_rem_54 */ / v7/* token_configuration */[9/* <9>non_fungible_depth_token_purchase_end_time */]/* 10**45 */) * v7/* token_configuration */[12/* <12>non_fungible_depth_token_time_multiplier */];/* 60 */
+            
+            if(v7/* token_configuration */[13/* <13>temp_non_fungible_depth_token_transaction_end_time */] != 0){
+                v1/* id_data */[2][13/* <13>temp_non_fungible_depth_token_transaction_end_time */] = v8/* purchase_end_time */ + v7/* token_configuration */[13/* <13>temp_non_fungible_depth_token_transaction_end_time */];
+            }
+            
+            if(
+                v8/* purchase_end_time */ < block.timestamp || 
+                (v6/* depth_rem_45 */ / v7/* token_configuration */[10/* <10>non_fungible_depth_token_purchase_start_time */]/* 10**36 */) * v7/* token_configuration */[12/* <12>non_fungible_depth_token_time_multiplier */]/* 60 */ > block.timestamp)
+            {
+                if(v7/* token_configuration */[9/* <9>non_fungible_depth_token_purchase_end_time */] != v7/* token_configuration */[10/* <10>non_fungible_depth_token_purchase_start_time */]){
+                    v1/* id_data */[1][0/* <0>default_exchange_amount_buy_limit */] = 0;
+                    v1/* id_data */[1][11/* <11>default_exchange_amount_sell_limit */] = 0;
+                }
+            }
+            
+            uint256 v9/* depth_rem_36 */ = v6/* depth_rem_45 */ % v7/* token_configuration */[10/* <10>non_fungible_depth_token_purchase_start_time */]/* 10**36 */;
+            if(v7/* token_configuration */[11/* <11>non_fungible_depth_token_applied_token_supply */] > 0){
+                v1/* id_data */[1][19/* <19>maximum_mint_token_supply */] = v9/* depth_rem_36 */ / v7/* token_configuration */[11/* <11>non_fungible_depth_token_applied_token_supply */]/* 10**27 */;
+            }
+
+            if(v7/* token_configuration */[14/* <14>non_fungible_depth_token_applied_class */] > 0){
+                uint256 v10/* applied_class */ = (v9/* depth_rem_36 */ % v7/* token_configuration */[14/* <14>non_fungible_depth_token_applied_class */]) / v7/* token_configuration */[16/* <16>non_fungible_depth_token_applied_increment */];/* 10**18 */
+
+                v1/* id_data */[2][15/* <15>temp_non_fungible_depth_token_transaction_class */] = v10/* applied_class */;
+
+                v1/* id_data */[2][17/* <17>temp_non_fungible_depth_token_class_total_supply */] = p2/* self */.num_metas[ p1/* _id */ ][v10/* applied_class */];
+            }
+
+            if(v7/* token_configuration */[16/* <16>non_fungible_depth_token_applied_increment */] > 0){
+                v1/* id_data */[2][7/* <7>default_depth */] = v1/* id_data */[2][7/* <7>default_depth */] - (v9/* depth_rem_36 */ % v7/* token_configuration */[16/* <16>non_fungible_depth_token_applied_increment */]) + v1/* id_data */[2][17/* <17>temp_non_fungible_depth_token_class_total_supply */];
+            }
+        }
     }//-----RETEST_OK-----
 
     /* update_exchange_ratios */
     function f125(
-        uint256[][5] calldata p1/* data */,
+        uint256[][6] calldata p1/* data */,
         uint256[] calldata p2/* tokens_to_receive */,
         NumData storage p3/* self */
     ) external {
@@ -486,84 +541,83 @@ library H3 {
                 } else {
                     v2/* exchange */[2][ 2 /* <2>token_exchange_liquidity*/ ] += p2/* tokens_to_receive */[r];
                     /* update exchange tokens liquidity */
-                    
                 }
 
                 v2/* exchange */[2][ 3 /* <3>parent_tokens_balance */ ] += p1/* data */[2/* target_amounts */][r]; 
                 /* adjust the parent tokens balance. its increased since by buying, the exchange would receive tokens from the buyer in its account in other exchanges */
             }
         }
-    }//-----CHANGED-----
+    }//-----RETEST_OK-----
 
 
 
 
 
-    /* scan_account_exchange_data */
-    function f241(
-        uint256[] calldata p1/* accounts */, 
-        NumData storage p2/* self */,
-        uint256[] calldata p3/* exchanges */
-    ) external view returns (uint256[4][] memory v1/* data */){
-        /* scans the int_int_int datastorage object for an accounts last_swap_block, last_swap_time, last_transaction_number and user_last_entered_contracts_number */
+    // /* scan_account_exchange_data */
+    // function f241(
+    //     uint256[] calldata p1/* accounts */, 
+    //     NumData storage p2/* self */,
+    //     uint256[] calldata p3/* exchanges */
+    // ) external view returns (uint256[4][] memory v1/* data */){
+    //     /* scans the int_int_int datastorage object for an accounts last_swap_block, last_swap_time, last_transaction_number and user_last_entered_contracts_number */
 
-        v1/* data */ = new uint256[4][](p1.length);
-        /* initialize the return variable as a new array whose length being the number of targets specified in the arguments */
+    //     v1/* data */ = new uint256[4][](p1.length);
+    //     /* initialize the return variable as a new array whose length being the number of targets specified in the arguments */
 
-        for (uint256 t = 0; t < p1/* accounts */.length; t++) {
-            /* for each target specified */
+    //     for (uint256 t = 0; t < p1/* accounts */.length; t++) {
+    //         /* for each target specified */
 
-            mapping(uint256 => uint256) storage v2/* pointer */ = p2/* self */.int_int_int[p3/* exchanges */[t]][p1/* accounts */[t]];
-            /* initialize a storage pointer variable that points to the accounts data in the targeted exchange including the last time they swapped, the last block they swapped and the number of transactions they had made during their last swap */
+    //         mapping(uint256 => uint256) storage v2/* pointer */ = p2/* self */.int_int_int[p3/* exchanges */[t]][p1/* accounts */[t]];
+    //         /* initialize a storage pointer variable that points to the accounts data in the targeted exchange including the last time they swapped, the last block they swapped and the number of transactions they had made during their last swap */
 
-            v1/* data */[t] = [
-                v2/* pointer */[ 0 /* last_swap_block */ ], 
-                v2/* pointer */[ 1 /* last_swap_timestamp */ ], 
-                v2/* pointer */[ 2 /* last_transaction_number */ ], 
-                v2/* pointer */[ 3 /* user_last_entered_contracts_number */ ]
-            ];
-            /* set the data in the return data array */
-        }
-    }//-----CHANGED-----
+    //         v1/* data */[t] = [
+    //             v2/* pointer */[ 0 /* last_swap_block */ ], 
+    //             v2/* pointer */[ 1 /* last_swap_timestamp */ ], 
+    //             v2/* pointer */[ 2 /* last_transaction_number */ ], 
+    //             v2/* pointer */[ 3 /* user_last_entered_contracts_number */ ]
+    //         ];
+    //         /* set the data in the return data array */
+    //     }
+    // }//-----MOVED-----
 
 
     /* run_exchange_transfer_checkers */
-    function f231(
-        uint256[][6] calldata p1/* data */,
-        uint256 p2/* initiator_account */,
-        NumData storage p3/* self */
-    ) external view returns (uint256[][5] memory v1/* data */){
-        /* ensures exchange transfer actions are valid */
-        /* data[0]:exchanges, data[1]:receivers, data[2]:amounts, data[3]:depths, data[4]:initiator_accounts, data[5]:token_targets */
+    // function f231(
+    //     uint256[][6] calldata p1/* data */,
+    //     uint256 p2/* initiator_account */,
+    //     NumData storage p3/* self */
+    // ) external view returns (uint256[][5] memory v1/* data */){
+    //     /* ensures exchange transfer actions are valid */
+    //     /* data[0]:exchanges, data[1]:receivers, data[2]:amounts, data[3]:depths, data[4]:initiator_accounts, data[5]:token_targets */
 
-        f83/* ensure_type_exchange */(p1/* data */[0/* exchanges */], p3/* self */);
-        /* ensure the supplied ids are the correct type */
+    //     f83/* ensure_type_exchange */(p1/* data */[0/* exchanges */], p3/* self */);
+    //     /* ensure the supplied ids are the correct type */
 
-        for (uint256 t = 0; t < p1/* data */[0/* exchanges */].length; t++) {
-            /* for each exchange that has been targeted */
+    //     for (uint256 t = 0; t < p1/* data */[0/* exchanges */].length; t++) {
+    //         /* for each exchange that has been targeted */
 
-            uint256 v2/* initiator */ = p2/* initiator_account */ == 0 ? p1/* data */[4/* initiator_accounts */][t]: p2/* initiator_account */;
-            /* initialize a new variable that holds the account that initiated the exchange transfer action */
+    //         uint256 v2/* initiator */ = p2/* initiator_account */ == 0 ? p1/* data */[4/* initiator_accounts */][t]: p2/* initiator_account */;
+    //         /* initialize a new variable that holds the account that initiated the exchange transfer action */
 
 
-            uint256 v3/* exchange_authority */ = p3/* self */.num[ p1/* data */[0/* exchanges */][t] ][1/* exchange_config */][9 /* <9>exchange_authority */];
-            /* get the specific exchange's authority were handling */
+    //         uint256 v3/* exchange_authority */ = p3/* self */.num[ p1/* data */[0/* exchanges */][t] ][1/* exchange_config */][9 /* <9>exchange_authority */];
+    //         /* get the specific exchange's authority were handling */
 
-            uint256 v4/* unlocked_liquidity */ = p3/* self */.num[ p1/* data */[0/* exchanges */][t] ][0][1 /* <1>unlocked_liquidity */];
+    //         uint256 v4/* unlocked_liquidity */ = p3/* self */.num[ p1/* data */[0/* exchanges */][t] ][0][1 /* <1>unlocked_liquidity */];
 
-            require(v3/* exchange_authority */ == v2/* initiator */ && v4/* unlocked_liquidity */ == 1);
-            /* ensure the initiator to be the exchange authority of the exchange and the exchange's unlocked liquidity is turned on */
-        }
+    //         require(v3/* exchange_authority */ == v2/* initiator */ && v4/* unlocked_liquidity */ == 1);
+    //         /* ensure the initiator to be the exchange authority of the exchange and the exchange's unlocked liquidity is turned on */
+    //     }
 
-        v1/* data */ = [
-            p1/* data */[5/* token_targets */], 
-            p1/* data */[2/* amounts */], 
-            p1/* data */[0/* exchanges */], 
-            p1/* data */[1/* receivers */], 
-            p1/* data */[3/* depths */]
-        ];
-        /* set the return data to finish the exchange transfer action */
-    }//-----RETEST_OK-----
+    //     v1/* data */ = [
+    //         p1/* data */[5/* token_targets */], 
+    //         p1/* data */[2/* amounts */], 
+    //         p1/* data */[0/* exchanges */], 
+    //         p1/* data */[1/* receivers */], 
+    //         p1/* data */[3/* depths */]
+    //     ];
+    //     /* set the return data to finish the exchange transfer action */
+    // }//-----MOVED-----
 
 
 

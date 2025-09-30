@@ -339,12 +339,13 @@ library E3 {
         else if ( v3/* action */ == 8 /* <8>buy_tokens/sell_tokens */ || v3/* action */ == 9 /* auth_mint */) {
             /* if the action involves buying or selling tokens */
 
-            v1/* data */ = [ 
+            v2/* data2 */ = [
                 p1/* tx_data */.sv4/* vals */[ 6 /* actions */ ], 
                 p2/* target_id_data */[ 0 /* target_ids */ ], /* exchange_ids */ 
                 p1/* tx_data */.sv4/* vals */[ 5 /* ammounts */ ], 
                 p2/* target_id_data */[ 1 /* secondary_target_ids */ ], /* receivers */ 
-                p2/* target_id_data */[ 2 /* e */ ]
+                p2/* target_id_data */[ 2 /* e */ ],
+                p1/* tx_data */.sv4/* vals */[ 9 /* depths */ ]
             ];
             /* set the data in the return object */
         }
@@ -416,10 +417,10 @@ library E3 {
 
     /* get_mint_tokens_data */
     function f28(TD/* TransactionData */ calldata p1/* tx_data */, uint256 p2/* action */) 
-    external view returns (uint256[][5] memory, uint256[4] memory , uint256[][2] memory){
+    external view returns (uint256[][6] memory, uint256[4] memory , uint256[][2] memory){
         /* returns data used for performing mint or dump actions */
 
-        (, uint256[][5] memory v1/* data */,) = f23/* get_token_primary_secondary_target_data */(p1/* tx_data */);
+        (,, uint256[][6] memory v3/* data2 */) = f23/* get_token_primary_secondary_target_data */(p1/* tx_data */);
         /* get the mint action data */
 
         if(p2/* action */ == 9 /* auth_mint */){
@@ -428,7 +429,7 @@ library E3 {
             uint256[] memory e = new uint256[](0);
             /* initialize an empty array */
             return (
-                v1/* data2 */,
+                v3/* data2 */,
                 [p1/* tx_data */.sv1/* user_acc_id */, 0, /* msg.value */ 0, /* user_last_transaction_number */ 0 /* user_last_entered_contracts_number */], 
                 [e, e]
             );
@@ -437,7 +438,7 @@ library E3 {
             /* its an ordinary mint action */
 
             return (
-                v1/* data2 */, 
+                v3/* data2 */, 
                 [p1/* tx_data */.sv1/* user_acc_id */, p1/* tx_data */.sv8/* tx_value_available */, p1/* tx_data */.sv9/* user_acc_data */[ 0 /* transaction_count */ ], p1/* tx_data */.sv9/* user_acc_data */[ 1 /* entered_contracts */ ]], 
                 [p1/* tx_data */.sv4/* vals */[ 7 /* lower_bounds */ ], p1/* tx_data */.sv4/* vals */[ 8 /* upper_bounds */ ]] 
             );
