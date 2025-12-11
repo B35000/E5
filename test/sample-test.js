@@ -45,7 +45,7 @@ let f3; let f32; let f33;
 let g3; let g32; let g33;    
 let h3; let h32;
 
-
+/* run each test one by one, not all at once. Enjoy the scroll! */
 before(async () => {
   var seconds = new Date().getTime() / 1000;
   // await console.log(hre);
@@ -237,7 +237,7 @@ before(async () => {
   // ////////////////////////////////////////
   const G5 = await hre.ethers.getContractFactory("G5", {
     libraries: {
-      E3: e3.address,
+      // E3: e3.address,
       G3: g3.address,
       // G32: g32.address,
       G33: g33.address,
@@ -245,7 +245,7 @@ before(async () => {
       E33: e33.address,
       // F3: f3.address,
       F32: f32.address,
-      // F33: f33.address
+      F33: f33.address
     },
   });
   g5 = await G5.connect(signer).deploy(f5.address);
@@ -293,7 +293,7 @@ before(async () => {
 
 });
 
-/* run each test one by one, not all at once. Enjoy the scroll! */
+
 describe("E3's", function () {
 
   xit("0. can run e", async () => {
@@ -2555,9 +2555,18 @@ describe("E3's", function () {
         [0, 3, 38]
       ]
     ];
+
+    const encode_data = (array_data) => {
+      var abiCoder = new ethers.utils.AbiCoder()
+      var encoded = abiCoder.encode(["uint256[]", "uint256[]", "uint256[]"], array_data);
+      var hash = ethers.utils.keccak256(encoded)
+      return BigInt(hash);
+    }
+    
+    var uintHash = encode_data([[3, 45, 56], [111, 345, 445], [0, 3, 38]])
     var val = await e.f36(v1/* temp_transaction_data_group */, 400, _ints, [], []);
     console.log("26a");
-    var exp_vals = [35, 800, 3, 45, 56, 111, 345, 445, 0, 3, 38];
+    var exp_vals = [35, 800, uintHash,   3, 45, 56,   111, 345, 445,  0, 3, 38];
     for (let j = 0; j < exp_vals.length; j++) {
       expect(await val[j]).to.equal(exp_vals[j]);
     }
@@ -2583,9 +2592,12 @@ describe("E3's", function () {
         [0, 39, 138]
       ]
     ];
+
+    var uintHash = encode_data([[3, 45, 56], [111, 345, 445], [33, 35, 380]])
+    var uintHash2 = encode_data([[3, 50, 60], [200, 400, 900], [0, 39, 138]])
     var val = await e.f36(v1/* temp_transaction_data_group */, 400, _ints, [], []);
     console.log("26b");
-    var exp_vals = [35, 60, 800, 700,  3, 45, 56, 111, 345, 445, 33, 35, 380,  3, 50, 60, 200, 400, 900, 0, 39, 138];
+    var exp_vals = [35, 60, 800, 700, uintHash, uintHash2,   3, 45, 56, 111, 345, 445, 33, 35, 380,   3, 50, 60, 200, 400, 900, 0, 39, 138];
     for (let j = 0; j < exp_vals.length; j++) {
       expect( val[j]).to.equal(exp_vals[j]);
     }
@@ -2616,50 +2628,54 @@ describe("E3's", function () {
         [20, 93, 388]
       ]
     ];
+    var uintHash = encode_data([[3, 45, 56], [111, 345, 445], [0, 3, 38]])
+    var uintHash2 = encode_data([[3, 50, 60], [200, 400, 900], [10, 3, 38]])
+    var uintHash3 = encode_data([[3, 144, 9000], [550, 450, 350], [20, 93, 388]])
     var val = await e.f36(v1/* temp_transaction_data_group */, 400, _ints, [], []);
     console.log("26c");
-    var exp_vals = [35, 60, 80, 800, 700, 400,  3, 45, 56, 111, 345, 445, 0, 3, 38,   3, 50, 60, 200, 400, 900,10, 3, 38,  3, 144, 9000, 550, 450, 350, 20, 93, 388];
+    var exp_vals = [35, 60, 80, 800, 700, 400, uintHash, uintHash2, uintHash3,    3, 45, 56, 111, 345, 445, 0, 3, 38,    3, 50, 60, 200, 400, 900,10, 3, 38,  3, 144, 9000, 550, 450, 350, 20, 93, 388];
     for (let j = 0; j < exp_vals.length; j++) {
       expect(await val[j]).to.equal(exp_vals[j]);
     }
 
 
-    // 1 target, incorrect first awward type
-    var v1/* temp_transaction_data_group */ = [[0, 0, 0, 0], [], []];
-    var _ints = [
-      [/* t0 */
-        [30000, 7],
-        [35],
-        [23],
-        [800],
 
-        [5/* bad! */, 45, 56],
-        [23, 23, 23],
-        [111, 345, 445],
-        [0, 3, 38]
-      ]
-    ];
-    console.log("26d");
-    await expect(e.f36(v1/* temp_transaction_data_group */, 400, _ints, [], [])).to.be.reverted;
+    // // 1 target, incorrect first awward type
+    // var v1/* temp_transaction_data_group */ = [[0, 0, 0, 0], [], []];
+    // var _ints = [
+    //   [/* t0 */
+    //     [30000, 7],
+    //     [35],
+    //     [23],
+    //     [800],
+
+    //     [5/* bad! */, 45, 56],
+    //     [23, 23, 23],
+    //     [111, 345, 445],
+    //     [0, 3, 38]
+    //   ]
+    // ];
+    // console.log("26d");
+    // await expect(e.f36(v1/* temp_transaction_data_group */, 400, _ints, [], [])).to.be.reverted;
 
 
-    // 1 target, incorrect first awward amount
-    var v1/* temp_transaction_data_group */ = [[0, 0, 0, 0], [], []];
-    var _ints = [
-      [/* t0 */
-        [30000, 7],
-        [35],
-        [23],
-        [800],
+    // // 1 target, incorrect first awward amount
+    // var v1/* temp_transaction_data_group */ = [[0, 0, 0, 0], [], []];
+    // var _ints = [
+    //   [/* t0 */
+    //     [30000, 7],
+    //     [35],
+    //     [23],
+    //     [800],
 
-        [3, 45, 56],
-        [23, 23, 23],
-        [0, 345, 445],
-        [0, 3, 38]
-      ]
-    ];
-    console.log("26e");
-    await expect(e.f36(v1/* temp_transaction_data_group */, 400, _ints, [], [])).to.be.reverted;
+    //     [3, 45, 56],
+    //     [23, 23, 23],
+    //     [0, 345, 445],
+    //     [0, 3, 38]
+    //   ]
+    // ];
+    // console.log("26e");
+    // await expect(e.f36(v1/* temp_transaction_data_group */, 400, _ints, [], [])).to.be.reverted;
   });
 
   /* calculate_tokens_setup(): fetches multiple exchange factors,  */
@@ -23780,14 +23796,446 @@ describe("E3's", function () {
     await e.delete_preset_data(presets);
   });
 
+  /* get_supplied_target_data_from_int_data: returns the offchain object data from a supplied array of numbers, specifically for setting in proposals */
+  xit("151. can run f290", async () => {
+    //can recreate data from one targeted object specified
+    var v1/* int_data */ = [
+      [0, 0, 0/* 2 */, 0, 0, 0, 3/* 6 */, 14, 1, 0],
+      [1],
+      [1],
+
+      [23],/* 3 */
+      [24],
+      [25],
+      [26],
+      [27],
+      [28],
+      [29],
+      [30],
+      [31],
+      [32],
+      [33],
+      [34],/* 14 */
+    ];
+    var val = await e.f290(v1/* int_data */);
+    console.log("151a");
+    var exp_vals = [23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 0];
+    for (let j = 0; j < exp_vals.length; j++) {
+      expect(await val[j]).to.equal(exp_vals[j]);
+    }
+
+
+
+
+
+
+
+    //can recreate data from two targeted objects specified
+    var v1/* int_data */ = [
+      [0, 0, 0/* 2 */, 0, 0, 0, 3/* 6 */, 26, 2, 0],
+      [1],
+      [1],
+
+      [23],/* 3 */
+      [24],
+      [25],
+      [26],
+      [27],
+      [28],
+      [29],
+      [30],
+      [31],
+      [32],
+      [33],
+      [34],/* 14 */
+
+      [23],/* 15 */
+      [24],
+      [25],
+      [26],
+      [27],
+      [28],
+      [29],
+      [30],
+      [31],
+      [32],
+      [33],
+      [34],/* 26 */
+    ];
+    var val = await e.f290(v1/* int_data */);
+    console.log("151b");
+    var exp_vals = [
+      23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,   
+      23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+
+      0,0
+    ];
+    for (let j = 0; j < exp_vals.length; j++) {
+      expect(await val[j]).to.equal(exp_vals[j]);
+    }
+
+
+
+    //can recreate data from two targeted objects specified
+    var v1/* int_data */ = [
+      [0, 0, 0/* 2 */, 0, 0, 0, 3/* 6 */, 26, 2, 0],
+      [1],
+      [1],
+
+      [23],/* 3 */
+      [24],
+      [25],
+      [26],
+      [27],
+      [28],
+      [29],
+      [30],
+      [31],
+      [32],
+      [33],
+      [34, 33],/* 14 */
+
+      [23],/* 15 */
+      [24],
+      [25],
+      [26],
+      [27],
+      [28],
+      [29],
+      [30],
+      [31],
+      [32],
+      [33],
+      [34, 35],/* 26 */
+    ];
+    var val = await e.f290(v1/* int_data */);
+    console.log("151c");
+    var exp_vals = [
+      23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 33,
+      23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 
+
+      0,0
+    ];
+    for (let j = 0; j < exp_vals.length; j++) {
+      expect(await val[j]).to.equal(exp_vals[j]);
+    }
+  });
+
+
+
+
+
+
+
+  /* ensure_proposal_hash_and_confirm_unedited_data | hash_data: hashes proposal data and checks if proposal data recreates exact hash hence unedited */
+  xit("152. can run f288", async () => {
+    //targeting 1 consensus object
+    console.log("152a");
+    var v1/* target_nums_data */ = [
+      [32], 
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5], /* 4 */
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],/* 11 */
+    ];
+    var v2/* target_nums_data2 */ = [
+      [32], 
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5], /* 4 */
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],/* 11 */
+    ];
+    await expect(e.f288(v1/* target_nums_data */, v2/* target_nums_data2 */)).to.not.be.reverted;
+
+
+
+
+
+
+    //targeting 1 consensus object, different configuration arrays
+    console.log("152b");
+    var v1/* target_nums_data */ = [
+      [32],
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 1, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5], /* 4 */
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],/* 11 */
+    ];
+    var v2/* target_nums_data2 */ = [
+      [32], 
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5], /* 4 */
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],/* 11 */
+    ];
+    await expect(e.f288(v1/* target_nums_data */, v2/* target_nums_data2 */)).to.not.be.reverted;
+
+
+
+
+
+
+    //targeting 1 consensus object, different data objects
+    console.log("152c");
+    var v1/* target_nums_data */ = [
+      [32], 
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5], /* 4 */
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],/* 11 */
+    ];
+    var v2/* target_nums_data2 */ = [
+      [32], 
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5], /* 4 */
+      [3, 5],
+      [3, 5], 
+      [3, 3/* different! */],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],/* 11 */
+    ];
+    await expect(e.f288(v1/* target_nums_data */, v2/* target_nums_data2 */)).to.be.reverted;
+
+
+
+
+
+
+
+
+
+    //targeting 1 consensus object, different data objects
+    console.log("152d");
+    var v1/* target_nums_data */ = [
+      [32], 
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5], /* 4 */
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],/* 11 */
+    ];
+    var v2/* target_nums_data2 */ = [
+      [32], 
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5], /* 4 */
+      [3, 5],
+      [3, 5], 
+      [3, 2/* different */],
+      [3, 5],
+      [3, 2/* different */],
+      [3, 5], 
+      [3, 5],/* 11 */
+    ];
+    await expect(e.f288(v1/* target_nums_data */, v2/* target_nums_data2 */)).to.be.reverted;
+  });
+
+  /* get_supplied_target_data_from_int_data: sets the valid supplied proposal object data into existing objects in memory */
+  xit("153. can run f289", async () => {
+    //can recreate data from one targeted object specified
+    var v1/* target_nums_data */ = [
+      [
+        [32], 
+        [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+        [],
+        [3, 5], /* 4 */
+        [3, 5],
+        [3, 5], 
+        [3, 5],
+        [3, 5], 
+        [3, 5],
+        [],
+        [3, 5],/* 11 */
+      ]
+    ];
+    var v2/* sv4_vals */ = [
+      [0, 0, 0/* 2 */, 0, 0, 0, 3/* 6 */, 14, 1, 0],
+      [1],
+      [1],
+
+      [32], /* 3 */
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5],
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [],
+      [3, 5],/* 14 */
+    ];
+
+    var val = await e.f289(v1/* target_nums_data */, v2/* sv4_vals */);
+    console.log("153a");
+    var exp_vals = [
+      32,
+      0, 1000, 1, bgN(5, 18), 0/* here */, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0,
+      3, 5,  3, 5,  3, 5,  3, 5,  3, 5,  3, 5,  3, 5, 
+
+      0,0
+    ];
+    for (let j = 0; j < exp_vals.length; j++) {
+      if(j != 5) expect(await val[j]).to.equal(exp_vals[j]);
+    }
+
+
+
+
+
+
+    //can recreate data from one targeted object specified
+    var v1/* target_nums_data */ = [
+      [
+        [32], 
+        [1, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+        [],
+        [3, 5], /* 4 */
+        [3, 5],
+        [3, 5], 
+        [3, 5],
+        [3, 5], 
+        [3, 5],
+        [],
+        [3, 5],/* 11 */
+      ]
+    ];
+    var v2/* sv4_vals */ = [
+      [0, 0, 0/* 2 */, 0, 0, 0, 3/* 6 */, 14, 1, 0],
+      [1],
+      [1],
+
+      [32], /* 3 */
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 5],
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [],
+      [3, 5],/* 14 */
+    ];
+
+    var val = await e.f289(v1/* target_nums_data */, v2/* sv4_vals */);
+    console.log("153b");
+    var exp_vals = [
+      32,
+      1, 1000, 1, bgN(5, 18), 0/* here */, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0,
+      3, 5,  3, 5,  3, 5,  3, 5,  3, 5,  3, 5,  3, 5, 
+
+      0,0
+    ];
+    for (let j = 0; j < exp_vals.length; j++) {
+      if(j != 5) expect(await val[j]).to.equal(exp_vals[j]);
+    }
+
+
+
+
+
+
+
+
+
+    //can recreate data from one targeted object specified
+    var v1/* target_nums_data */ = [
+      [
+        [32], 
+        [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+        [],
+        [3, 4], /* 4 */
+        [3, 5],
+        [3, 5], 
+        [3, 5],
+        [3, 5], 
+        [3, 5],
+        [],
+        [3, 5],/* 11 */
+      ]
+    ];
+    var v2/* sv4_vals */ = [
+      [0, 0, 0/* 2 */, 0, 0, 0, 3/* 6 */, 14, 1, 0],
+      [1],
+      [1],
+
+      [32], /* 3 */
+      [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */], [],
+      [],
+      [3, 4],
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [3, 5], 
+      [3, 5],
+      [],
+      [3, 5],/* 14 */
+    ];
+
+    var val = await e.f289(v1/* target_nums_data */, v2/* sv4_vals */);
+    console.log("153c");
+    var exp_vals = [
+      32,
+      0, 1000, 1, bgN(5, 18), 0/* here */, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0,
+      3, 4,  3, 5,  3, 5,  3, 5,  3, 5,  3, 5,  3, 5, 
+
+      0,0
+    ];
+    for (let j = 0; j < exp_vals.length; j++) {
+      if(j != 5) expect(await val[j]).to.equal(exp_vals[j]);
+    }
+  });
+  
+
+
+
   /*  */
   xit("", async () => {
-
   });
 
 });
 
 describe("E5's", function () {
+  /* README: before you continue with these tests, be sure to uncomment the test functions that are in use in the various contracts. And be sure to leave the 'allowUnlimitedContractSize' value to true in the hardhat.config.js file. */
 
   /* read_author_owners(): can fetch id's of each author given a list of target objects */
   xit("1. can run f132/f133", async () => {
@@ -29260,7 +29708,7 @@ describe("E5's", function () {
     //type spend
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [1004], [23]/* targets */
       ]
     ];
@@ -29331,7 +29779,7 @@ describe("E5's", function () {
     //submit reconfig contract consensus
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [1009], [23]/* targets */
       ]
     ];
@@ -29407,7 +29855,7 @@ describe("E5's", function () {
     //submit reconfig subscription consensus
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [1014], [23]/* targets */
       ]
     ];
@@ -29490,7 +29938,7 @@ describe("E5's", function () {
     //submit reconfig token consensus
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [1019], [23]/* targets */
       ]
     ];
@@ -29558,7 +30006,7 @@ describe("E5's", function () {
     //submit buy consensus
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [1023], [23]/* targets */
       ]
     ];
@@ -29643,7 +30091,7 @@ describe("E5's", function () {
 
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [1028], [23]/* targets */
       ]
     ];
@@ -29731,7 +30179,7 @@ describe("E5's", function () {
 
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [1033], [23]/* targets */
       ]
     ];
@@ -29789,7 +30237,7 @@ describe("E5's", function () {
     /* submit proposal */
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [id], [23]/* targets */
       ]
     ];
@@ -29850,7 +30298,7 @@ describe("E5's", function () {
     /* submit proposal */
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [id], [23]/* targets */
       ]
     ];
@@ -29914,7 +30362,7 @@ describe("E5's", function () {
     /* submit proposal */
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [id], [23]/* targets */
       ]
     ];
@@ -29977,7 +30425,7 @@ describe("E5's", function () {
     /* submit proposal */
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [id], [23]/* targets */
       ]
     ];
@@ -30038,7 +30486,7 @@ describe("E5's", function () {
     /* submit proposal */
     var vv = [
       [
-        [30000, 5, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */,0, 0, 0, 0],
         [id], [23]/* targets */
       ]
     ];
@@ -32995,7 +33443,7 @@ describe("E5's", function () {
 
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1005], [23]/* targets */
       ]
     ];
@@ -33147,7 +33595,7 @@ describe("E5's", function () {
 
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1005], [23]/* targets */
       ]
     ];
@@ -33335,7 +33783,7 @@ describe("E5's", function () {
 
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1005], [23]/* targets */
       ]
     ];
@@ -34190,10 +34638,10 @@ describe("E5's", function () {
 
     
 
-    //attempt to submit modify_moderators propsal for toke exchange object without being moderator
+    //attempt to submit modify_moderators propsal for token exchange object without being moderator
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1005], [23]/* targets */
       ]
     ];
@@ -34219,7 +34667,7 @@ describe("E5's", function () {
     //submit modify_moderators proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1005], [23]/* targets */
       ]
     ];
@@ -34235,7 +34683,7 @@ describe("E5's", function () {
     //submit enable_disable_interactible_checkers proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1006], [23]/* targets */
       ]
     ];
@@ -34251,7 +34699,7 @@ describe("E5's", function () {
     //submit add_interactible_account proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1007], [23]/* targets */
       ]
     ];
@@ -34268,7 +34716,7 @@ describe("E5's", function () {
     //submit revoke_author_privelages proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1008], [23]/* targets */
       ]
     ];
@@ -34284,7 +34732,7 @@ describe("E5's", function () {
     //submit block_accounts proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1009], [23]/* targets */
       ]
     ];
@@ -34494,7 +34942,7 @@ describe("E5's", function () {
     //submit pay_subscription proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1006], [23]/* targets */
       ]
     ];
@@ -34508,7 +34956,7 @@ describe("E5's", function () {
     //submit cancel_subscription proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1007], [23]/* targets */
       ]
     ];
@@ -34536,7 +34984,7 @@ describe("E5's", function () {
     //submit collect_subscription proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 3, 3, 0, 0],
+        [30000, 5, 3, 3, 0/* 4 */, 0, 0, 0, 0, 0],
         [1008], [23],/* targets */
         [1005]
       ]
@@ -34812,7 +35260,7 @@ describe("E5's", function () {
     //submit enter_contract proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1005], [23]/* targets */
       ]
     ];
@@ -34828,7 +35276,7 @@ describe("E5's", function () {
     //submit extend_enter_contract proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1006], [23]/* targets */
       ]
     ];
@@ -34843,7 +35291,7 @@ describe("E5's", function () {
     //submit vote_contract_proposal proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 3, 4],
+        [30000, 5, 0, 0, 3, 4, 0,0,0],
         [1008], [23],/* targets */
         [3], [0]/* vote bounties */
       ]
@@ -34858,7 +35306,7 @@ describe("E5's", function () {
     //submit force_exit_contract proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1010], [23]/* targets */
       ]
     ];
@@ -34873,7 +35321,7 @@ describe("E5's", function () {
     //submit force_exit_contract proposal
     var vv = [
       [/* submit consensus */
-        [30000, 5, 0, 0, 0, 0],
+        [30000, 5, 0, 0, 0/* 4 */, 0, 0, 0, 0, 0],
         [1009], [23]/* targets */
       ]
     ];
@@ -35262,7 +35710,7 @@ describe("E5's", function () {
       /* action used to freeze tokens in specific targeted accounts. for each targeted account, a target exchange is passed and a targetes amount and depth is also passed. two actions can occur, freezing(1) and unfreezing(0). to freeze the balance of a particular account, i should be the exchanges authority. meaning you cant freeze someones spend for instance.  */
 
       [/* ✔️submit consensus request */
-        [30000, 5, 0/* payer_account_data_start */, 0/* payer_account_data_end */, 0/* vote_proposal_bounty_data_start */, 0/* vote_proposal_bounty_data_end */, 0],
+        [30000, 5, 0/* payer_account_data_start */, 0/* payer_account_data_end */, 0/* vote_proposal_bounty_data_start */, 0/* vote_proposal_bounty_data_end */, 0/* consensus_object_data_start */, 0/* consensus_object_data_end */, 0/* consensus_object_data_count */],
         [1004, 1009], [23, 23],/* targets */
         /* payer_account_data */
         [1002, 1004],/* for 1004 */
@@ -35271,9 +35719,22 @@ describe("E5's", function () {
         [3, 5],/* bounty_exchanges for 1004 */
         [0, 0],/* bounty_exchange depths for 1004*/
         [3, 5],/* bounty_exchanges for 1009*/
-        [0, 0]/* bounty_exchange depths for 1009*/
+        [0, 0],/* bounty_exchange depths for 1009*/
+        /* proposal_object_data(if created using hashes with data being stored off-chain) */
+        [32],/* type consensus request */
+        [0, 1000, 1, bgN(5, 18)/* 3 */, 0, 0, 0/* 6 */, 0, 0/* 8 */, 0, 0, 0, 12, 0, 0, 0, 0/* 16 */],/* consensus configuration */ 
+        [],/* bounty arrays(should be empty) */
+        [],/* bounty arrays(should be empty) */
+        [3, 5],/* original consensus data */
+        [3, 5],/* original consensus data */
+        [3, 5],/* original consensus data */
+        [3, 5],/* original consensus data */
+        [3, 5],/* original consensus data */
+        [3, 5],/* original consensus data */
+        [],/* bounty arrays(should be empty) */
+        [3, 5],/* original consensus data */
       ],
-      /* action used to submit proposals after receiving consensus. the targets passed are proposal ids and do not necessarily have to be of the same contract. also you should know that the proposals passed are not processed in the order of their appearance(you should check out the bottom of function f200 in G5). if you prefer a specific order of processing your proposals(for instance all the collect subscription proposals first, before the spend proposals), just use multiple stacks(two or more of these👆 2d arrays in that case). in the event youre submitting collect subscription proposal, the payer account data is included since to collect subscriptions, you need account ids for the accounts that paid for the subscription. in the event youre submitting a vote proposal, the vote proposal bounty data is passed, since when voting I collect bounty(in this case the contract that received the vote proposal would be receiving the bounty) */
+      /* action used to submit proposals after receiving consensus. the targets passed are proposal ids and do not necessarily have to be of the same contract. also you should know that the proposals passed are not processed in the order of their appearance(you should check out the bottom of function f200 in G5). if you prefer a specific order of processing your proposals(for instance all the collect subscription proposals first, before the spend proposals), just use multiple stacks(two or more of these👆 2d arrays in that case). in the event youre submitting collect subscription proposal, the payer account data is included since to collect subscriptions, you need account ids for the accounts that paid for the subscription. in the event youre submitting a vote proposal, the vote proposal bounty data is passed, since when voting I collect bounty(in this case the contract that received the vote proposal would be receiving the bounty). In the even the proposal being submitted was created with the 'externally_set_data' value turned on(the propsal's data is being stored off-chain), you are required to specify the original proposal objects with their original data unchanged. That is, through the 'consensus_object_data_start'(the array containing the first array of the first consensus object), 'consensus_object_data_end'(the array containing teh last array of the last consensus object) and the 'consensus_object_data_count'(the number of consensus objects). If at least one of the consensus objects being submitted has this setting turned on, these values have to be specified, even for the proposals not using the setting. Due to this, its best to divide your proposal submition transactions between the proposals that use this setting and the proposals that do not; they still should be able to be submitted within the same stack in one run though. */
 
       [/* ✔️extend enter contract */
         [30000, 14, 0],
@@ -36794,7 +37255,7 @@ describe("E5's", function () {
 
 /*
  ???@BPC E5 % yarn hardhat size-contracts 
-   ·-----------------------|----------------------------|----------------·
+ ·-----------------------|----------------------------|----------------·
  |  Solc version: 0.8.4  ·  Optimizer enabled: false  ·  Runs: 1       │
  ························|····························|·················
  |  Contract Name        ·  Size (KiB)                ·  Change (KiB)  │
@@ -36803,7 +37264,7 @@ describe("E5's", function () {
  ························|····························|·················
  |  E2                   ·                     1.880  ·         0.000  │
  ························|····························|·················
- |  F33                  ·                    11.079  ·         0.000  │
+ |  F33                  ·                    15.491  ·         0.000  │
  ························|····························|·················
  |  E32                  ·                    20.005  ·         0.000  │
  ························|····························|·················
@@ -36813,36 +37274,36 @@ describe("E5's", function () {
  ························|····························|·················
  |  E34                  ·                    20.748  ·         0.000  │
  ························|····························|·················
- |  E33                  ·                    21.720  ·         0.000  │
+ |  E33                  ·                    22.292  ·         0.000  │
  ························|····························|·················
- |  G3                   ·                    21.990  ·         0.000  │
+ |  G3                   ·                    22.885  ·         0.000  │
  ························|····························|·················
  |  G32                  ·                    22.921  ·         0.000  │
- ························|····························|·················
- |  E3                   ·                    22.965  ·         0.000  │
  ························|····························|·················
  |  F32                  ·                    23.220  ·         0.000  │
  ························|····························|·················
  |  H3                   ·                    23.225  ·         0.000  │
  ························|····························|·················
+ |  E3                   ·                    23.263  ·         0.000  │
+ ························|····························|·················
  |  H32                  ·                    23.311  ·         0.000  │
  ························|····························|·················
  |  G52                  ·                    23.324  ·         0.000  │
  ························|····························|·················
- |  G5                   ·                    23.617  ·         0.000  │
- ························|····························|·················
  |  E52                  ·                    23.624  ·         0.000  │
- ························|····························|·················
- |  E5                   ·                    23.641  ·         0.000  │
  ························|····························|·················
  |  H5                   ·                    23.695  ·         0.000  │
  ························|····························|·················
- |  H52                  ·                    23.713  ·         0.000  │
+ |  G5                   ·                    23.745  ·         0.000  │
  ························|····························|·················
  |  G33                  ·                    23.771  ·         0.000  │
+ ························|····························|·················
+ |  H52                  ·                    23.852  ·         0.000  │
+ ························|····························|·················
+ |  E5                   ·                    23.947  ·         0.000  │
  ·-----------------------|----------------------------|----------------·
   
-  as of Thursday 25 Sep 2025
+  as of Thursday 13 Nov 2025
 */
 
 /*
@@ -36942,4 +37403,4 @@ describe("E5's", function () {
 
 */
 
-//289
+//291

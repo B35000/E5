@@ -467,7 +467,7 @@ library E3 {
     /* get_awward_data */
     function f36(TD/* TransactionData */ calldata p1/* tx_data */)
     external view returns (
-        uint256[][2] memory v1/* awward_targets_data */, 
+        uint256[][3] memory v1/* awward_targets_data */, 
         uint256[][5][] memory v2/* awward_transaction_data */
     ){
         /* calculates and sets the data used to perform awward actions */
@@ -495,6 +495,9 @@ library E3 {
 
         uint256 v3/* targets_count */ = p1/* tx_data */.sv4/* vals */[ 1 /* targets */ ].length;
         /* initialize a variable containing the number of targets specified */
+
+        v1/* awward_targets_data */[ 2/* awward_record_hashes */ ] = new uint256[](v3/* targets_count */);
+        /* initialize an array to contain the transaction hash data */
 
         v2/* awward_transaction_data */ = new uint256[][5][](v3/* targets_count */);
         /* initialize a three dimentional array whose length is the number of targets */
@@ -530,12 +533,17 @@ library E3 {
 
             v2/* awward_transaction_data */[v5/* count */][4/* amount_depths */] = p1/* tx_data */.sv4/* vals */[ r+3 ];
             /* set the exchange amount depths specified */
+            
 
-            // require(
-            //     v2/* awward_transaction_data */[v5/* count */][0/* exchanges_ids */][0] == 3 && 
-            //     v2/* awward_transaction_data */[v5/* count */][1/* amounts */][0] >= 3 
-            // );
-            /* make sure the first exchange is end exchange and the amonut is at least 3 */
+            v1/* awward_targets_data */[ 2/* awward_record_hashes */ ][v5/* count */] = uint256(
+                keccak256(
+                    abi.encode(
+                        v2/* awward_transaction_data */[v5/* count */][0/* exchanges_ids */], 
+                        p1/* tx_data */.sv4/* vals */[ r+2 ], 
+                        p1/* tx_data */.sv4/* vals */[ r+3 ]
+                    )
+                )
+            );
 
             v5/* count */++;
             /* increment the count value */
@@ -550,12 +558,24 @@ library E3 {
     function f253(TD/* TransactionData */ calldata p1/* tx_data */)
     private pure returns (
         uint256[][] memory v1/* payer_accounts */, 
-        uint256[][][2] memory v4/* target_bounty_exchanges_depth-data */ 
+        uint256[][][2] memory v4/* target_bounty_exchanges_depth-data */
     ){
         /* sets the payer account data for submitted collect subscription proposals. Payer account data should be submitted for each targeted subscription in the collect subscription proposals being submitted */
         /* 
-            0[<2>payer_account_data_start, <3>payer_account_data_end, <4>vote_proposal_bounty_data_start, <5>vote_proposal_bounty_data_end] <---- tx config data
+            0[
+                <2>payer_account_data_start, 
+                <3>payer_account_data_end, 
+
+                <4>vote_proposal_bounty_data_start, 
+                <5>vote_proposal_bounty_data_end, 
+
+                <6>object_data_start, 
+                <7>object_data_end, 
+                <8>object_data_count
+            ] <---- tx config data
+            
             1[n(sub1, sub2), o(sub3, sub4, sub5)] <---- target proposal ids(assume n and o are collect subscription proposals)
+
             2[] <---- target proposal id types
 
             <3>sub1[] <---- payer account data
@@ -612,34 +632,6 @@ library E3 {
     }//-----RETEST_OK-----
 
 
-
-
-    //
-    //
-    //
-    //
-    //
-    //
-    // ------------------------CONTRACT-FUNCTIONS-------------------------------
-    /* fetch_modify_targets */
-    function f52( uint256[][][] calldata p1/* target_nums */ ) 
-    external pure returns (uint256[] memory v1/* modify_target_ids */) {
-        /* returns the targets of consensus objects being modified */
-
-        v1/* modify_target_ids */ = new uint256[](p1.length);
-        /* initialize the return value as an array whose size is the number of targets */
-
-        for (uint256 t = 0; t < p1/* target_nums */.length; t++) {
-            /* for each target specified */
-            
-            if ( p1/* target_nums */[t][1][0/* action */] == 1 /* reconfig */ ) {
-                /* if the target action is a reconfig action */
-
-                v1/* modify_target_ids */[t] = p1/* target_nums */[t][1][ 9 /* modify_target */ ];
-                /* record the modify target accordingly */
-            }
-        }
-    }//-----TEST_OK-----
 
 
 

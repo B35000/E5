@@ -24,7 +24,7 @@ import "./G3.sol"; /* import "./ContractsHelperFunctions.sol"; */
 // import "./G32.sol"; /* import "./ContractsHelperFunctions2.sol"; */
 import "./G33.sol"; /* import "./ContractsHelperFunctions3.sol"; */
 
-import "../E5D/E3.sol"; /* import "../E5Data/E5HelperFunctions.sol"; */
+// import "../E5D/E3.sol"; /* import "../E5Data/E5HelperFunctions.sol"; */
 import "../E5D/E32.sol"; /* import "../E5Data/E5HelperFunctions2.sol"; */
 import "../E5D/E33.sol"; /* import "../E5Data/E5HelperFunctions3.sol"; */
 import "../E5D/E5.sol"; /* import "./E5.sol"; */
@@ -35,7 +35,7 @@ import "../H5D/H52.sol"; /* import "../TokensData/TokensData2.sol"; */
 
 import "../F5D/F5.sol"; /* import "../SubscriptionData/SubscriptionData.sol"; */
 import "../F5D/F32.sol"; /* import "./SubscriptionHelperFunctions2.sol"; */
-// import "../F5D/F33.sol"; /* import "./SubscriptionHelperFunctions3.sol"; */
+import "../F5D/F33.sol"; /* import "./SubscriptionHelperFunctions3.sol"; */
 
 
 contract G5 {
@@ -277,14 +277,15 @@ contract G5 {
         uint256[] memory p1/* targets */, 
         uint256 p2/* sender_account */,
         uint256[][] memory p3/* payer_accounts */,
-        uint256[][][2] memory p4/* target_bounty_exchanges_depth-data */ 
+        uint256[][][2] memory p4/* target_bounty_exchanges_depth-data */,
+        uint256[][] memory p5/* sv4_vals */ 
     ) external f153(msg.sender) {
         /* function used for submitting a set of consensus requests. target -> consensus request object */
 
         uint256[] memory v2/* target_payers_for_buy_data */ = gv10/* e52 */.f137/* require_target_author */( p1/* targets */, p2/* sender_account */ );
         /* ensure the sender is the author of the consensus objects being submitted */
 
-        uint256[][][] memory v1/* target_nums */ = f78/* read_ids */(p1/* targets */, false);
+        uint256[][][] memory v1/* target_nums */ = F33.f289/* read_ids_with_hash_if_any */(f78/* read_ids */(p1/* targets */, false), p5/* sv4_vals */);
         /* read the data stored for the specified targets and store them in a variable */
 
         (uint256[21] memory v3/* consensus_type_data */, bool[3] memory v11/* contains_subscription_contract_moderator_work */ ) = gv8/* contractsData2 */.f201/* run_all_consensus_checkers */(p1/* targets */, v1/* target_nums */, p4/* target_bounty_exchanges_depth-data */);
@@ -306,7 +307,7 @@ contract G5 {
         if ( v3/* consensus_type_data */[ 1 /* reconfig */ ] != 0 ) {
             /* if one of the consensus objects is a reconfig consensus action */
 
-            uint256[] memory v7/* modify_target_ids */ = E3.f52/* fetch_modify_targets */(v1/* target_nums */);
+            uint256[] memory v7/* modify_target_ids */ = F33.f52/* fetch_modify_targets */(v1/* target_nums */);
             /* get the modify targets for each consensus action thats a reconfig action */
 
             uint256[] memory v8/* modify_target_id_types */ = gv10/* e52 */.f134/* read_multiple_id_types */(v7/* modify_target_ids */);
@@ -449,7 +450,12 @@ contract G5 {
         if (v1/* update_main_contract_limit_data */) {
             /* if the main contract was modified */
 
-            gv9/* e5 */.f206/* update_main_contract_limit_data */(f77/* read_id */( 2 /* main_contract_obj */, false )[ 1 /* config */ ] );
+            // gv9/* e5 */.f206/* update_main_contract_limit_data */(f77/* read_id */( 2 /* main_contract_obj */, false )[ 1 /* config */ ] );
+
+            uint256[] memory v3/* read_ids_array */ = new uint256[](1);
+            v3/* read_ids_array */[0] = uint256(2);
+            
+            gv9/* e5 */.f206/* update_main_contract_limit_data */(f78/* read_ids */( v3/* read_ids_array */, false )[0][ 1 /* config */ ] );
             /* update the main contract data stored in E5 */
         }
     }
@@ -489,13 +495,6 @@ contract G5 {
         return G3.f78/* read_ids */(p1/* _ids */, gv4/* num_data */, p2/* full_read */);
     }
 
-    /* read_id */
-    function f77(uint256 p1/* id */, bool p2/* full_read */) 
-    public view returns (uint256[][] memory) {
-        /* reads the id for a specific contract or consensus object */
-        return G3.f77/* read_id */(p1/* id */, gv4/* num_data */, p2/* full_read */);
-    }
-
 
 
 
@@ -529,5 +528,12 @@ contract G5 {
     //             v1/* data */[t] = 0;
     //         }
     //     }
+    // }
+
+    /* read_id */
+    // function f77(uint256 p1/* id */, bool p2/* full_read */) 
+    // public view returns (uint256[][] memory) {
+    //     /* reads the id for a specific contract or consensus object */
+    //     return G3.f77/* read_id */(p1/* id */, gv4/* num_data */, p2/* full_read */);
     // }
 }

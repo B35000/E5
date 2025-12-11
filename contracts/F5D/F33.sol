@@ -22,6 +22,7 @@ pragma solidity 0.8.4;
 /* SubscriptionHelperFunctions3 */
 library F33 {
 
+
     /* get_consensus_subscription_data */
     function f251(
         uint256[21] calldata p2/* consensus_type_data */,
@@ -319,6 +320,156 @@ library F33 {
             v1/* v1: val */ = 1;
         }
     }//-----TEST_OK-----
+
+
+
+
+
+
+
+
+
+
+
+
+    //
+    //
+    //
+    //
+    //
+    //
+    // ------------------------CONTRACT-FUNCTIONS-------------------------------
+    /* fetch_modify_targets */
+    function f52( uint256[][][] calldata p1/* target_nums */ ) 
+    external pure returns (uint256[] memory v1/* modify_target_ids */) {
+        /* returns the targets of consensus objects being modified */
+
+        v1/* modify_target_ids */ = new uint256[](p1.length);
+        /* initialize the return value as an array whose size is the number of targets */
+
+        for (uint256 t = 0; t < p1/* target_nums */.length; t++) {
+            /* for each target specified */
+            
+            if ( p1/* target_nums */[t][1][0/* action */] == 1 /* reconfig */ ) {
+                /* if the target action is a reconfig action */
+
+                v1/* modify_target_ids */[t] = p1/* target_nums */[t][1][ 9 /* modify_target */ ];
+                /* record the modify target accordingly */
+            }
+        }
+    }//-----TEST_OK-----
+
+    /* ensure_proposal_hash_and_confirm_unedited_data */
+    function f288(
+        uint256[][] memory p1/* target_num_data */,
+        uint256 p3/* require_hash_value */
+    ) private pure {
+        /* hashes data for short storage and confirms supplied proposal data is unchanged */
+        /* action[0] = hash, action[1] = confirm */
+
+        for (uint256 v = 0; v < p1/* target_num_data */.length; v++) {
+            /* for each array in the supplied proposal data array group */
+
+            if(v < 4 || v == 10){
+                /* if the array in focus is less than four and greater than nine, or the array is not part of the data portion of the proposal */
+
+                p1/* target_num_data */[v] = new uint256[](0);
+                /* set the array as empty since its unneeded */
+            }
+        }
+        
+        uint256 v2/* hashed_data */ = uint256(keccak256(abi.encode(p1/* target_num_data */)));
+        /* hash the final arraygroup and convert the resulting bytes32 value to an unsigned integer */
+
+        require(v2/* hashed_data */ == p3/* require_hash_value */);
+        /* ensure that the supplied hash value is correct */
+    }//-----TEST_OK-----
+
+    /* read_ids_with_hash_if_any */
+    function f289(
+        uint256[][][] calldata p1/* target_nums */,
+        uint256[][] calldata p3/* sv4_vals */
+    ) external pure returns (uint256[][][] memory v1/* id_data */){
+        v1/* id_data */ = new uint256[][][](p1/* target_nums */.length);
+        /* initialize the return variable as a 3D array whose length is the number of objects speified */
+
+        uint256[][][] memory v3/* supplied_target_data */ = f290/* get_supplied_target_data_from_int_data */(p3/* sv4_vals */);
+
+        for (uint256 v = 0; v < p1/* target_nums */.length; v++) {
+            /* for each proposal object specified */
+
+            uint256[][] memory v2/* target_data */ = p1/* target_nums */[v];
+            /* initialize a variable pointing to the proposal object in focus */
+
+            v1/* id_data */[v] = p1/* target_nums */[v];
+            /* initialize the return value for the specific object in focus */
+
+            if(v2/* target_data */[1/* config */][4/* <4>externally_set_data */] != 0){
+                for (uint256 t = 4; t <= 11; t++) {
+                    /* for each array in the targeted proposal object */
+
+                    v2/* target_data */[t] = v3/* supplied_target_data */[v][t];
+                    /* set the original array in the object to ensure */
+
+                    v1/* id_data */[v][t] = v3/* supplied_target_data */[v][t];
+                    /* set the original array in the return object as well */
+                }
+                f288/* ensure_proposal_hash_and_confirm_unedited_data */(v2/* target_data */, v2/* target_data */[1/* config */][4/* <4>externally_set_data */]);
+                /* confirm data has not been tampered with */
+            }
+        }
+    }//-----TEST_OK-----
+
+
+    /* get_supplied_target_data_from_int_data */
+    function f290( uint256[][] calldata p1/* int_data */ ) 
+    private pure returns (uint256[][][] memory v1/* supplied_target_data */){
+        /* 
+            0[
+                <2>payer_account_data_start, 
+                <3>payer_account_data_end, 
+
+                <4>vote_proposal_bounty_data_start, 
+                <5>vote_proposal_bounty_data_end, 
+
+                <6>object_data_start, 
+                <7>object_data_end, 
+                <8>object_data_count
+            ] <---- tx config data
+            
+            1[n(sub1, sub2), o(sub3, sub4, sub5)] <---- target proposal ids(assume n and o are collect subscription proposals)
+
+            2[] <---- target proposal id types
+
+            <3>sub1[] <---- payer account data
+            <4>sub2[] <---- payer account data
+
+            <5>sub3[] <---- payer account data
+            <6>sub4[] <---- payer account data
+            <7>sub5[] <---- payer account data
+
+        */
+        v1/* supplied_target_data */ = new uint256[][][](0);
+        /* initialize the return variable as a 3D array whose length is the number of objects speified */
+        
+        if(p1/* int_data */[0/* tx_config */][6/* <6>object_data_start */] != 0){
+            uint256 v9/* targeted_object_count */ = p1/* int_data */[0/* tx_config */][8/* <8>object_data_count */ ];
+
+            v1/* supplied_target_data */ = new uint256[][][](v9/* targeted_object_count */);
+            uint256 v10/* counter */ = p1/* int_data */[0/* tx_config */][6/* <6>object_data_start */];
+
+            for ( uint256 e = 0; e < v9/* targeted_object_count */; e++ ) {
+                v1/* supplied_target_data */[e] = new uint256[][](12);
+                
+                for ( uint256 f = 0; f < 12; f++ ) {
+                    v1/* supplied_target_data */[e][f] = p1/* int_data */[v10/* counter */];
+                    v10/* counter */++;
+                }
+                
+            }
+        }
+    }//-----TEST_OK-----
+
 
 
 

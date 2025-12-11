@@ -201,6 +201,60 @@ contract E2 {
 
 
 
+
+
+
+
+    // /* get_supplied_target_data_from_int_data */
+    // function f289( uint256[][][] memory p1/* target_nums */, uint256[][] memory p3/* sv4_vals */ )
+    // external pure returns (uint256[] memory v1/* return_data */) {
+    //     for (uint256 t = 0; t < p1/* target_nums */.length; t++) {
+    //         uint256 v3/* hash */ = G3.f288/* hash_data */(p1/* target_nums */[t]);
+    //         p1/* target_nums */[t][1/* config */][4/* <4>externally_set_data */] = v3/* hash */;
+    //     }
+        
+    //     uint256[][][] memory v2/* updated_exchange_nums */ = F33.f289(p1/* target_nums */, p3/* sv4_vals */);
+
+    //     v1/* return_data */ = new uint256[](100);
+    //     uint256 v4/* pos */ = 0;
+    //     for (uint256 t = 0; t < v2/* updated_exchange_nums */.length; t++) {
+    //         for (uint256 e = 0; e < v2/* updated_exchange_nums */[t].length; e++) {
+    //             for (uint256 v = 0; v < v2/* updated_exchange_nums */[t][e].length; v++) {
+    //                 v1/* return_data */[v4/* pos */] = v2/* updated_exchange_nums */[t][e][v];
+    //                 v4/* pos */++;
+    //             }
+    //         }
+    //     }
+    // }
+
+
+
+    // /* ensure_proposal_hash_and_confirm_unedited_data | hash_data */
+    // function f288( uint256[][] memory p1/* target_nums */, uint256[][] memory p2/* target_nums_2 */ )
+    // external {
+    //     uint256 v2/* hash */ = G3.f288/* hash_data */(p1/* target_nums */);
+    //     F33.f288/* ensure_proposal_hash_and_confirm_unedited_data */(p2/* target_nums_2 */, v2/* hash */);
+    // }
+
+
+    // /* get_supplied_target_data_from_int_data */
+    // function f290( uint256[][] memory p1/* target_nums */ )
+    // external pure returns (uint256[] memory v1/* return_data */) {
+    //     uint256[][][] memory v2/* modify_target_ids */ = F33.f290(p1/* target_nums */);
+
+    //     v1/* return_data */ = new uint256[](100);
+    //     uint256 v4/* pos */ = 0;
+    //     for (uint256 t = 0; t < v2/* updated_exchange_nums */.length; t++) {
+    //         for (uint256 e = 0; e < v2/* updated_exchange_nums */[t].length; e++) {
+    //             for (uint256 v = 0; v < v2/* updated_exchange_nums */[t][e].length; v++) {
+    //                 v1/* return_data */[v4/* pos */] = v2/* updated_exchange_nums */[t][e][v];
+    //                 v4/* pos */++;
+    //             }
+    //         }
+    //     }
+    // }
+
+
     /* balance_of_multiple_accounts */
     // H32.NumData private num_data;
     // function f270(
@@ -1968,7 +2022,7 @@ contract E2 {
     /* fetch_modify_targets */
     // function f52( uint256[][][] memory p1/* target_nums */ )
     // external pure returns (uint256[] memory v1/* return_data */) {
-    //     uint256[] memory v2/* modify_target_ids */ = G32.f52(p1/* target_nums */);
+    //     uint256[] memory v2/* modify_target_ids */ = F33.f52(p1/* target_nums */);
 
     //     v1/* return_data */ = new uint256[](100);
     //     uint256 v3/* pos */ = 0;
@@ -2168,10 +2222,10 @@ contract E2 {
     //     uint256[][][] calldata p3/* _ints */,
     //     address[] calldata p4/* _adds */,
     //     string[][] calldata p5/* _strs */
-    // ) public pure returns (uint256[] memory v1/* return_data */) {
-    //     E3.TD/* TransactionData */ memory v2/* tx_data */ = E3.TD/* TransactionData */( p2/* user_acc_id */, false/* can_sender_vote_in_main_contract */, p1/* temp_transaction_data_group */[0], p3/* _ints */[0], p4/* _adds */, p5/* _strs */, 0, /* t */ 0, /* new_obj_id */ 500 /* msg.value */, [ 3/* transaction_count */, uint256(5)/* entered_contracts */ ], false );
+    // ) public view returns (uint256[] memory v1/* return_data */) {
+    //     E3.TD/* TransactionData */ memory v2/* tx_data */ = E3.TD/* TransactionData */( p2/* user_acc_id */, false/* can_sender_vote_in_main_contract */, p1/* temp_transaction_data_group */[0], p3/* _ints */[0], p4/* _adds */, p5/* _strs */, 0, /* t */ 0, /* new_obj_id */ 500 /* msg.value */, [ 3/* transaction_count */, uint256(5)/* entered_contracts */ ], false, new uint256[](0) );
 
-    //     (uint256[][2] memory v3/* awward_targets_data */, uint256[][5][] memory v4/* awward_transction_data */) = E3.f36/* get_awward_data */(v2/* tx_data */);
+    //     (uint256[][3] memory v3/* awward_targets_data */, uint256[][5][] memory v4/* awward_transction_data */) = E3.f36/* get_awward_data */(v2/* tx_data */);
 
     //     v1/* return_data */ = new uint256[](100);
     //     uint256 v5/* pos */ = 0;

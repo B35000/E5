@@ -35,7 +35,7 @@ contract H52 {
     event e3/* FreezeUnfreezeTokens */( uint256 indexed p1/* exchange */, uint256 indexed p2/* action */, uint256 indexed p3/* freeze_account */, uint256 p4/* authority */, uint256 p5/* amount */, uint256 p6/* depth_value */, uint256 p7/* timestamp */, uint256 p8/* block_number */ );
     /* event emitted when a sender freezes or unfreezes tokens from a given target account */
 
-    event e5/* Awward */( uint256 indexed p1/* awward_sender */, uint256 indexed p2/* awward_receiver */, uint256 indexed p3/* awward_context */, string p4/* metadata */, uint256 p5/* timestamp */, uint256 p6/* block_number */);
+    event e5/* Awward */( uint256 indexed p1/* awward_sender */, uint256 indexed p2/* awward_receiver */, uint256 indexed p3/* awward_context */, string p4/* metadata */, uint256 p5/* timestamp */, uint256 p6/* block_number */, uint256 p7/* data_hash_record */);
     /* event emitted when an awward is sent from a sender to a targeted recipient with a context */
 
     event power/* StackDepthSwap */( uint256 indexed p1/* exchange */, uint256 indexed p2/* action */, uint256 p3/* receiver */, uint256 p4/* depth_val */, uint256 p5/* amount */, uint256 indexed p6/* sender */, uint256 p7/* timestamp */, uint256 p8/* blocknumber */);
@@ -147,7 +147,7 @@ contract H52 {
             else if(v1/* action */ == 7/* <7>send_awwards */){
                 /* if the action is to send awwards to specified targets */
 
-                (uint256[][2] memory v6/* awward_targets_data */, uint256[][5][] memory v7/* awward_transction_data */) = E3.f36/* get_awward_data */(p1/* tx_data */);
+                (uint256[][3] memory v6/* awward_targets_data */, uint256[][5][] memory v7/* awward_transction_data */) = E3.f36/* get_awward_data */(p1/* tx_data */);
                 /* fetch the awward data from the transaction data struct */
 
                 require(p1/* tx_data */.sv2/* can_sender_vote_in_main_contract */);
@@ -162,7 +162,7 @@ contract H52 {
                     f184/* execute_multi_transfer */( v7/* awward_transction_data */[r], p1/* tx_data */.sv1/* user_acc_id */, v8/* awward_receiver */,  true/* single_receiver_instead */, true /* single_sender_instead */, 1 );
                     /* execute transfers from the senders account to the target receiver for the awward */
                     
-                    emit e5/* Awward */(p1/* tx_data */.sv1/* user_acc_id */, v8/* awward_receiver */, v6/* awward_targets_data */[ 1/* awward_target_contexts */ ][r], p1/* tx_data */.sv6/* strs */[0][r], block.timestamp, block.number);
+                    emit e5/* Awward */(p1/* tx_data */.sv1/* user_acc_id */, v8/* awward_receiver */, v6/* awward_targets_data */[ 1/* awward_target_contexts */ ][r], p1/* tx_data */.sv6/* strs */[0][r], block.timestamp, block.number, v6/* awward_targets_data */[ 2/* awward_record_hashes */ ][r]);
                     /* emit the awward event */
                 }
             }

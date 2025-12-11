@@ -237,11 +237,6 @@ contract E5 {
         
     }
 
-    /* get_gas_consumed */
-    function f5300g() public view returns (uint256){
-        return g;
-    }
-
 
     /* withdraw */
     function f145(address p1/* withdraw_target */, uint256[2] calldata p2/* t_limits */) external {
@@ -509,7 +504,7 @@ contract E5 {
                 (uint256[] memory v2/* targets */, uint256[][] memory v3/* payer_accounts */, uint256[][][2] memory v4/* target_bounty_exchanges_depth-data */) = E3.f29/* get_submit_consensus_data */(p1/* tx_data */);
                 /* get the transaction data such as the proposal targets, payer accounts(used while submitting proposals for collecting subscription payments) and bounty data for collecting bounty*/
 
-                gv8/* contractsData */.f200/* execute_submit_consensus_request */(v2/* targets */, p1/* tx_data */.sv1/* user_acc_id */, v3/* payer_accounts */, v4/* target_bounty_exchanges_depth-data */);
+                gv8/* contractsData */.f200/* execute_submit_consensus_request */(v2/* targets */, p1/* tx_data */.sv1/* user_acc_id */, v3/* payer_accounts */, v4/* target_bounty_exchanges_depth-data */, p1/* tx_data */.sv4/* vals */);
                 /* send the transaction to G5 with the specified data arguments */
             }
             else{
@@ -578,11 +573,10 @@ contract E5 {
     //
     //
     // ------------------------VIEW_FUNCTIONS-------------------------------
-
-    /* get_balance | get_block_timestamp | get_block_number | gas_limit | difficulty */
+    /* get_balance | get_block_timestamp | get_block_number | gas_limit | difficulty | id_height */
     function f147(uint256 v1/* action */) public view returns(uint256){
         /* returns the basic blockchain data available to e such as the timestamp and block number */
-        /* [1] = get_balance | [2] = get_block_timestamp | [3] = get_block_number | [4] = gas_limit | [5] = difficulty */
+        /* [1] = get_balance | [2] = get_block_timestamp | [3] = get_block_number | [4] = gas_limit | [5] = difficulty | [6] = id_height */
         
         if(v1/* action */ == 1){
             return address(this).balance;
@@ -618,9 +612,16 @@ contract E5 {
         return gv6/* num_data */.int_add[ 10 /* accounts_obj_id */ ][p1/* account_id */];
     }
 
-    /* get_last_transaction_block & last_transaction_time & entered_contracts_count & transaction_count_data && */
+    // function f289(uint256[] calldata p1/* accounts */) 
+    // public view returns (address[] memory v1/* data */){
+    //     /* returns the address corresponding to the account id specified */
+    //     return E33.f289/* get_address */(p1/* accounts */, gv6/* num_data */);
+    // }
+    
+
+    /* get_last_transaction_block & last_transaction_time & entered_contracts_count & transaction_count_data & account_address */
     function f287(uint256[] calldata p1/* accounts */) 
-    public view returns (uint256[4][] memory v1/* data */){
+    public view returns (uint256[4][] memory v1/* data */, address[] memory v2/* data */){
         /* gets the basic transaction data for a given set of accounts such as the last time they sent a transaction to e, the number of entered contracts and the total number of transactions theyve made with e */
         return E33.f287/* get_last_transaction_block & last_transaction_time & entered_contracts_count & transaction_count_data */(p1/* accounts */, gv6/* num_data */);
     }
@@ -640,6 +641,11 @@ contract E5 {
     //
     //
     // ------------------------TEST_FUNCTIONS-------------------------------
+    // /* get_gas_consumed */
+    // function f5300g() public view returns (uint256){
+    //     return g;
+    // }
+
     // function f141e(uint256[3] memory p1/* buy_sell_data */) public {
     //     f141(p1/* buy_sell_data */);
     // }

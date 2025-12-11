@@ -332,9 +332,9 @@ library E33 {
 
 
 
-    /* get_last_transaction_block & last_transaction_time & entered_contracts_count & transaction_count_data */
+    /* get_last_transaction_block & last_transaction_time & entered_contracts_count & transaction_count_data & account_address */
     function f287(uint256[] calldata p1/* accounts */, NumData storage p2/* self */) 
-    external view returns (uint256[4][] memory v1/* data */) {
+    external view returns (uint256[4][] memory v1/* data */, address[] memory v3/* address_data */) {
         /* scans and returns the last_transaction_block, last_transaction_time, entered_contracts_count and transaction_count_data for a specified set of users */
         /* 
             data[t][0] = last_transaction_block
@@ -345,6 +345,12 @@ library E33 {
 
         v1/* data */ = new uint256[4][](p1.length);
         /* initialize the return variable as a new array whose length is the number of ids specified */
+
+        v3/* address_data */ = new address[](p1.length);
+        /* initialize the return addresses variable as a new array whose length is the number of ids specified  */
+
+        mapping(uint256 => address) storage v4/* account_int_add */ = p2/* self */.int_add[ 10 /* accounts_obj_id */ ];
+        /* initalize a storage mapping that points to the accounts addresses */
 
         for (uint256 t = 0; t < p1/* accounts */.length; t++) {
             /* for each id specified */
@@ -358,8 +364,27 @@ library E33 {
                 v2/* account_int_int */[ 4 /* entered_contracts */ ],
                 v2/* account_int_int */[ 3 /* transaction_count */ ]
             ];
+
+            v3/* address_data */[t] = v4/* account_int_add */[p1/* accounts */[t]];
         }
     }//-----TEST_OK-----
+
+    /* get_address */
+    // function f289(uint256[] calldata p1/* accounts */, NumData storage p2/* self */) 
+    // external view returns (address[] memory v1/* data */) {
+    //     /* returns the address corresponding to the account id specified */
+
+    //     v1/* data */ = new address[](p1.length);
+    //     /* initialize the return variable as a new array whose length is the number of ids specified */
+
+    //     mapping(uint256 => address) storage v2/* account_int_add */ = p2/* self */.int_add[ 10 /* accounts_obj_id */ ];
+    //     /* initalize a storage mapping that points to the accounts addresses */
+
+    //     for (uint256 t = 0; t < p1/* accounts */.length; t++) {
+    //         /* for each id specified */
+    //         v1/* data */[t] = v2/* account_int_add */[p1/* accounts */[t]];
+    //     }
+    // }
 
     /* calculate_max_consumable_gas */
     function f280(uint256[] calldata p1/* gas_prices */, NumData storage p2/* self */)
