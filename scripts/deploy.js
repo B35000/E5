@@ -228,7 +228,8 @@ async function main() {
   const H52 = await hre.ethers.getContractFactory("H52", {
     libraries: {
       E3: e3.address,
-      H32: h32.address
+      H32: h32.address,
+      F33: f33.address
     },
   });
   h52 = await H52.connect(booter).deploy(f5.address, /* {nonce: base_nonce+18} */);

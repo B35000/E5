@@ -414,7 +414,7 @@ library H3 {
         uint256 v2/* source_tokens_count */ = p2/* self */.num_str_metas[p1/* _id */][ 1 /* id_data */ ][3/* source_tokens_count */];
         /* initialize a variable that contains the number of tokens used for buying the target token */
         
-        uint256[6] memory v3/* data */ = [ 5, 20, 18, v2/* source_tokens_count */, v2/* source_tokens_count */ , v2/* source_tokens_count */ ];
+        uint256[6] memory v3/* data */ = [ 5, 20, 20, v2/* source_tokens_count */, v2/* source_tokens_count */ , v2/* source_tokens_count */ ];
         /* initialise a data array containing the variable length of each array, in the two dimentional array that contains the exchange's data */
 
         for ( uint256 s = 0; s < 6; /* data_len */ s++ ) {

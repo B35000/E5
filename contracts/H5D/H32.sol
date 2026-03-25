@@ -164,7 +164,11 @@ library H32 {
         }
     }//-----RETEST_OK-----
 
-    
+
+
+
+
+
 
 
     /* run_exchange_transfers */
@@ -174,11 +178,12 @@ library H32 {
         uint256 p3/* sender_account */,
         uint256[][][] calldata p4/* exchange_nums */,
         bool p5/* authority_mint */,
-        NumData storage p6/* self */
-    ) external returns(uint256[4][][] memory v1/* amount_sender_acc_receiver_acc_data */){
+        NumData storage p6/* self */,
+        uint256[4][][] calldata p7/* amount_sender_acc_receiver_acc_data */
+    ) external returns(uint256[3][] memory v1/* receiver_depth_balance */) {
         /* runs the exchnange transfers for buy sell and mint actions and updates the balance for the targeted sender */
         
-        v1/* amount_sender_acc_receiver_acc_data */ = f90/* run_exchange_transfer_setters */(p1/* data */, p2/* tokens_to_receive */, p4/* exchange_nums */, p3/* sender_account */, p5/* authority_mint */);
+        // v1/* amount_sender_acc_receiver_acc_data */ = f90/* run_exchange_transfer_setters */(p1/* data */, p2/* tokens_to_receive */, p4/* exchange_nums */, p3/* sender_account */, p5/* authority_mint */);
         /* sets the data required for running the exchange transfer function(run_exchange_transfer) */
         
         if (!p5/* authority_mint */) {
@@ -194,11 +199,12 @@ library H32 {
                         /* if the exchange is non zero */
                         /* t3e: source_token_for_buy   t4e: source_token_fee_for_buy */
                         
-                        f130/* run_exchange_transfer */(v1/* amount_sender_acc_receiver_acc_data */[t][e], p4/* exchange_nums */[t][3][e], p6/* self */);
+                        f130/* run_exchange_transfer */(p7/* amount_sender_acc_receiver_acc_data */[t][e], p4/* exchange_nums */[t][3][e], p6/* self */);
                         /* run a transfer to or from the target exchange, to if its a buy action and from if its a sell action */
                     }
                 }
-                f128/* update_balance */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p6/* self */, t, p4/* exchange_nums */[t], p5/* authority_mint */);
+
+                f128/* update_balance */(p1/* data */, p2/* tokens_to_receive */, [p3/* sender_account */, uint256(0)], p6/* self */, t, p4/* exchange_nums */[t]);
                 /* update the balance for the sender of the mint action, debiting if they are selling and crediting if they are buying */
             }
         }else{
@@ -206,78 +212,9 @@ library H32 {
             f129/* update_balances */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p6/* self */, p4/* exchange_nums */, p5/* authority_mint */);
             /* update the balance for the sender, crediting since tokens are being minted */
         }
-        
-    }//-----RETEST_OK-----
 
-    /* run_exchange_transfer_setters */
-    function f90(
-        uint256[][6] calldata p1/* data */,
-        uint256[] calldata p2/* tokens_to_receive */,
-        uint256[][][] calldata p3/* exchange_nums */,
-        uint256 p4,/* sender_account */
-        bool p5/* authority_mint */
-    ) private pure returns (uint256[4][][] memory v1/* amount_sender_acc_receiver_acc_data */) {
-        /* presets the data required to run the exchange transfer function before the final balance is updated */
+        v1/* receiver_depth_balance */ = f183/* get_update_balances_data */(p1/* data */, p3/* sender_account */, p4/* exchange_nums */, p6/* self */);
         
-        v1/* amount_sender_acc_receiver_acc_data */ = new uint256[4][][](p1/* data */[1].length);
-        /* initialise a new three dimentional array object with the targeted exchange count as its length */
-        
-        for ( uint256 t = 0; t < p1/* data */[1].length; /* exchanges */ t++ ) {
-            /* for each exchange in the data array object */
-            
-            v1/* amount_sender_acc_receiver_acc_data */[t] = new uint256[4][](p3/* exchange_nums */[t][3].length);
-            /* initialise a two dimentional array object with the source tokens for buying number as its length  */
-            
-            for ( uint256 e = 0; e < p3/* exchange_nums */[t][3].length; e++ ) {
-                /* for each exchange id in the source tokens for buying */
-                
-                if ( p3/* exchange_nums */[t][3][e] != 0 && p3/* exchange_nums */[t][4][e] != 0 ) { 
-                    /* if the exchange id is not zero  */
-                    /* t3e: source_token_for_buy   t4e: source_token_fee_for_buy  t5e: source_token_depth_for_buy */
-                    
-                    uint256[4] memory v2/* items */ = [uint256(0), 0, 0, 0];
-                    /* initalize a new array of length 4 to contain the exchange transfer data */
-
-                    if ( p1/* data */[0][t] == 0 /* action buy? */ ) {
-                        /* if the action is a buy action */
-                        
-                        uint256 v3/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][t] : p4/* sender_account */;
-                        /* initalize a sender variable to be either from the senders array if exists or the transaction sender otherwise */
-                        
-                        if(!p5/* authority_mint */){
-                            /* if its an ordinary mint action */
-                            v2/* items */ = [
-                                p1/* data */[2/*target_amounts */][t] * p3/* exchange_nums */[t][4][e], 
-                                v3/* sender */, 
-                                p1/* data */[1/* exchanges */][t],
-                                p3/* exchange_nums */[t][5/* depth values */][e]
-                            ];
-                            /* set the amount (as the targeted amount times the amount required by the exchange for the specific token from the source amounts for buy values), sender, exchange and depth value */
-                        }else{
-                            v2/* items */ = [
-                                p1/* data */[2/*target_amounts */][t], 
-                                v3/* sender */, 
-                                p1/* data */[1/* exchanges */][t],
-                                p3/* exchange_nums */[t][5/* depth values */][e]
-                            ];
-                            /* set the targeted amount, sender(since its a buy action), exchange id(as the receiver since the exchange receives tokens for a buy) and depth value */
-                        }
-                        
-                    }else{
-                        /* its a sell action */
-                        v2/* items */ = [
-                            p2/* tokens_to_receive */[t] * p3/* exchange_nums */[t][4][e], 
-                            p1/* data */[1/* exchanges */][t], 
-                            p1/* data */[3 /* receivers */][t],
-                            p3/* exchange_nums */[t][5/* depth values */][e]
-                        ];
-                        /* set the amount(as the tokens to receive times the amount required by the exchange for the specific token from the source amounts for buy values), the exchange(as the sender since its a sell action), the receiver and the depth value */
-                    }
-                    v1/* amount_sender_acc_receiver_acc_data */[t][e] = v2/* items */;
-                    /* set the array data in the amount_sender_acc_receiver_acc_data array */
-                }
-            }
-        }
     }//-----RETEST_OK-----
 
     /* run_exchange_transfer */
@@ -319,6 +256,35 @@ library H32 {
         }
     }//-----RETEST_OK-----
 
+    /* get_update_balances_data */
+    function f183( 
+        uint256[][6] calldata p1/* data */, 
+        uint256 p2/* sender_account */, 
+        uint256[][][] calldata p3/* exchange_nums */,
+        NumData storage p4/* self */
+    ) public view returns (uint256[3][] memory v5/* receiver_depth_balance */) {
+        /* emits a balance update for each targeted recipient of a mint or dump action */
+
+        v5/* receiver_depth_balance */ = new uint256[3][](p1/* data */[1].length);
+        for ( uint256 r = 0; r < p1/* data */[1].length; /* exchanges */ r++ ) {
+            /* for each target specified */
+            
+            uint256 v1/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][r] : p2/* sender_account */;
+            /* specify the sender as from the sender account array or the sender themselves */
+            
+            uint256 v2/* receiver */ = p1/* data */[0][r] == 1 /* actions sell? */ ? v1/* sender */ : p1/* data */[3][r] /* receivers */;
+            /* specify the receiver as from the receiver account array or the receiver themselves */
+            
+            uint256 v4/* exchange_default_depth */ = p3/* exchange_nums */[r][2/* exchange_config */][7/* default_exchange_depth */];
+            /* get the default exchange depth value. should be 0 for most types of exchanges */
+            
+            uint256 v3/* new_balance */ = p4/* self */.int_int_int[ p1/* data */[1][r] /* exchanges */ ][ 1 /* data */ ][v2/* receiver */][v4/* exchange_default_depth */];
+            /* fetch the new balance for the receiver at the specified depth */
+            
+            v5/* receiver_depth_balance */[r] = [ v2/* receiver */, v4/* exchange_default_depth */, v3/* new_balance */ ];
+        }
+    }//-----TEST_OK-----
+
 
 
 
@@ -335,8 +301,9 @@ library H32 {
     ) private {
         /* initalizes and runs the update balance function for updating the recipients balance after the exchange transfers */
         for ( uint256 r = 0; r < p1/* data */[1].length; /* exchanges */ r++ ) {
+            uint256 v1/* authority_mint_as_integer */ = p6/* authority_mint */ == true ? uint256(1) : uint256(0);
             
-            f128/* update_balance */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p4/* self */, r, p5/* exchange_nums */[r], p6/* authority_mint */);
+            f128/* update_balance */(p1/* data */, p2/* tokens_to_receive */, [p3/* sender_account */, v1/* authority_mint_as_integer */], p4/* self */, r/* r */, p5/* exchange_nums */[r]);
             /* updates the balance for the targeted recipient for the mint or dump action */
         }
     }//-----RETEST_OK-----
@@ -345,30 +312,42 @@ library H32 {
     function f128(
         uint256[][6] calldata p1/* data */,
         uint256[] calldata p2/* tokens_to_receive */,
-        uint256 p3/* sender_account */,
+        uint256[2] memory p3/* sender_account, authority_mint */,
         NumData storage p4/* self */,
         uint256 p5/* r */,
-        uint256[][] calldata p6/* exchange_data */,
-        bool p7/* authority_mint */
+        uint256[][] calldata p6/* exchange_data */
     ) private {
         /* updates the balance for the recipient for the mint or dump action */
         
-        uint256 v1/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][p5/* r */] : p3/* sender_account */;
+        uint256 v1/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][p5/* r */] : p3/* sender_account, authority_mint */[0];
         /* initialise the sender from the data's senders array or the sender of the transaction themselves */
         
-        mapping(uint256 => mapping(uint256 => uint256)) storage v2/* int_int_pointer */ = p4/* self */.int_int_int[ p1/* data */[1][p5/* r */] /* exchanges */ ][ 1 /* data */];
+        // mapping(uint256 => mapping(uint256 => uint256)) storage v2/* int_int_pointer */ = p4/* self */.int_int_int[ p1/* data */[1][p5/* r */] /* exchanges */ ][ 1 /* data */];
         /* initalise a storage variable that points to the exchanges data mapping that holds the exchanges balances */
         
-        uint256 v3/*exchange_default_depth*/ = p6/* exchange_data */[2/* exchange_config_data */][7/* default_depth */];
+        uint256 v3/* exchange_default_depth */ = p6/* exchange_data */[2/* exchange_config_data */][7/* default_depth */];
         /* initalize a variable that holds the exchanges default depth */
 
-        uint256 v4/* num_str_metas_pointer */ = p4/* self */.num_str_metas[p1/* data */[1][p5/* r */] /* exchanges */ ][ v3/*exchange_default_depth*/ ];
+        uint256 v4/* num_str_metas_pointer */ = p4/* self */.num_str_metas[p1/* data */[1][p5/* r */] /* exchanges */ ][ v3/* exchange_default_depth */ ];
 
         if ( p1/* data */[0/* actions */][p5/* r */] == 1 /* sell? */ ) {
             /* if the action is a sell action or dump action */
-            
-            v2/* int_int_pointer */[v1/* sender */][v3/* exchange_default_depth */] -= p1/* data */[2][p5/* r */]; /* target_amounts */
-            /* deduct the balance of the sender since their selling their tokens */
+
+            if(p6/* exchange_data */[2][ 18 /* <18>classic_swap_exchange_parent_token  */ ] != 0){
+                mapping(uint256 => mapping(uint256 => uint256)) storage v5/* classic_swap_exchange_parent_token_int_int_pointer */ = p4/* self */.int_int_int[ p6/* exchange_data */[2][ 18 /* <18>classic_swap_exchange_parent_token  */ ] ][ 1 /* data */];
+
+                uint256 v6 /* classic_swap_exchange_parent_token_depth */ = p6/* exchange_data */[2][ 19 /* <19>classic_swap_exchange_parent_token_depth  */ ];
+
+                v5/* classic_swap_exchange_parent_token_int_int_pointer */[v1/* sender */][v6 /* classic_swap_exchange_parent_token_depth */] -= p1/* data */[2][p5/* r */]; /* target_amounts */
+                /* decrease the balance for the sender in the <18>classic_swap_exchange_parent_token exchange */
+                
+                v5/* classic_swap_exchange_parent_token_int_int_pointer */[p1/* data */[1/* exchanges */][p5/* r */]][v6 /* classic_swap_exchange_parent_token_depth */] += p1/* data */[2/* target_amounts */][p5/* r */]; 
+                /* increase the balance of the exchange in the <18>classic_swap_exchange_parent_token exchange */
+            }
+            else{
+                p4/* self */.int_int_int[ p1/* data */[1][p5/* r */] /* exchanges */ ][ 1 /* data */][v1/* sender */][v3/* exchange_default_depth */] -= p1/* data */[2][p5/* r */]; /* target_amounts */
+                /* deduct the balance of the sender since their selling their tokens */
+            }
 
             if(p6/* exchange_data */[2][ 13 /* <13>temp_non_fungible_depth_token_transaction_end_time  */ ] != 0){
                 /* its an non-fungible token*/
@@ -376,14 +355,14 @@ library H32 {
                 require(v4/* num_str_metas_pointer */ != 0);
                 /* ensure the depth has been consumed */
                 
-                p4/* self */.num_str_metas[p1/* data */[1][p5/* r */] /* exchanges */ ][ v3/*exchange_default_depth*/ ] = 0;
+                p4/* self */.num_str_metas[p1/* data */[1][p5/* r */] /* exchanges */ ][ v3/* exchange_default_depth */ ] = 0;
                 /* revert the time after which the token can no longer be transferred back to its default */
             }
         }
         else {
             /* the action is a buy action */
 
-            if(p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ] != 0 && p6/* exchange_data */[0][ 3 /* exchange_type */ ] == 5 /* type_uncapped_supply */ && !p7/* authority_mint */){
+            if(p6/* exchange_data */[1][ 19 /* <19>maximum_mint_token_supply  */ ] != 0 && p6/* exchange_data */[0][ 3 /* exchange_type */ ] == 5 /* type_uncapped_supply */ && p3/* sender_account, authority_mint */[1] == 0){
                 /* if the maximum_mint_token_supply has been specified for a uncapped token. */
 
                 uint256 v5/* total_supply */ = p6/* exchange_data */[2][ 13 /* <13>temp_non_fungible_depth_token_transaction_end_time  */ ] != 0 ? p6/* exchange_data */[2][ 17 /* <17>temp_non_fungible_depth_token_class_total_supply  */ ] : p6/* exchange_data */[2][ 2 /* <2>token_exchange_liquidity/total_supply  */ ];
@@ -392,8 +371,22 @@ library H32 {
                 /* ensure sender isnt minting more token than have been required by the exchange author */
             }
 
-            v2/* int_int_pointer */[p1/* data */[3/* receivers */][p5/* r */]][v3/* exchange_default_depth */] += p2/* tokens_to_receive */[p5/* r */];
-            /* increase the balance of the sender since their buying tokens */
+            if(p6/* exchange_data */[2][ 18 /* <18>classic_swap_exchange_parent_token  */ ] != 0){
+                mapping(uint256 => mapping(uint256 => uint256)) storage v5/* classic_swap_exchange_parent_token_int_int_pointer */ = p4/* self */.int_int_int[ p6/* exchange_data */[2][ 18 /* <18>classic_swap_exchange_parent_token  */ ] ][ 1 /* data */];
+
+                uint256 v6 /* classic_swap_exchange_parent_token_depth */ = p6/* exchange_data */[2][ 19 /* <19>classic_swap_exchange_parent_token_depth  */ ];
+
+                v5/* classic_swap_exchange_parent_token_int_int_pointer */[p1/* data */[1][p5/* r */] /* exchanges */][v6 /* classic_swap_exchange_parent_token_depth */] -= p2/* tokens_to_receive */[p5/* r */];
+                /* decrease the balance of the exchange in the <18>classic_swap_exchange_parent_token exchange */
+
+                v5/* classic_swap_exchange_parent_token_int_int_pointer */[p1/* data */[3/* receivers */][p5/* r */]][v6 /* classic_swap_exchange_parent_token_depth */] += p2/* tokens_to_receive */[p5/* r */];
+                /* increase the balance for the sender in the <18>classic_swap_exchange_parent_token exchange */
+            }
+            else{
+                p4/* self */.int_int_int[ p1/* data */[1][p5/* r */] /* exchanges */ ][ 1 /* data */][p1/* data */[3/* receivers */][p5/* r */]][v3/* exchange_default_depth */] += p2/* tokens_to_receive */[p5/* r */];
+                /* increase the balance of the sender since their buying tokens */
+            }
+
 
             if(p6/* exchange_data */[2][ 13 /* <13>temp_non_fungible_depth_token_transaction_end_time  */ ] != 0){
                 /* its an non-fungible token*/
@@ -411,6 +404,15 @@ library H32 {
             }
         }
     }//-----RETEST_OK-----
+
+
+
+
+
+
+
+
+
 
 
 
@@ -443,7 +445,7 @@ library H32 {
         uint256 p2/* account */, 
         NumData storage p3/* self */,
         uint256[] calldata p4/* depths */
-    ) external view returns(uint256[] memory v1/* data */) {
+    ) public view returns(uint256[] memory v1/* data */) {
         /* scans the balance of an account at specific exchanges and depths */
 
         v1/* data */ = new uint256[](p1.length);

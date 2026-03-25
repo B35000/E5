@@ -322,6 +322,77 @@ library F33 {
     }//-----TEST_OK-----
 
 
+    /* run_exchange_transfer_setters */
+    function f90(
+        uint256[][6] calldata p1/* data */,
+        uint256[] calldata p2/* tokens_to_receive */,
+        uint256[][][] calldata p3/* exchange_nums */,
+        uint256 p4,/* sender_account */
+        bool p5/* authority_mint */
+    ) external pure returns (uint256[4][][] memory v1/* amount_sender_acc_receiver_acc_data */) {
+        /* presets the data required to run the exchange transfer function before the final balance is updated */
+        
+        v1/* amount_sender_acc_receiver_acc_data */ = new uint256[4][][](p1/* data */[1].length);
+        /* initialise a new three dimentional array object with the targeted exchange count as its length */
+        
+        for ( uint256 t = 0; t < p1/* data */[1].length; /* exchanges */ t++ ) {
+            /* for each exchange in the data array object */
+            
+            v1/* amount_sender_acc_receiver_acc_data */[t] = new uint256[4][](p3/* exchange_nums */[t][3].length);
+            /* initialise a two dimentional array object with the source tokens for buying number as its length  */
+            
+            for ( uint256 e = 0; e < p3/* exchange_nums */[t][3].length; e++ ) {
+                /* for each exchange id in the source tokens for buying */
+                
+                if ( p3/* exchange_nums */[t][3][e] != 0 && p3/* exchange_nums */[t][4][e] != 0 ) { 
+                    /* if the exchange id is not zero  */
+                    /* t3e: source_token_for_buy   t4e: source_token_fee_for_buy  t5e: source_token_depth_for_buy */
+                    
+                    uint256[4] memory v2/* items */ = [uint256(0), 0, 0, 0];
+                    /* initalize a new array of length 4 to contain the exchange transfer data */
+
+                    if ( p1/* data */[0][t] == 0 /* action buy? */ ) {
+                        /* if the action is a buy action */
+                        
+                        uint256 v3/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][t] : p4/* sender_account */;
+                        /* initalize a sender variable to be either from the senders array if exists or the transaction sender otherwise */
+                        
+                        if(!p5/* authority_mint */){
+                            /* if its an ordinary mint action */
+                            v2/* items */ = [
+                                p1/* data */[2/*target_amounts */][t] * p3/* exchange_nums */[t][4][e], 
+                                v3/* sender */, 
+                                p1/* data */[1/* exchanges */][t],
+                                p3/* exchange_nums */[t][5/* depth values */][e]
+                            ];
+                            /* set the amount (as the targeted amount times the amount required by the exchange for the specific token from the source amounts for buy values), sender, exchange and depth value */
+                        }else{
+                            v2/* items */ = [
+                                p1/* data */[2/*target_amounts */][t], 
+                                v3/* sender */, 
+                                p1/* data */[1/* exchanges */][t],
+                                p3/* exchange_nums */[t][5/* depth values */][e]
+                            ];
+                            /* set the targeted amount, sender(since its a buy action), exchange id(as the receiver since the exchange receives tokens for a buy) and depth value */
+                        }
+                        
+                    }else{
+                        /* its a sell action */
+                        v2/* items */ = [
+                            p2/* tokens_to_receive */[t] * p3/* exchange_nums */[t][4][e], 
+                            p1/* data */[1/* exchanges */][t], 
+                            p1/* data */[3 /* receivers */][t],
+                            p3/* exchange_nums */[t][5/* depth values */][e]
+                        ];
+                        /* set the amount(as the tokens to receive times the amount required by the exchange for the specific token from the source amounts for buy values), the exchange(as the sender since its a sell action), the receiver and the depth value */
+                    }
+                    v1/* amount_sender_acc_receiver_acc_data */[t][e] = v2/* items */;
+                    /* set the array data in the amount_sender_acc_receiver_acc_data array */
+                }
+            }
+        }
+    }//-----RETEST_OK-----
+
 
 
 

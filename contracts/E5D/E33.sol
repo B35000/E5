@@ -737,10 +737,17 @@ library E33 {
             /* if the token is type capped */
             
             require( p1/* new_obj_id_num */[ 3 /* default_source_tokens_for_buy */ ].length != 0 );
-            require( p1/* new_obj_id_num */[ 2 /* exchange_ratios */ ][ 2 /* <2>token_exchange_liquidity */ ] == p1/* new_obj_id_num */[ 2 /* exchange_ratios */ ][ 0 /* token_exchange_ratio_x */ ] );
-            /* require that source tokens for buying should exist and the the tokens liquidity should match the exchange ratio x */
+            /* ensure there are tokens defined for buying the new token */
+            
+            if(p1/* new_obj_id_num */[ 2 /* exchange_ratios */ ][18/* <18>classic_swap_exchange_parent_token */] == 0){
+                /* if the token is not an afterexchange */
 
-            require( 
+                require( p1/* new_obj_id_num */[ 2 /* exchange_ratios */ ][ 2 /* <2>token_exchange_liquidity */ ] == p1/* new_obj_id_num */[ 2 /* exchange_ratios */ ][ 0 /* token_exchange_ratio_x */ ] );
+                /* require that source tokens for buying should exist and the the tokens liquidity should match the exchange ratio x */
+            }
+            
+
+            require(
                 p1/* new_obj_id_num */[2][ 2 /* token_exchange_liquidity/total_supply */ ] >= 100_000 && 
                 p1/* new_obj_id_num */[2][ 6 /* active_block_limit_reduction_proportion */ ] == 0
             );

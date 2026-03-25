@@ -351,7 +351,8 @@ contract G52 {
         uint256[][][] memory v1/* target_data */ = gv5/* contractsData */.f111/* archive_proposals */(p1/* targets */);
         /* initialize a variable containing the target data for the contracts and proposals being archived */
 
-        bool v2/* includes_transfers */ = G32.f118/* archive_data */(p1/* targets */, v1/* target_data */, gv4/* num_data */, p2/* accounts_exchanges_depths */);
+        // bool v2/* includes_transfers */ = 
+        G32.f118/* archive_data */(p1/* targets */, v1/* target_data */, gv4/* num_data */, p2/* accounts_exchanges_depths */);
         /* calls the archive data function in G32 helper library */
 
         for (uint256 t = 0; t < p1/* targets */.length; t++) {
@@ -361,12 +362,12 @@ contract G52 {
             /* emit an archive event */
         }
 
-        if (v2/* includes_transfers */) {
-            /* if tranfer actions are to take place since the sender has specified exchanges that the targets being archived have token balances in */
+        // if (v2/* includes_transfers */) {
+        //     /* if tranfer actions are to take place since the sender has specified exchanges that the targets being archived have token balances in */
 
-            gv8/* tokensData2 */.f212/* execute_archive_transfers */(p1/* targets */, p3/* sender_account_id */, p2/* accounts_exchanges_depths */[1/* balance_exchanges */],p2/* accounts_exchanges_depths */[2/* exchanges_depths */]);
-            /* call the archive transfer function for transfering tokens out of the archived targets accounts to the senders account */
-        }
+        //     gv8/* tokensData2 */.f212/* execute_archive_transfers */(p1/* targets */, p3/* sender_account_id */, p2/* accounts_exchanges_depths */[1/* balance_exchanges */],p2/* accounts_exchanges_depths */[2/* exchanges_depths */]);
+        //     /* call the archive transfer function for transfering tokens out of the archived targets accounts to the senders account */
+        // }
     }//-----CHANGED-----
 
 
@@ -408,8 +409,6 @@ contract G52 {
     }//-----CHANGED-----
 
 
-    //
-    // ------------------------~~~AUTH~~~-------------------------------
     /* run_consensus_contract_actions */
     function f271(
         uint256[21] memory p1/* consensus_type_data */,

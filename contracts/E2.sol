@@ -205,6 +205,31 @@ contract E2 {
 
 
 
+
+
+
+    /* get_update_balances_data */
+    // H32.NumData private num_data;
+    // function f183( 
+    //     uint256[][6] calldata p1/* data */, 
+    //     uint256[][][] memory p2/* exchange_nums */, 
+    //     uint256 p3/* sender_account */
+    // ) external view returns (uint256[] memory v1/* return_data */) {
+    //     uint256[3][] memory v2/* receiver_depth_balance */ = H32.f183(p1/* data */, p3/* sender_account */, p2/* exchange_nums */, num_data);
+
+    //     v1/* return_data */ = new uint256[](100);
+    //     uint256 v4/* pos */ = 0;
+    //     for (uint256 e = 0; e < v2/* receiver_depth_balance */.length; e++) {
+    //         for (uint256 v = 0; v < v2/* receiver_depth_balance */[e].length; v++) {
+    //             v1/* return_data */[v4/* pos */] = v2/* receiver_depth_balance */[e][v];
+    //             v4/* pos */++;
+    //         }
+    //     }
+    // }
+
+
+
+
     // /* get_supplied_target_data_from_int_data */
     // function f289( uint256[][][] memory p1/* target_nums */, uint256[][] memory p3/* sv4_vals */ )
     // external pure returns (uint256[] memory v1/* return_data */) {
@@ -1517,7 +1542,7 @@ contract E2 {
     //     uint256[][][] calldata p3/* exchange_nums */,
     //     uint256 p4/* sender_account */
     // ) public pure returns (uint256[] memory v1/* return_data */) {
-    //     uint256[4][][] memory v2/* ints */ = H32.f90(p1/* data */, p2/* tokens_to_receive */, p3/* exchange_nums */, p4/* sender_account */, false);
+    //     uint256[4][][] memory v2/* ints */ = F33.f90(p1/* data */, p2/* tokens_to_receive */, p3/* exchange_nums */, p4/* sender_account */, false);
 
     //     v1/* return_data */ = new uint256[](101);
     //     uint256 v3/* pos */ = 0;
@@ -1587,7 +1612,7 @@ contract E2 {
 
     // }
 
-    /* read_ids/read_id */
+    // /* read_ids/read_id */
     // H3.NumData private num_data;
     // function f86(uint256[] calldata p1/* id_data */, uint256[] calldata p2/* id_depth_data */) 
     // external view returns (uint256[] memory v1/* return_data */){

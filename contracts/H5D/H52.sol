@@ -24,6 +24,7 @@ import "../E5D/E3.sol"; /* import "../E5Data/E5HelperFunctions.sol"; */
 import "./H32.sol"; /* import "./TokensHelperFunctions2.sol"; */
 import "./H5.sol"; /* import "./TokensData.sol"; */
 
+import "../F5D/F33.sol"; /* import "../F5Data/F5HelperFunctions3.sol"; */
 
 contract H52 {
     event e1/* Transfer */( uint256 indexed p1/* exchange */, uint256 indexed p2/* sender */, uint256 indexed p3/* receiver */, uint256 p4/* amount */, uint256 p7/* depth */, uint256 p5/* timestamp */, uint256 p6/* block_number */ );
@@ -249,38 +250,40 @@ contract H52 {
     //
     // ------------------------~~~AUTH~~~-------------------------------
     /* execute_archive_transfers */
-    function f212(
-        uint256[] memory p1/* targets */,
-        uint256 p2/* sender_account */,
-        uint256[][] memory p3/* balance_exchanges */,
-        uint256[][] memory p4/* exchange_depths */
-    ) external f156(msg.sender) {
-        /* executes transfer actions for tokens out of the accounts which are being archived */
+    // function f212(
+    //     uint256[] memory p1/* targets */,
+    //     uint256 p2/* sender_account */,
+    //     uint256[][] memory p3/* balance_exchanges */,
+    //     uint256[][] memory p4/* exchange_depths */
+    // ) external f156(msg.sender) {
+    //     /* executes transfer actions for tokens out of the accounts which are being archived */
+
+    //     // H32.f212/* execute_archive_transfers */(p1/* targets */, p2/* sender_account */, p3/* balance_exchanges */, p4/* exchange_depths */,  gv4/* num_data */);
         
-        for (uint256 t = 0; t < p1/* targets */.length; t++) {
-            /* for each target being archived */
+    //     // for (uint256 t = 0; t < p1/* targets */.length; t++) {
+    //     //     /* for each target being archived */
 
-            if ( p3/* balance_exchanges */[t].length != 0 ) {
-                /* if exchanges have been specified */
+    //     //     if ( p3/* balance_exchanges */[t].length != 0 ) {
+    //     //         /* if exchanges have been specified */
 
-                for ( uint256 e = 0; e < p3/* balance_exchanges */[t].length; e++ ) {
-                    /* for each exchange specified */
+    //     //         for ( uint256 e = 0; e < p3/* balance_exchanges */[t].length; e++ ) {
+    //     //             /* for each exchange specified */
 
-                    uint256 v1/* exchange */ = p3/* balance_exchanges */[t][e]; 
-                    /* get the exchange */
+    //     //             uint256 v1/* exchange */ = p3/* balance_exchanges */[t][e]; 
+    //     //             /* get the exchange */
 
-                    uint256 v3/* amount_depth */ = p4/* exchange_depths */[t][e]; 
-                    /* get the depth targeted */
+    //     //             uint256 v3/* amount_depth */ = p4/* exchange_depths */[t][e]; 
+    //     //             /* get the depth targeted */
 
-                    uint256 v2/* amount */ = gv4/* num_data */.int_int_int[v1/* exchange */][ 1 /* data */ ][p1/* targets */[t]][v3/* amount_depth */];
-                    /* get the amount from the targets existing balance */
+    //     //             uint256 v2/* amount */ = gv4/* num_data */.int_int_int[v1/* exchange */][ 1 /* data */ ][p1/* targets */[t]][v3/* amount_depth */];
+    //     //             /* get the amount from the targets existing balance */
                     
-                    f148/* transfer */(v1/* exchange */, p1/* targets */[t], v2/* amount */, p2/* sender_account */,v3/* amount_depth */);
-                    /* perform a transfer from the target to the senders account */
-                }
-            }
-        }
-    }
+    //     //             f148/* transfer */(v1/* exchange */, p1/* targets */[t], v2/* amount */, p2/* sender_account */,v3/* amount_depth */);
+    //     //             /* perform a transfer from the target to the senders account */
+    //     //         }
+    //     //     }
+    //     // }
+    // }
 
     //
     // ------------------------~~~AUTH~~~-------------------------------
@@ -295,6 +298,8 @@ contract H52 {
         uint256[] memory p7/* sender_accounts */
     ) external f156(msg.sender) {
         /* executes transfers from a proposal account to a sender as a bounty reward */
+
+        // H32.f204/* execute_bounty_transfers */(p1/* targets */, p2/* include_transfers */, [p3/* bounty_data */, p7/* sender_accounts */], p4/* sender_account */, [p5/* target_bounty_exchanges */, p6/* exchange_depths */], gv4/* num_data */);
 
         for (uint256 t = 0; t < p1/* targets */.length; t++) {
             /* for each target specified */
@@ -368,7 +373,7 @@ contract H52 {
     ) public f156(msg.sender) {
         /* transfers tokens from a given sender or set of senders to a given set of receivers or receiver in a specified set of exchanges */
         /* data[0] = exchange_ids , data[1] = amounts , data[2] = senders , data[3] = receivers, data[4] = depth_val */
-
+        
         for ( uint256 t = 0; t < p1/* data */[ 0 /* exchange_ids */ ].length; t++ ) {
             /* for each exchange being targeted */
 
@@ -427,7 +432,9 @@ contract H52 {
     ) external f156(msg.sender) {
         /* runs the transfer actions that take place when a sender is buying tokens from exchanges */
 
-        uint256[4][][] memory v1/* amount_sender_acc_receiver_acc_data */ = H32.f131/* run_exchange_transfers */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p4/* exchange_nums */, p5/* authority_mint */, gv4/* num_data */);
+        uint256[4][][] memory v1/* amount_sender_acc_receiver_acc_data */ = F33.f90/* run_exchange_transfer_setters */(p1/* data */, p2/* tokens_to_receive */, p4/* exchange_nums */, p3/* sender_account */, p5/* authority_mint */);
+
+        uint256[3][] memory v2/* receiver_depth_balance */ = H32.f131/* run_exchange_transfers */(p1/* data */, p2/* tokens_to_receive */, p3/* sender_account */, p4/* exchange_nums */, p5/* authority_mint */, gv4/* num_data */, v1/* amount_sender_acc_receiver_acc_data */);
         /* calls the exchange transfer function in the H32 helper library and receives emit data */
 
         if (!p5/* authority_mint */) {
@@ -447,37 +454,43 @@ contract H52 {
                 }
             }
         }
-        f183/* update_balances */(p1/* data */, p3/* sender_account */, p4/* exchange_nums */);
+        for ( uint256 r = 0; r < p1/* data */[1].length; /* exchanges */ r++ ) {
+            /* for each target specified */
+
+            emit e2/* UpdatedBalance */(p1/* data */[1/* exchanges */ ][r], v2/* receiver_depth_balance */[r][0/* receiver */], v2/* receiver_depth_balance */[r][2/* new_balance */], block.timestamp, block.number, v2/* receiver_depth_balance */[r][1/* depth */]);
+            /* emit an updated balance event */
+        }
+        // f183/* update_balances */(p1/* data */, p3/* sender_account */, p4/* exchange_nums */);
         /* calls the update balance function with the specified arguments */
     }
 
     /* update_balances */
-    function f183( 
-        uint256[][6] memory p1/* data */, 
-        uint256 p2/* sender_account */, 
-        uint256[][][] memory p3/* exchange_nums */
-    ) private {
-        /* emits a balance update for each targeted recipient of a mint or dump action */
+    // function f183( 
+    //     uint256[][6] memory p1/* data */, 
+    //     uint256 p2/* sender_account */, 
+    //     uint256[][][] memory p3/* exchange_nums */
+    // ) private {
+    //     /* emits a balance update for each targeted recipient of a mint or dump action */
 
-        for ( uint256 r = 0; r < p1/* data */[1].length; /* exchanges */ r++ ) {
-            /* for each target specified */
+    //     for ( uint256 r = 0; r < p1/* data */[1].length; /* exchanges */ r++ ) {
+    //         /* for each target specified */
             
-            uint256 v1/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][r] : p2/* sender_account */;
-            /* specify the sender as from the sender account array or the sender themselves */
+    //         uint256 v1/* sender */ = p1/* data */[ 4 /* sender_accounts */ ].length > 0 ? p1/* data */[ 4 /* sender_accounts */ ][r] : p2/* sender_account */;
+    //         /* specify the sender as from the sender account array or the sender themselves */
             
-            uint256 v2/* receiver */ = p1/* data */[0][r] == 1 /* actions sell? */ ? v1/* sender */ : p1/* data */[3][r] /* receivers */;
-            /* specify the receiver as from the receiver account array or the receiver themselves */
+    //         uint256 v2/* receiver */ = p1/* data */[0][r] == 1 /* actions sell? */ ? v1/* sender */ : p1/* data */[3][r] /* receivers */;
+    //         /* specify the receiver as from the receiver account array or the receiver themselves */
             
-            uint256 v4/* exchange_default_depth */ = p3/* exchange_nums */[r][2/* exchange_config */][7/* default_exchange_depth */];
-            /* get the default exchange depth value. should be 0 for most types of exchanges */
+    //         uint256 v4/* exchange_default_depth */ = p3/* exchange_nums */[r][2/* exchange_config */][7/* default_exchange_depth */];
+    //         /* get the default exchange depth value. should be 0 for most types of exchanges */
             
-            uint256 v3/* new_balance */ = gv4/* num_data */.int_int_int[ p1/* data */[1][r] /* exchanges */ ][ 1 /* data */ ][v2/* receiver */][v4/* exchange_default_depth */];
-            /* fetch the new balance for the receiver at the specified depth */
+    //         uint256 v3/* new_balance */ = gv4/* num_data */.int_int_int[ p1/* data */[1][r] /* exchanges */ ][ 1 /* data */ ][v2/* receiver */][v4/* exchange_default_depth */];
+    //         /* fetch the new balance for the receiver at the specified depth */
             
-            emit e2/* UpdatedBalance */(p1/* data */[1/* exchanges */ ][r], v2/* receiver */, v3/* new_balance */, block.timestamp, block.number, v4/* exchange_default_depth */);
-            /* emit an updated balance event */
-        }
-    }
+    //         emit e2/* UpdatedBalance */(p1/* data */[1/* exchanges */ ][r], v2/* receiver */, v3/* new_balance */, block.timestamp, block.number, v4/* exchange_default_depth */);
+    //         /* emit an updated balance event */
+    //     }
+    // }
 
 
     //
