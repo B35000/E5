@@ -42,5 +42,5 @@ The smart contracts can be deployed on any EVM Blockchain (classified as `Ethers
 
 ## License
 
-E5 Smart Contracts are released under the terms of the MIT license.
+E5 Smart Contracts are released under the terms of the General Public License (GPL). See the LICENSE file for details.
 Copyright (c) 2022 Bry Onyoni.
